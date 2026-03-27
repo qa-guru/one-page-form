@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Automation Practice Form</title>
+    <style>
+:root {
+  --bg: #eef3ff;
+  --bg-accent: #dde7ff;
+  --card: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --accent: #335dff;
+  --accent-hover: #2348da;
+  --border: #d5dded;
+  --focus: rgba(51, 93, 255, 0.2);
+  --error: #b91c1c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: linear-gradient(160deg, var(--bg) 0%, var(--bg-accent) 100%);
+  color: var(--text);
+  line-height: 1.45;
+}
+
+.site-shell {
+  width: min(960px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.site-header {
+  background: #0f172a;
+  color: #fff;
+  padding: 16px 0;
+  box-shadow: 0 2px 10px rgba(2, 8, 23, 0.2);
+}
+
+.site-header .site-shell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.brand .default-logo {
+  display: block;
+  vertical-align: middle;
+}
+
+.site-nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  color: #dbe4ff;
+  text-decoration: none;
+  padding: 6px 11px;
+  border-radius: 999px;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+.site-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  border-top: 1px solid #d9e2f3;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 14px 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+.page {
+  min-height: calc(100vh - 112px);
+  display: grid;
+  place-items: center;
+  padding: 32px 24px 70px;
+}
+
+.card {
+  width: min(760px, 100%);
+  background: var(--card);
+  border: 1px solid #e3e9f5;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.1);
+  position: relative;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 5px;
+  border-radius: 16px 16px 0 0;
+  background: linear-gradient(90deg, #335dff, #7b8cff);
+}
+
+h1 {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.4rem, 2.7vw, 2rem);
+  letter-spacing: 0.2px;
+}
+
+.subtitle {
+  margin: 8px 0 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 14px 18px;
+  align-items: start;
+}
+
+.field-grid > label,
+.field-grid > span {
+  font-weight: 600;
+  color: #1e293b;
+  padding-top: 10px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  color: #0f172a;
+  transition: border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--focus);
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  background: #f5f7fb;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+input[type="file"] {
+  padding: 8px;
+}
+
+.state-city-trigger {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  color: #0f172a;
+  cursor: pointer;
+  min-height: 42px;
+}
+
+.state-city-dropdown {
+  position: absolute;
+  z-index: 100;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.state-city-option {
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.state-city-option:hover {
+  background: #f1f5f9;
+}
+
+.subjects-auto-complete {
+  position: relative;
+}
+
+.subjects-input-area {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.subjects-input-area:focus-within {
+  border-color: var(--accent);
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.subjects-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.subjects-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: #f1f5f9;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.subjects-chip__label {
+  color: var(--text);
+}
+
+.subjects-chip__remove {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.subjects-chip__remove:hover {
+  color: var(--text);
+  background: #e2e8f0;
+}
+
+.subjects-input-area #subjectsInput {
+  flex: 1;
+  min-width: 120px;
+  border: none;
+  padding: 6px 0;
+  outline: none;
+  font: inherit;
+  box-shadow: none;
+}
+
+.subjects-input-area #subjectsInput:focus {
+  border: none;
+  box-shadow: none;
+}
+
+.subjects-input-area #subjectsInput::placeholder {
+  color: var(--muted);
+}
+
+.subjects-auto-complete__menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 2px;
+}
+
+.subjects-auto-complete__option {
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.subjects-auto-complete__option:hover {
+  background: #f1f5f9;
+}
+
+.react-datepicker-wrapper {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  padding: 12px;
+}
+
+.react-datepicker__header {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.react-datepicker__month-select,
+.react-datepicker__year-select {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.react-datepicker__month {
+  min-width: 280px;
+}
+
+.react-datepicker__week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.react-datepicker__day {
+  padding: 8px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.react-datepicker__day:hover:not(.react-datepicker__day--outside-month) {
+  background: var(--bg-accent);
+}
+
+.react-datepicker__day--outside-month {
+  color: #94a3b8;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.inline-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.inline-group label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: #f8faff;
+  cursor: pointer;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.inline-group label:hover {
+  border-color: #b6c5ea;
+}
+
+.inline-group input {
+  width: auto;
+  margin: 0;
+}
+
+button {
+  margin-top: 20px;
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 120ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+#submit,
+#closeModal {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(51, 93, 255, 0.25);
+}
+
+#submit:hover,
+#closeModal:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+#submit {
+  min-width: 160px;
+}
+
+.error {
+  min-height: 1.2em;
+  margin: 10px 0 0;
+  color: var(--error);
+  font-size: 0.9rem;
+}
+
+dialog {
+  width: min(620px, calc(100vw - 32px));
+  border: 1px solid #dbe4f8;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 26px 56px rgba(2, 8, 23, 0.28);
+}
+
+dialog:not([open]) {
+  display: none;
+}
+
+dialog h2 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 16px;
+  font-size: 0.95rem;
+}
+
+td {
+  border: 1px solid #e2e8f7;
+  padding: 9px;
+  vertical-align: top;
+}
+
+td:first-child {
+  width: 38%;
+  font-weight: 700;
+  background: #f7f9ff;
+}
+
+@media (max-width: 640px) {
+  .site-header .site-shell {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .field-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .field-grid > label,
+  .field-grid > span {
+    padding-top: 0;
+  }
+
+  .card {
+    padding: 22px 16px 18px;
+  }
+
+  #submit {
+    width: 100%;
+  }
+}
+    </style>
+    <script>
+      if (typeof window.$ !== "function") {
+        window.$ = function (selector) {
+          const elements = Array.from(document.querySelectorAll(selector));
+          return {
+            remove() {
+              elements.forEach((element) => element.remove());
+              return this;
+            }
+          };
+        };
+      }
+    </script>
+  </head>
+  <body>
+    <div id="siteHeader">
+      <header class="site-header">
+        <div class="site-shell">
+          <a class="brand" href="automation-practice-form-extended.html">
+          <img loading="lazy" width="140" height="26" src="https://qa.guru/wp-content/uploads/2025/12/QA-Guru-Logo-White-Original.svg" class="default-logo" alt="QA.GURU" decoding="async">
+        </a>
+          <nav class="site-nav" aria-label="Main navigation">
+            <a class="nav-link" href="automation-practice-form-extended.html">Practice Form</a>
+            <a class="nav-link" href="text-box.html">Text Box</a>
+          </nav>
+        </div>
+      </header>
+    </div>
+
+    <main class="page">
+      <section class="card">
+        <h1>Practice Form</h1>
+        <div class="practice-form-wrapper">
+          <p class="subtitle">Student Registration Form</p>
+        </div>
+        <form id="userForm" novalidate>
+          <div class="field-grid">
+            <label for="firstName">First Name *</label>
+            <input id="firstName" name="firstName" type="text" required />
+
+            <label for="lastName">Last Name *</label>
+            <input id="lastName" name="lastName" type="text" required />
+
+            <label for="userEmail">Email</label>
+            <input id="userEmail" name="userEmail" type="email" placeholder="name@example.com" />
+
+            <span>Gender *</span>
+            <div class="inline-group" id="genterWrapper">
+              <label for="gender-radio-1">
+                <input id="gender-radio-1" name="gender" type="radio" value="Male" required />
+                Male
+              </label>
+              <label for="gender-radio-2">
+                <input id="gender-radio-2" name="gender" type="radio" value="Female" />
+                Female
+              </label>
+              <label for="gender-radio-3">
+                <input id="gender-radio-3" name="gender" type="radio" value="Other" />
+                Other
+              </label>
+            </div>
+
+            <label for="userNumber">Mobile (10 Digits) *</label>
+            <input
+              id="userNumber"
+              name="userNumber"
+              type="tel"
+              inputmode="numeric"
+              minlength="10"
+              maxlength="10"
+              pattern="[0-9]{10}"
+              required
+            />
+
+            <label for="dateOfBirthInput">Date of Birth</label>
+            <input id="dateOfBirthInput" name="dateOfBirth" type="text" placeholder="DD MMM YYYY" readonly />
+
+            <div id="datepickerRoot" class="react-datepicker-wrapper" style="display: none;">
+              <div class="react-datepicker">
+                <div class="react-datepicker__month-container">
+                  <div class="react-datepicker__header">
+                    <select class="react-datepicker__month-select"></select>
+                    <select class="react-datepicker__year-select"></select>
+                  </div>
+                  <div class="react-datepicker__month">
+                    <div class="react-datepicker__week" id="datepickerDays"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <label for="subjectsInput">Subjects</label>
+            <div id="subjectsWrapper" class="subjects-auto-complete">
+              <div class="subjects-input-area">
+                <div id="subjectsChips" class="subjects-chips"></div>
+                <input id="subjectsInput" type="text" placeholder="e.g. Maths, Physics" autocomplete="off" />
+              </div>
+              <input type="hidden" name="subjects" id="subjectsValue" />
+              <div id="subjectsDropdown" class="subjects-auto-complete__menu" style="display: none;" role="listbox"></div>
+            </div>
+
+            <span>Hobbies</span>
+            <div class="inline-group" id="hobbiesWrapper">
+              <label for="hobbies-checkbox-1">
+                <input id="hobbies-checkbox-1" type="checkbox" value="Sports" />
+                Sports
+              </label>
+              <label for="hobbies-checkbox-2">
+                <input id="hobbies-checkbox-2" type="checkbox" value="Reading" />
+                Reading
+              </label>
+              <label for="hobbies-checkbox-3">
+                <input id="hobbies-checkbox-3" type="checkbox" value="Music" />
+                Music
+              </label>
+            </div>
+
+            <label for="uploadPicture">Picture</label>
+            <input id="uploadPicture" name="uploadPicture" type="file" />
+
+            <label for="currentAddress">Current Address</label>
+            <textarea id="currentAddress" name="currentAddress" rows="4"></textarea>
+
+            <label for="state">State</label>
+            <div id="state" class="state-city-trigger" tabindex="0" role="combobox">Select State</div>
+            <input type="hidden" name="state" id="stateValue" />
+
+            <label for="city">City</label>
+            <div id="city" class="state-city-trigger" tabindex="0" role="combobox">Select City</div>
+            <input type="hidden" name="city" id="cityValue" />
+
+            <div id="stateCity-wrapper" class="state-city-dropdown" style="display: none;"></div>
+          </div>
+
+          <button id="submit" type="submit">Submit</button>
+          <p id="formError" class="error" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <dialog id="resultModal">
+      <div class="modal-dialog">
+        <div id="example-modal-sizes-title-lg">Thanks for submitting the form</div>
+        <div class="table-responsive">
+          <table>
+            <tbody id="resultBody"></tbody>
+          </table>
+        </div>
+        <button id="closeModal" type="button">Close</button>
+      </div>
+    </dialog>
+
+    <div id="siteFooter">
+      <div id="fixedban" style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; display: flex; align-items: flex-end; justify-content: center; padding: 0 16px 80px; pointer-events: none;">
+        <div style="pointer-events: auto; max-width: 420px; background: #fff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.06); padding: 24px; border: 1px solid #e5e7eb;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+            <div>
+              <p style="margin: 0 0 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6366f1;">QA.GURU</p>
+              <h3 style="margin: 0 0 8px; font-size: 1.15rem; color: #111827;">Level up your automation</h3>
+              <p style="margin: 0; font-size: 0.9rem; color: #6b7280; line-height: 1.45;">Java, Python, JavaScript, Kotlin, Swift. Real projects, portfolio, mentorship. 3,000+ grads. Start with a free intensive.</p>
+              <a href="https://qa.guru" style="display: inline-block; margin-top: 14px; padding: 10px 18px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; font-weight: 600; font-size: 0.9rem; text-decoration: none; border-radius: 10px;">View courses</a>
+            </div>
+            <button type="button" aria-label="Close" onclick="document.getElementById('fixedban').remove()" style="flex-shrink: 0; width: 32px; height: 32px; border: none; background: #f3f4f6; color: #6b7280; border-radius: 8px; cursor: pointer; font-size: 18px; line-height: 1;">×</button>
+          </div>
+        </div>
+      </div>
+      <footer class="site-footer">
+        <div class="site-shell">
+          <small>(c) QA.GURU 2019-2026</small>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+function setActiveNavLink() {
+  const currentPath = window.location.pathname.split("/").pop() || "automation-practice-form-extended.html";
+  const links = document.querySelectorAll(".site-nav .nav-link");
+  links.forEach((link) => {
+    const href = link.getAttribute("href");
+    const isActive = href === currentPath;
+    link.classList.toggle("active", isActive);
+    if (isActive) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+}
+document.addEventListener("DOMContentLoaded", setActiveNavLink);
+    </script>
+    <script>
+const cityMap = {
+  NCR: ["Delhi", "Gurgaon", "Noida"],
+  "Uttar Pradesh": ["Agra", "Lucknow", "Merrut"],
+  Haryana: ["Karnal", "Panipat"],
+  Rajasthan: ["Jaipur", "Jaiselmer"]
+};
+
+const STATE_OPTIONS = ["NCR", "Uttar Pradesh", "Haryana", "Rajasthan"];
+const SUBJECTS_OPTIONS = ["Maths", "Physics", "Chemistry", "Biology", "English", "Computer Science", "Economics", "Arts", "History", "Civics", "Hindi"];
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+const form = document.getElementById("userForm");
+const stateTrigger = document.getElementById("state");
+const cityTrigger = document.getElementById("city");
+const stateValue = document.getElementById("stateValue");
+const cityValue = document.getElementById("cityValue");
+const stateCityWrapper = document.getElementById("stateCity-wrapper");
+const modal = document.getElementById("resultModal");
+const resultBody = document.getElementById("resultBody");
+const closeModalButton = document.getElementById("closeModal");
+const formError = document.getElementById("formError");
+const dateOfBirthInput = document.getElementById("dateOfBirthInput");
+const datepickerRoot = document.getElementById("datepickerRoot");
+const datepickerMonthSelect = datepickerRoot && datepickerRoot.querySelector(".react-datepicker__month-select");
+const datepickerYearSelect = datepickerRoot && datepickerRoot.querySelector(".react-datepicker__year-select");
+const datepickerDays = document.getElementById("datepickerDays");
+
+function showStateOptions() {
+  stateCityWrapper.innerHTML = "";
+  STATE_OPTIONS.forEach((name) => {
+    const opt = document.createElement("div");
+    opt.className = "state-city-option";
+    opt.textContent = name;
+    opt.tabIndex = 0;
+    opt.addEventListener("click", () => {
+      stateValue.value = name;
+      stateTrigger.textContent = name;
+      stateCityWrapper.style.display = "none";
+      const cities = cityMap[name] || [];
+      cityValue.value = "";
+      cityTrigger.textContent = "Select City";
+      cityTrigger.style.pointerEvents = "auto";
+    });
+    stateCityWrapper.appendChild(opt);
+  });
+  stateCityWrapper.style.display = "block";
+}
+
+function showCityOptions() {
+  const state = stateValue.value;
+  const cities = cityMap[state] || [];
+  stateCityWrapper.innerHTML = "";
+  cities.forEach((name) => {
+    const opt = document.createElement("div");
+    opt.className = "state-city-option";
+    opt.textContent = name;
+    opt.tabIndex = 0;
+    opt.addEventListener("click", () => {
+      cityValue.value = name;
+      cityTrigger.textContent = name;
+      stateCityWrapper.style.display = "none";
+    });
+    stateCityWrapper.appendChild(opt);
+  });
+  stateCityWrapper.style.display = "block";
+}
+
+stateTrigger.addEventListener("click", (e) => {
+  e.preventDefault();
+  showStateOptions();
+});
+
+cityTrigger.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (!stateValue.value) return;
+  showCityOptions();
+});
+
+function getSelectedGender() {
+  const selected = form.querySelector('input[name="gender"]:checked');
+  return selected ? selected.value : "";
+}
+
+function getSelectedHobbies() {
+  return [
+    document.getElementById("hobbies-checkbox-1"),
+    document.getElementById("hobbies-checkbox-2"),
+    document.getElementById("hobbies-checkbox-3")
+  ]
+    .filter((input) => input && input.checked)
+    .map((input) => input.value)
+    .join(", ");
+}
+
+function createResultRow(label, value) {
+  const row = document.createElement("tr");
+  const left = document.createElement("td");
+  const right = document.createElement("td");
+
+  left.textContent = label;
+  right.textContent = value || "-";
+
+  row.append(left, right);
+  return row;
+}
+
+function validateForm() {
+  const firstName = document.getElementById("firstName").value.trim();
+  const lastName = document.getElementById("lastName").value.trim();
+  const phone = document.getElementById("userNumber").value.trim();
+  const gender = getSelectedGender();
+
+  if (!firstName || !lastName || !gender || !/^\d{10}$/.test(phone)) {
+    formError.textContent = "Please fill required fields and enter a valid 10-digit mobile number.";
+    return false;
+  }
+
+  formError.textContent = "";
+  return true;
+}
+
+function buildDatepicker() {
+  if (!datepickerRoot || !dateOfBirthInput) return;
+
+  let month = 6;
+  let year = 2008;
+
+  function pad(n) {
+    return String(n).padStart(3, "0");
+  }
+
+  function renderMonthYear() {
+    if (!datepickerMonthSelect || !datepickerYearSelect) return;
+    datepickerMonthSelect.innerHTML = "";
+    MONTHS.forEach((name, i) => {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = name;
+      if (i === month) opt.selected = true;
+      datepickerMonthSelect.appendChild(opt);
+    });
+    const yearFrom = 1900;
+    const yearTo = 2100;
+    datepickerYearSelect.innerHTML = "";
+    for (let y = yearFrom; y <= yearTo; y++) {
+      const opt = document.createElement("option");
+      opt.value = y;
+      opt.textContent = y;
+      if (y === year) opt.selected = true;
+      datepickerYearSelect.appendChild(opt);
+    }
+  }
+
+  function daysInMonth(m, y) {
+    return new Date(y, m + 1, 0).getDate();
+  }
+
+  function firstDayOfMonth(m, y) {
+    return new Date(y, m, 1).getDay();
+  }
+
+  function renderDays() {
+    if (!datepickerDays) return;
+    datepickerDays.innerHTML = "";
+    const totalDays = daysInMonth(month, year);
+    const first = firstDayOfMonth(month, year);
+    const prevMonth = month === 0 ? 11 : month - 1;
+    const prevYear = month === 0 ? year - 1 : year;
+    const prevTotal = daysInMonth(prevMonth, prevYear);
+
+    for (let i = 0; i < first; i++) {
+      const d = document.createElement("span");
+      const dayNum = prevTotal - first + i + 1;
+      d.className = "react-datepicker__day react-datepicker__day--" + pad(dayNum) + " react-datepicker__day--outside-month";
+      d.textContent = dayNum;
+      datepickerDays.appendChild(d);
+    }
+    for (let day = 1; day <= totalDays; day++) {
+      const d = document.createElement("span");
+      d.className = "react-datepicker__day react-datepicker__day--" + pad(day);
+      d.textContent = day;
+      d.tabIndex = 0;
+      d.setAttribute("data-day", String(day));
+      datepickerDays.appendChild(d);
+    }
+    const totalCells = first + totalDays;
+    const nextMonthStart = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+    for (let i = 1; i <= nextMonthStart; i++) {
+      const d = document.createElement("span");
+      d.className = "react-datepicker__day react-datepicker__day--" + pad(i) + " react-datepicker__day--outside-month";
+      d.textContent = i;
+      datepickerDays.appendChild(d);
+    }
+  }
+
+  function hideDatepicker() {
+    if (datepickerRoot) datepickerRoot.style.display = "none";
+  }
+
+  dateOfBirthInput.addEventListener("click", () => {
+    datepickerRoot.style.display = "block";
+    renderMonthYear();
+    renderDays();
+  });
+
+  const subjectsInput = document.getElementById("subjectsInput");
+  if (subjectsInput) {
+    subjectsInput.addEventListener("focus", hideDatepicker);
+    subjectsInput.addEventListener("click", hideDatepicker);
+  }
+
+  datepickerRoot.addEventListener("click", (e) => {
+    const dayEl = e.target.closest && e.target.closest(".react-datepicker__day");
+    if (!dayEl || dayEl.classList.contains("react-datepicker__day--outside-month")) return;
+    const day = parseInt(dayEl.getAttribute("data-day"), 10);
+    if (!day) return;
+    const date = new Date(year, month, day);
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    dateOfBirthInput.value = dd + " " + MONTHS[month].slice(0, 3) + " " + y;
+    dateOfBirthInput.setAttribute("data-iso", y + "-" + m + "-" + dd);
+    hideDatepicker();
+  });
+
+  if (datepickerMonthSelect) {
+    datepickerMonthSelect.addEventListener("change", () => {
+      month = parseInt(datepickerMonthSelect.value, 10);
+      renderDays();
+    });
+  }
+  if (datepickerYearSelect) {
+    datepickerYearSelect.addEventListener("change", () => {
+      year = parseInt(datepickerYearSelect.value, 10);
+      renderDays();
+    });
+  }
+}
+
+buildDatepicker();
+
+(function initSubjectsAutocomplete() {
+  const wrapper = document.getElementById("subjectsWrapper");
+  const input = document.getElementById("subjectsInput");
+  const chipsContainer = document.getElementById("subjectsChips");
+  const hiddenInput = document.getElementById("subjectsValue");
+  const dropdown = document.getElementById("subjectsDropdown");
+  if (!input || !dropdown || !chipsContainer || !hiddenInput) return;
+
+  let selectedSubjects = [];
+
+  function syncHiddenInput() {
+    hiddenInput.value = selectedSubjects.join(", ");
+  }
+
+  const PLACEHOLDER_TEXT = "e.g. Maths, Physics";
+
+  function updatePlaceholder() {
+    input.placeholder = selectedSubjects.length > 0 ? "" : PLACEHOLDER_TEXT;
+  }
+
+  function renderChips() {
+    chipsContainer.innerHTML = "";
+    selectedSubjects.forEach((subject) => {
+      const chip = document.createElement("div");
+      chip.className = "subjects-chip";
+      const label = document.createElement("span");
+      label.className = "subjects-chip__label";
+      label.textContent = subject;
+      const removeBtn = document.createElement("span");
+      removeBtn.className = "subjects-chip__remove";
+      removeBtn.setAttribute("aria-label", "Remove");
+      removeBtn.textContent = "×";
+      removeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        selectedSubjects = selectedSubjects.filter((s) => s !== subject);
+        renderChips();
+        syncHiddenInput();
+      });
+      chip.appendChild(label);
+      chip.appendChild(removeBtn);
+      chipsContainer.appendChild(chip);
+    });
+    updatePlaceholder();
+  }
+
+  function showSuggestions(filter) {
+    const toMatch = (filter !== undefined ? filter : input.value.trim()).toLowerCase();
+    const options = toMatch
+      ? SUBJECTS_OPTIONS.filter((s) => s.toLowerCase().includes(toMatch) && !selectedSubjects.includes(s))
+      : SUBJECTS_OPTIONS.filter((s) => !selectedSubjects.includes(s));
+    dropdown.innerHTML = "";
+    options.slice(0, 10).forEach((subject) => {
+      const opt = document.createElement("div");
+      opt.className = "subjects-auto-complete__option";
+      opt.setAttribute("role", "option");
+      opt.textContent = subject;
+      opt.tabIndex = 0;
+      opt.addEventListener("click", () => {
+        selectSubject(subject);
+        dropdown.style.display = "none";
+      });
+      dropdown.appendChild(opt);
+    });
+    dropdown.style.display = options.length ? "block" : "none";
+  }
+
+  function selectSubject(subject) {
+    if (!selectedSubjects.includes(subject)) {
+      selectedSubjects.push(subject);
+    }
+    input.value = "";
+    renderChips();
+    syncHiddenInput();
+    input.focus();
+    dropdown.style.display = "none";
+  }
+
+  input.addEventListener("input", () => showSuggestions());
+  input.addEventListener("focus", () => showSuggestions());
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const opts = dropdown.querySelectorAll(".subjects-auto-complete__option");
+      if (opts.length > 0) {
+        selectSubject(opts[0].textContent);
+      }
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!wrapper.contains(e.target)) {
+      dropdown.style.display = "none";
+    }
+  });
+})();
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  if (!validateForm()) {
+    return;
+  }
+
+  const firstName = document.getElementById("firstName").value.trim();
+  const lastName = document.getElementById("lastName").value.trim();
+  const email = document.getElementById("userEmail").value.trim();
+  const gender = getSelectedGender();
+  const mobile = document.getElementById("userNumber").value.trim();
+  const dobInput = document.getElementById("dateOfBirthInput");
+  const dob = dobInput.getAttribute("data-iso") || dobInput.value;
+  const subjects = (document.getElementById("subjectsValue") && document.getElementById("subjectsValue").value) || "";
+  const hobbies = getSelectedHobbies();
+  const pictureInput = document.getElementById("uploadPicture");
+  const picture = pictureInput.files[0] ? pictureInput.files[0].name : "";
+  const address = document.getElementById("currentAddress").value.trim();
+  const state = stateValue ? stateValue.value : "";
+  const city = cityValue ? cityValue.value : "";
+
+  resultBody.innerHTML = "";
+  resultBody.append(
+    createResultRow("Student Name", `${firstName} ${lastName}`.trim()),
+    createResultRow("Student Email", email),
+    createResultRow("Gender", gender),
+    createResultRow("Mobile", mobile),
+    createResultRow("Date of Birth", dob),
+    createResultRow("Subjects", subjects),
+    createResultRow("Hobbies", hobbies),
+    createResultRow("Picture", picture),
+    createResultRow("Address", address),
+    createResultRow("State and City", [state, city].filter(Boolean).join(" "))
+  );
+
+  if (typeof modal.showModal === "function") {
+    modal.showModal();
+  }
+});
+
+closeModalButton.addEventListener("click", () => {
+  modal.close();
+});
+    </script>
+  </body>
+</html>
