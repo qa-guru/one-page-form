@@ -6,8 +6,10 @@ Small static HTML/CSS/JavaScript demos for practicing form interactions and basi
 
 - `automation-practice-form.html`
 - `text-box.html`
+- `login.html`
 
 ### Open in github pages
 
 - [https://qa-guru.github.io/one-page-form/automation-practice-form.html](https://qa-guru.github.io/one-page-form/automation-practice-form.html)
 - [https://qa-guru.github.io/one-page-form/text-box.html](https://qa-guru.github.io/one-page-form/text-box.html)
+- [https://qa-guru.github.io/one-page-form/login.html](https://qa-guru.github.io/one-page-form/login.html)
