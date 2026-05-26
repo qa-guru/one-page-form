@@ -3,15 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Text Box</title>
+    <title>Login</title>
     <style>
       :root {
-        --bg: #efefef;
         --text: #222;
         --muted: #6b6b6b;
-        --line: #cfcfcf;
-        --input-bg: #f4f4f4;
         --button: #1677f2;
+        --focus: rgba(51, 93, 255, 0.2);
+        --error: #b91c1c;
         --color-bg: #f5f0e8;
         --color-surface: #2c2a26;
         --color-text-inverse: #f5f0e8;
@@ -252,7 +251,7 @@
       }
 
       .card {
-        width: min(760px, 100%);
+        width: min(440px, 100%);
         background: #ffffff;
         border: 1px solid #e3e9f5;
         border-radius: 16px;
@@ -271,7 +270,7 @@
       }
 
       h1 {
-        margin: 0;
+        margin: 0 0 24px;
         text-align: center;
         font-size: clamp(1.4rem, 2.7vw, 2rem);
         letter-spacing: 0.2px;
@@ -279,10 +278,14 @@
 
       .form-row {
         display: grid;
-        grid-template-columns: 180px 1fr;
+        grid-template-columns: 100px 1fr;
         align-items: start;
         gap: 14px 18px;
         margin-bottom: 14px;
+      }
+
+      .form-row input {
+        max-width: 240px;
       }
 
       label {
@@ -292,9 +295,9 @@
         font-size: 1rem;
       }
 
-      input,
-      textarea {
+      input {
         width: 100%;
+        height: 50px;
         border: 1px solid #c4cfdf;
         border-radius: 10px;
         background: #f8fbff;
@@ -305,31 +308,21 @@
         outline: none;
       }
 
-      input::placeholder,
-      textarea::placeholder {
+      input::placeholder {
         color: #6b7280;
       }
 
-      input {
-        height: 50px;
-      }
-
-      textarea {
-        min-height: 130px;
-        resize: vertical;
-      }
-
-      input:focus,
-      textarea:focus {
+      input:focus {
         border-color: #335dff;
         box-shadow: 0 0 0 4px var(--focus);
         background: #ffffff;
       }
 
-      .actions {
+      .login-form .actions {
         display: flex;
-        justify-content: flex-end;
+        justify-content: flex-start;
         margin-top: 6px;
+        margin-left: calc(100px + 18px);
       }
 
       button {
@@ -347,26 +340,34 @@
         background: #0e63d7;
       }
 
-      #output {
-        display: none;
-        margin-top: 18px;
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 12px 14px;
-        font-size: 0.98rem;
-        background: #f8fbff;
+      .error {
+        min-height: 1.2em;
+        margin: 10px 0 0;
+        color: var(--error);
+        font-size: 0.9rem;
       }
 
-      #output.has-content {
+      .success-panel {
+        display: none;
+        text-align: center;
+      }
+
+      .success-panel.is-visible {
         display: block;
       }
 
-      #output p {
-        margin: 0 0 8px;
+      .success-panel p {
+        margin: 0 0 20px;
+        font-size: 1.1rem;
+        color: #1e293b;
       }
 
-      #output p:last-child {
-        margin-bottom: 0;
+      .success-panel .actions {
+        justify-content: center;
+      }
+
+      .login-form.is-hidden {
+        display: none;
       }
 
       .site-footer {
@@ -439,20 +440,24 @@
           gap: 10px;
         }
 
+        .form-row input {
+          max-width: none;
+        }
+
         label {
           padding-top: 0;
         }
 
-        .actions {
+        .login-form .actions {
+          margin-left: 0;
           margin-top: 8px;
         }
 
-        #submit {
+        #loginSubmit,
+        #logoutButton {
           width: 100%;
         }
       }
-
-      /* Keep desktop-like 2-column layout to match reference screenshot. */
     </style>
   </head>
   <body>
@@ -536,37 +541,47 @@
 
     <main class="page">
       <section class="card">
-        <h1>Text Box</h1>
+        <h1>Login Form</h1>
 
-        <form id="userForm">
+        <form id="loginForm" class="login-form" data-testid="login-form">
           <div class="form-row">
-            <label for="userName">Full Name</label>
-            <input id="userName" type="text" placeholder="Full Name" />
+            <label for="loginLogin">Login</label>
+            <input
+              id="loginLogin"
+              type="text"
+              placeholder=""
+              autocomplete="username"
+              data-testid="login-login"
+            />
           </div>
 
           <div class="form-row">
-            <label for="userEmail">Email</label>
-            <input id="userEmail" type="email" placeholder="name@example.com" />
+            <label for="loginPassword">Password</label>
+            <input
+              id="loginPassword"
+              type="password"
+              placeholder=""
+              autocomplete="current-password"
+              data-testid="login-password"
+            />
           </div>
 
-          <div class="form-row">
-            <label for="currentAddress">Current Address</label>
-            <textarea id="currentAddress" placeholder="Current Address"></textarea>
-          </div>
-
-          <div class="form-row">
-            <label for="permanentAddress">Permanent Address</label>
-            <textarea id="permanentAddress"></textarea>
-          </div>
+          <p id="loginError" class="error" aria-live="polite" data-testid="login-error"></p>
 
           <div class="actions">
-            <button id="submit" type="submit">Submit</button>
+            <button id="loginSubmit" type="submit" data-testid="login-submit">Login</button>
           </div>
         </form>
 
-        <div id="output" aria-live="polite"></div>
+        <div id="loginSuccess" class="success-panel" data-testid="login-success">
+          <p id="welcomeMessage">Welcome!</p>
+          <div class="actions">
+            <button id="logoutButton" type="button" data-testid="logout-button">Logout</button>
+          </div>
+        </div>
       </section>
     </main>
+
     <footer class="site-footer">
       <div class="site-shell">
         <small>(c) QA.GURU 2019-2026</small>
@@ -574,25 +589,130 @@
     </footer>
 
     <script>
-      const form = document.getElementById("userForm");
+      const USERBASE_KEY = "userbase";
+      const AUTH_KEY = "authUser";
+      const DEFAULT_USERBASE = "user1:password1";
 
-      form.addEventListener("submit", (event) => {
+      const loginForm = document.getElementById("loginForm");
+      const loginLogin = document.getElementById("loginLogin");
+      const loginPassword = document.getElementById("loginPassword");
+      const loginError = document.getElementById("loginError");
+      const loginSuccess = document.getElementById("loginSuccess");
+      const welcomeMessage = document.getElementById("welcomeMessage");
+      const logoutButton = document.getElementById("logoutButton");
+
+      function readLocalStorage(name) {
+        try {
+          return localStorage.getItem(name);
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function writeLocalStorage(name, value) {
+        try {
+          localStorage.setItem(name, value);
+        } catch (e) {}
+      }
+
+      function removeFromLocalStorage(name) {
+        try {
+          localStorage.removeItem(name);
+        } catch (e) {}
+      }
+
+      function initUserbase() {
+        if (!readLocalStorage(USERBASE_KEY)) {
+          writeLocalStorage(USERBASE_KEY, DEFAULT_USERBASE);
+        }
+      }
+
+      function parseUserbase(userbase) {
+        if (!userbase) return { login: "", password: "" };
+        const separatorIndex = userbase.indexOf(":");
+        if (separatorIndex === -1) return { login: userbase, password: "" };
+        return {
+          login: userbase.slice(0, separatorIndex),
+          password: userbase.slice(separatorIndex + 1),
+        };
+      }
+
+      function validateLogin(login, password) {
+        const minLoginLength = 3;
+        const minPasswordLength = 6;
+
+        if (!login && !password) {
+          return (
+            "Login and password are required (minimum " +
+            minLoginLength +
+            " and " +
+            minPasswordLength +
+            " characters)"
+          );
+        }
+        if (!login) {
+          return "Login is required (minimum " + minLoginLength + " characters)";
+        }
+        if (login.length < minLoginLength) {
+          return "Login must be at least " + minLoginLength + " characters";
+        }
+        if (!password) {
+          return "Password is required (minimum " + minPasswordLength + " characters)";
+        }
+        if (password.length < minPasswordLength) {
+          return "Password must be at least " + minPasswordLength + " characters";
+        }
+
+        const stored = parseUserbase(readLocalStorage(USERBASE_KEY));
+        if (login !== stored.login || password !== stored.password) {
+          return "Wrong login or password";
+        }
+
+        return null;
+      }
+
+      function showLoggedIn(login) {
+        loginForm.classList.add("is-hidden");
+        loginSuccess.classList.add("is-visible");
+        welcomeMessage.textContent = "Welcome, " + login + "!";
+        loginError.textContent = "";
+      }
+
+      function showLoginForm() {
+        loginForm.classList.remove("is-hidden");
+        loginSuccess.classList.remove("is-visible");
+        loginLogin.value = "";
+        loginPassword.value = "";
+        loginError.textContent = "";
+      }
+
+      loginForm.addEventListener("submit", (event) => {
         event.preventDefault();
 
-        const userNameValue = document.getElementById("userName").value.trim();
-        const userEmailValue = document.getElementById("userEmail").value.trim();
-        const currentAddressValue = document.getElementById("currentAddress").value.trim();
-        const permanentAddressValue = document.getElementById("permanentAddress").value.trim();
+        const login = loginLogin.value.trim();
+        const password = loginPassword.value.trim();
+        const error = validateLogin(login, password);
 
-        const output = document.getElementById("output");
-        output.innerHTML = `
-          <p id="name">Name:${userNameValue}</p>
-          <p id="email">Email:${userEmailValue}</p>
-          <p id="currentAddress">Current Address :${currentAddressValue}</p>
-          <p id="permanentAddress">Permananet Address :${permanentAddressValue}</p>
-        `;
-        output.classList.add("has-content");
+        if (error) {
+          loginError.textContent = error;
+          return;
+        }
+
+        writeLocalStorage(AUTH_KEY, login);
+        showLoggedIn(login);
       });
+
+      logoutButton.addEventListener("click", () => {
+        removeFromLocalStorage(AUTH_KEY);
+        showLoginForm();
+      });
+
+      initUserbase();
+
+      const authUser = readLocalStorage(AUTH_KEY);
+      if (authUser) {
+        showLoggedIn(authUser);
+      }
     </script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
