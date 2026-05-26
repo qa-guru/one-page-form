@@ -447,7 +447,7 @@
           margin-top: 8px;
         }
 
-        #submit {
+        #submit-button {
           width: 100%;
         }
       }
@@ -538,33 +538,50 @@
       <section class="card">
         <h1>Text Box</h1>
 
-        <form id="userForm">
+        <form id="text-box-form" data-testid="text-box-form">
           <div class="form-row">
-            <label for="userName">Full Name</label>
-            <input id="userName" type="text" placeholder="Full Name" />
+            <label for="full-name-input">Full Name</label>
+            <input
+              id="full-name-input"
+              type="text"
+              placeholder="Full Name"
+              data-testid="full-name-input"
+            />
           </div>
 
           <div class="form-row">
-            <label for="userEmail">Email</label>
-            <input id="userEmail" type="email" placeholder="name@example.com" />
+            <label for="email-input">Email</label>
+            <input
+              id="email-input"
+              type="email"
+              placeholder="name@example.com"
+              data-testid="email-input"
+            />
           </div>
 
           <div class="form-row">
-            <label for="currentAddress">Current Address</label>
-            <textarea id="currentAddress" placeholder="Current Address"></textarea>
+            <label for="current-address-textarea">Current Address</label>
+            <textarea
+              id="current-address-textarea"
+              placeholder="Current Address"
+              data-testid="current-address-textarea"
+            ></textarea>
           </div>
 
           <div class="form-row">
-            <label for="permanentAddress">Permanent Address</label>
-            <textarea id="permanentAddress"></textarea>
+            <label for="permanent-address-textarea">Permanent Address</label>
+            <textarea
+              id="permanent-address-textarea"
+              data-testid="permanent-address-textarea"
+            ></textarea>
           </div>
 
           <div class="actions">
-            <button id="submit" type="submit">Submit</button>
+            <button id="submit-button" type="submit" data-testid="submit-button">Submit</button>
           </div>
         </form>
 
-        <div id="output" aria-live="polite"></div>
+        <div id="output-panel" aria-live="polite" data-testid="output-panel"></div>
       </section>
     </main>
     <footer class="site-footer">
@@ -574,22 +591,22 @@
     </footer>
 
     <script>
-      const form = document.getElementById("userForm");
+      const form = document.getElementById("text-box-form");
 
       form.addEventListener("submit", (event) => {
         event.preventDefault();
 
-        const userNameValue = document.getElementById("userName").value.trim();
-        const userEmailValue = document.getElementById("userEmail").value.trim();
-        const currentAddressValue = document.getElementById("currentAddress").value.trim();
-        const permanentAddressValue = document.getElementById("permanentAddress").value.trim();
+        const userNameValue = document.getElementById("full-name-input").value.trim();
+        const userEmailValue = document.getElementById("email-input").value.trim();
+        const currentAddressValue = document.getElementById("current-address-textarea").value.trim();
+        const permanentAddressValue = document.getElementById("permanent-address-textarea").value.trim();
 
-        const output = document.getElementById("output");
+        const output = document.getElementById("output-panel");
         output.innerHTML = `
-          <p id="name">Name:${userNameValue}</p>
-          <p id="email">Email:${userEmailValue}</p>
-          <p id="currentAddress">Current Address :${currentAddressValue}</p>
-          <p id="permanentAddress">Permananet Address :${permanentAddressValue}</p>
+          <p id="name-output" data-testid="name-output">Name:${userNameValue}</p>
+          <p id="email-output" data-testid="email-output">Email:${userEmailValue}</p>
+          <p id="current-address-output" data-testid="current-address-output">Current Address :${currentAddressValue}</p>
+          <p id="permanent-address-output" data-testid="permanent-address-output">Permananet Address :${permanentAddressValue}</p>
         `;
         output.classList.add("has-content");
       });

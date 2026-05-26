@@ -880,29 +880,29 @@ td:first-child {
         <div class="practice-form-wrapper">
           <p class="subtitle">Student Registration Form</p>
         </div>
-        <form id="userForm" novalidate>
+        <form id="userForm" data-testid="practice-form" novalidate>
           <div class="field-grid">
             <label for="firstName">Name *</label>
             <div class="name-row">
-              <input id="firstName" name="firstName" type="text" placeholder="First Name" required />
-              <input id="lastName" name="lastName" type="text" placeholder="Last Name" required />
+              <input id="firstName" name="firstName" type="text" placeholder="First Name" data-testid="first-name-input" required />
+              <input id="lastName" name="lastName" type="text" placeholder="Last Name" data-testid="last-name-input" required />
             </div>
 
             <label for="userEmail">Email</label>
-            <input id="userEmail" name="userEmail" type="email" placeholder="name@example.com" />
+            <input id="userEmail" name="userEmail" type="email" placeholder="name@example.com" data-testid="email-input" />
 
             <span>Gender *</span>
-            <div class="inline-group" id="genterWrapper">
+            <div class="inline-group" id="genterWrapper" data-testid="gender-wrapper">
               <label for="gender-radio-1">
-                <input id="gender-radio-1" name="gender" type="radio" value="Male" required />
+                <input id="gender-radio-1" name="gender" type="radio" value="Male" data-testid="gender-radio-1" required />
                 Male
               </label>
               <label for="gender-radio-2">
-                <input id="gender-radio-2" name="gender" type="radio" value="Female" />
+                <input id="gender-radio-2" name="gender" type="radio" value="Female" data-testid="gender-radio-2" />
                 Female
               </label>
               <label for="gender-radio-3">
-                <input id="gender-radio-3" name="gender" type="radio" value="Other" />
+                <input id="gender-radio-3" name="gender" type="radio" value="Other" data-testid="gender-radio-3" />
                 Other
               </label>
             </div>
@@ -916,12 +916,13 @@ td:first-child {
               minlength="10"
               maxlength="10"
               pattern="[0-9]{10}"
+              data-testid="mobile-input"
               required
             />
 
             <label for="dateOfBirthInput">Date of Birth</label>
             <div class="datepicker-field">
-              <input id="dateOfBirthInput" name="dateOfBirth" type="text" placeholder="DD MMM YYYY" readonly />
+              <input id="dateOfBirthInput" name="dateOfBirth" type="text" placeholder="DD MMM YYYY" data-testid="date-of-birth-input" readonly />
               <div id="datepickerRoot" class="react-datepicker-wrapper" style="display: none;">
                 <div class="react-datepicker">
                   <div class="react-datepicker__month-container">
@@ -938,66 +939,66 @@ td:first-child {
             </div>
 
             <label for="subjectsInput">Subjects</label>
-            <div id="subjectsWrapper" class="subjects-auto-complete">
+            <div id="subjectsWrapper" class="subjects-auto-complete" data-testid="subjects-wrapper">
               <div class="subjects-input-area">
-                <div id="subjectsChips" class="subjects-chips"></div>
-                <input id="subjectsInput" type="text" placeholder="e.g. Maths, Physics" autocomplete="off" />
+                <div id="subjectsChips" class="subjects-chips" data-testid="subjects-chips"></div>
+                <input id="subjectsInput" type="text" placeholder="e.g. Maths, Physics" autocomplete="off" data-testid="subjects-input" />
               </div>
-              <input type="hidden" name="subjects" id="subjectsValue" />
-              <div id="subjectsDropdown" class="subjects-auto-complete__menu" style="display: none;" role="listbox"></div>
+              <input type="hidden" name="subjects" id="subjectsValue" data-testid="subjects-value" />
+              <div id="subjectsDropdown" class="subjects-auto-complete__menu" style="display: none;" role="listbox" data-testid="subjects-dropdown"></div>
             </div>
 
             <span>Hobbies</span>
-            <div class="inline-group" id="hobbiesWrapper">
+            <div class="inline-group" id="hobbiesWrapper" data-testid="hobbies-wrapper">
               <label for="hobbies-checkbox-1">
-                <input id="hobbies-checkbox-1" type="checkbox" value="Sports" />
+                <input id="hobbies-checkbox-1" type="checkbox" value="Sports" data-testid="hobbies-checkbox-1" />
                 Sports
               </label>
               <label for="hobbies-checkbox-2">
-                <input id="hobbies-checkbox-2" type="checkbox" value="Reading" />
+                <input id="hobbies-checkbox-2" type="checkbox" value="Reading" data-testid="hobbies-checkbox-2" />
                 Reading
               </label>
               <label for="hobbies-checkbox-3">
-                <input id="hobbies-checkbox-3" type="checkbox" value="Music" />
+                <input id="hobbies-checkbox-3" type="checkbox" value="Music" data-testid="hobbies-checkbox-3" />
                 Music
               </label>
             </div>
 
             <label for="uploadPicture">Picture</label>
-            <input id="uploadPicture" name="uploadPicture" type="file" />
+            <input id="uploadPicture" name="uploadPicture" type="file" data-testid="picture-input" />
 
             <label for="currentAddress">Current Address</label>
-            <textarea id="currentAddress" name="currentAddress" rows="4"></textarea>
+            <textarea id="currentAddress" name="currentAddress" rows="4" data-testid="current-address-textarea"></textarea>
 
             <label>State and City</label>
             <div class="state-city-row">
               <div class="state-city-col">
-                <div id="state" class="state-city-trigger" tabindex="0" role="combobox">Select State</div>
-                <input type="hidden" name="state" id="stateValue" />
+                <div id="state" class="state-city-trigger" tabindex="0" role="combobox" data-testid="state-combobox">Select State</div>
+                <input type="hidden" name="state" id="stateValue" data-testid="state-value" />
               </div>
               <div class="state-city-col">
-                <div id="city" class="state-city-trigger disabled" tabindex="0" role="combobox">Select City</div>
-                <input type="hidden" name="city" id="cityValue" />
+                <div id="city" class="state-city-trigger disabled" tabindex="0" role="combobox" data-testid="city-combobox">Select City</div>
+                <input type="hidden" name="city" id="cityValue" data-testid="city-value" />
               </div>
-              <div id="stateCity-wrapper" class="state-city-dropdown" style="display: none;"></div>
+              <div id="stateCity-wrapper" class="state-city-dropdown" style="display: none;" data-testid="state-city-dropdown"></div>
             </div>
           </div>
 
-          <button id="submit" type="submit">Submit</button>
-          <p id="formError" class="error" aria-live="polite"></p>
+          <button id="submit" type="submit" data-testid="submit-button">Submit</button>
+          <p id="formError" class="error" aria-live="polite" data-testid="error-message"></p>
         </form>
       </section>
     </main>
 
-    <dialog id="resultModal">
+    <dialog id="resultModal" data-testid="result-modal">
       <div class="modal-dialog">
-        <div id="example-modal-sizes-title-lg">Thanks for submitting the form</div>
+        <div id="example-modal-sizes-title-lg" data-testid="modal-title">Thanks for submitting the form</div>
         <div class="table-responsive">
           <table>
-            <tbody id="resultBody"></tbody>
+            <tbody id="resultBody" data-testid="result-body"></tbody>
           </table>
         </div>
-        <button id="closeModal" type="button">Close</button>
+        <button id="closeModal" type="button" data-testid="close-button">Close</button>
       </div>
     </dialog>
 
