@@ -453,8 +453,8 @@
           margin-top: 8px;
         }
 
-        #loginSubmit,
-        #logoutButton {
+        #submit-button,
+        #logout-button {
           width: 100%;
         }
       }
@@ -543,40 +543,40 @@
       <section class="card">
         <h1>Login Form</h1>
 
-        <form id="loginForm" class="login-form" data-testid="login-form">
+        <form id="login-form" class="login-form" data-testid="login-form">
           <div class="form-row">
-            <label for="loginLogin">Login</label>
+            <label for="login-input">Login</label>
             <input
-              id="loginLogin"
+              id="login-input"
               type="text"
               placeholder=""
               autocomplete="username"
-              data-testid="login-login"
+              data-testid="login-input"
             />
           </div>
 
           <div class="form-row">
-            <label for="loginPassword">Password</label>
+            <label for="password-input">Password</label>
             <input
-              id="loginPassword"
+              id="password-input"
               type="password"
               placeholder=""
               autocomplete="current-password"
-              data-testid="login-password"
+              data-testid="password-input"
             />
           </div>
 
-          <p id="loginError" class="error" aria-live="polite" data-testid="login-error"></p>
+          <p id="error-message" class="error" aria-live="polite" data-testid="error-message"></p>
 
           <div class="actions">
-            <button id="loginSubmit" type="submit" data-testid="login-submit">Login</button>
+            <button id="submit-button" type="submit" data-testid="submit-button">Login</button>
           </div>
         </form>
 
-        <div id="loginSuccess" class="success-panel" data-testid="login-success">
-          <p id="welcomeMessage">Welcome!</p>
+        <div id="success-panel" class="success-panel" data-testid="success-panel">
+          <p id="welcome-message" data-testid="welcome-message">Welcome!</p>
           <div class="actions">
-            <button id="logoutButton" type="button" data-testid="logout-button">Logout</button>
+            <button id="logout-button" type="button" data-testid="logout-button">Logout</button>
           </div>
         </div>
       </section>
@@ -593,13 +593,13 @@
       const AUTH_KEY = "authUser";
       const DEFAULT_USERBASE = "user1:password1";
 
-      const loginForm = document.getElementById("loginForm");
-      const loginLogin = document.getElementById("loginLogin");
-      const loginPassword = document.getElementById("loginPassword");
-      const loginError = document.getElementById("loginError");
-      const loginSuccess = document.getElementById("loginSuccess");
-      const welcomeMessage = document.getElementById("welcomeMessage");
-      const logoutButton = document.getElementById("logoutButton");
+      const loginForm = document.getElementById("login-form");
+      const loginLogin = document.getElementById("login-input");
+      const loginPassword = document.getElementById("password-input");
+      const loginError = document.getElementById("error-message");
+      const loginSuccess = document.getElementById("success-panel");
+      const welcomeMessage = document.getElementById("welcome-message");
+      const logoutButton = document.getElementById("logout-button");
 
       function readLocalStorage(name) {
         try {
