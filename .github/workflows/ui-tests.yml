@@ -96,6 +96,9 @@ jobs:
         run: |
           REPORT_ID="${{ github.run_number }}"
           REPORT_DIR="pages/allure-reports/${REPORT_ID}"
+          REPORT_SRC="tests-java/build/reports/allure-report/allureReport"
+          DASHBOARD_SRC="${REPORT_SRC}/dashboard"
+          LANDING_DIR="pages/allure-reports"
 
           mkdir -p pages
 
@@ -107,35 +110,16 @@ jobs:
 
           cp *.html pages/
           mkdir -p "$REPORT_DIR"
-          cp -r tests-java/build/reports/allure-report/allureReport/. "$REPORT_DIR/"
+          cp -r "${REPORT_SRC}/." "$REPORT_DIR/"
 
           if [ -f tests-java/history.jsonl ]; then
-            cp tests-java/history.jsonl pages/allure-reports/history.jsonl
+            cp tests-java/history.jsonl "${LANDING_DIR}/history.jsonl"
           fi
 
-          {
-            echo '<!DOCTYPE html>'
-            echo '<html lang="en">'
-            echo '<head>'
-            echo '  <meta charset="utf-8">'
-            echo '  <title>Allure Reports</title>'
-            echo '  <style>'
-            echo '    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }'
-            echo '    a { color: #0969da; }'
-            echo '    li { margin: 0.5rem 0; }'
-            echo '  </style>'
-            echo '</head>'
-            echo '<body>'
-            echo '  <h1>Allure Reports</h1>'
-            echo '  <ul>'
-            for dir in $(find pages/allure-reports -mindepth 1 -maxdepth 1 -type d | sort -Vr); do
-              run=$(basename "$dir")
-              echo "    <li><a href=\"${run}/index.html\">Run #${run}</a></li>"
-            done
-            echo '  </ul>'
-            echo '</body>'
-            echo '</html>'
-          } > pages/allure-reports/index.html
+          if [ -d "$DASHBOARD_SRC" ]; then
+            find "${LANDING_DIR}" -maxdepth 1 -type f ! -name 'history.jsonl' -delete
+            cp -r "${DASHBOARD_SRC}/." "${LANDING_DIR}/"
+          fi
 
       - name: Publish Allure report to GitHub Pages
         if: always() && github.event_name != 'pull_request'
@@ -150,15 +134,15 @@ jobs:
         working-directory: .
         run: |
           REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/${{ github.run_number }}/index.html"
-          INDEX_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/"
+          DASHBOARD_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/"
 
           echo "Allure report (this run): ${REPORT_URL}"
-          echo "Allure reports index:     ${INDEX_URL}"
+          echo "Allure dashboard:         ${DASHBOARD_URL}"
           echo "::notice title=Allure Report::${REPORT_URL}"
 
           {
             echo "## Allure Report"
             echo ""
+            echo "- [Dashboard с trends](${DASHBOARD_URL})"
             echo "- [Run #${{ github.run_number }}](${REPORT_URL})"
-            echo "- [All reports index](${INDEX_URL})"
           } >> "$GITHUB_STEP_SUMMARY"
