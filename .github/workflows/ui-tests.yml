@@ -72,9 +72,6 @@ jobs:
           if [ -n "$LATEST_REPORT" ] && [ -d "$LATEST_REPORT/history" ]; then
             mkdir -p build/allure-results/history
             cp -r "$LATEST_REPORT/history/." build/allure-results/history/
-          elif [ -d ../gh-pages/allure-report/history ]; then
-            mkdir -p build/allure-results/history
-            cp -r ../gh-pages/allure-report/history/. build/allure-results/history/
           fi
 
       - name: Generate Allure report
@@ -93,6 +90,8 @@ jobs:
           if [ -d gh-pages ]; then
             cp -a gh-pages/. pages/
           fi
+
+          rm -rf pages/allure-report
 
           cp *.html pages/
           mkdir -p "$REPORT_DIR"
