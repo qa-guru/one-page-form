@@ -14,6 +14,9 @@ on:
   pull_request:
     branches: [cicd]
 
+permissions:
+  contents: write
+
 jobs:
   ui-tests:
     runs-on: ubuntu-latest
@@ -53,13 +56,39 @@ jobs:
       - name: Run UI tests
         run: allurectl watch -- gradle test -Denv=ci
 
+      - name: Load Allure report history
+        if: always()
+        uses: actions/checkout@v6
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Restore Allure history
+        if: always()
+        working-directory: tests-java
+        run: |
+          if [ -d ../gh-pages/allure-report/history ]; then
+            mkdir -p build/allure-results/history
+            cp -r ../gh-pages/allure-report/history/. build/allure-results/history/
+          fi
+
       - name: Generate Allure report
         if: always()
         run: gradle allureReport
 
-      - name: Upload Allure report
-        if: always()
-        uses: actions/upload-artifact@v6
+      - name: Prepare GitHub Pages site
+        if: always() && github.event_name != 'pull_request'
+        working-directory: .
+        run: |
+          mkdir -p pages/allure-report
+          cp *.html pages/
+          cp -r tests-java/build/reports/allure-report/allureReport/. pages/allure-report/
+
+      - name: Publish Allure report to GitHub Pages
+        if: always() && github.event_name != 'pull_request'
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          name: allure-report
-          path: tests-java/build/reports/allure-report/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: pages
