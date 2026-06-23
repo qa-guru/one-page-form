@@ -22,6 +22,10 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Cache Selenium browsers and drivers
         uses: actions/cache@v5
         with:
@@ -36,12 +40,9 @@ jobs:
 
       - name: Run UI tests
         run: |
-          python3 -m http.server 8080 --directory .. &
+          python -m http.server 8080 --directory .. &
           sleep 1
-          gradle test
-        env:
-          CI: true
-          BASE_URL: http://127.0.0.1:8080
+          gradle test -Denv=ci
 
       - name: Upload test report
         if: failure()

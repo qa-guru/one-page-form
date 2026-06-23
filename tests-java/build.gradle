@@ -9,6 +9,7 @@ repositories {
 dependencies {
     testImplementation (
             "com.codeborne:selenide:7.16.2",
+            "org.aeonbits.owner:owner:1.0.12",
             "org.junit.jupiter:junit-jupiter:5.11.4")
     testRuntimeOnly (
             "org.junit.platform:junit-platform-launcher",
