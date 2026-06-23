@@ -11,7 +11,7 @@ public interface TestConfig extends Config {
 
     @Key("baseUrl")
     @DefaultValue("")
-    String baseUrl();
+    String baseUrlRaw();
 
     @Key("browser")
     @DefaultValue("chrome")

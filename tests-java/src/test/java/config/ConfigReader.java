@@ -9,8 +9,9 @@ public class ConfigReader {
   public static final TestConfig config = ConfigFactory.create(TestConfig.class);
 
   public static String resolvedBaseUrl() {
-    return config.baseUrl().isBlank()
+    String baseUrl = config.baseUrlRaw();
+    return baseUrl == null || baseUrl.isBlank()
         ? Paths.get("../").toAbsolutePath().normalize().toUri().toString()
-        : config.baseUrl();
+        : baseUrl;
   }
 }

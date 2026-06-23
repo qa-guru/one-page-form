@@ -68,7 +68,11 @@ jobs:
         if: always()
         working-directory: tests-java
         run: |
-          if [ -d ../gh-pages/allure-report/history ]; then
+          LATEST_REPORT=$(find ../gh-pages/allure-reports -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort -V | tail -1)
+          if [ -n "$LATEST_REPORT" ] && [ -d "$LATEST_REPORT/history" ]; then
+            mkdir -p build/allure-results/history
+            cp -r "$LATEST_REPORT/history/." build/allure-results/history/
+          elif [ -d ../gh-pages/allure-report/history ]; then
             mkdir -p build/allure-results/history
             cp -r ../gh-pages/allure-report/history/. build/allure-results/history/
           fi
@@ -81,9 +85,42 @@ jobs:
         if: always() && github.event_name != 'pull_request'
         working-directory: .
         run: |
-          mkdir -p pages/allure-report
+          REPORT_ID="${{ github.run_number }}"
+          REPORT_DIR="pages/allure-reports/${REPORT_ID}"
+
+          mkdir -p pages
+
+          if [ -d gh-pages ]; then
+            cp -a gh-pages/. pages/
+          fi
+
           cp *.html pages/
-          cp -r tests-java/build/reports/allure-report/allureReport/. pages/allure-report/
+          mkdir -p "$REPORT_DIR"
+          cp -r tests-java/build/reports/allure-report/allureReport/. "$REPORT_DIR/"
+
+          {
+            echo '<!DOCTYPE html>'
+            echo '<html lang="en">'
+            echo '<head>'
+            echo '  <meta charset="utf-8">'
+            echo '  <title>Allure Reports</title>'
+            echo '  <style>'
+            echo '    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }'
+            echo '    a { color: #0969da; }'
+            echo '    li { margin: 0.5rem 0; }'
+            echo '  </style>'
+            echo '</head>'
+            echo '<body>'
+            echo '  <h1>Allure Reports</h1>'
+            echo '  <ul>'
+            for dir in $(find pages/allure-reports -mindepth 1 -maxdepth 1 -type d | sort -Vr); do
+              run=$(basename "$dir")
+              echo "    <li><a href=\"${run}/index.html\">Run #${run}</a></li>"
+            done
+            echo '  </ul>'
+            echo '</body>'
+            echo '</html>'
+          } > pages/allure-reports/index.html
 
       - name: Publish Allure report to GitHub Pages
         if: always() && github.event_name != 'pull_request'
