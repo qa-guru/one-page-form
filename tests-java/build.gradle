@@ -22,4 +22,5 @@ tasks.withType(JavaCompile) {
 
 test {
     useJUnitPlatform()
+    systemProperty 'env', System.getProperty('env', 'local')
 }

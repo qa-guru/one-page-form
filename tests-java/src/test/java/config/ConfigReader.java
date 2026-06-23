@@ -6,12 +6,6 @@ import org.aeonbits.owner.ConfigFactory;
 
 public class ConfigReader {
 
-  static {
-    if (System.getProperty("env", "").isBlank()) {
-      System.setProperty("env", "local");
-    }
-  }
-
   public static final TestConfig config = ConfigFactory.create(TestConfig.class);
 
   public static String resolvedBaseUrl() {
