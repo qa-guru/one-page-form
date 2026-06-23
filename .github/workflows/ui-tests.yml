@@ -10,9 +10,9 @@ on:
         description: "TestOps service parameter. Leave blank"
         required: false
   push:
-    branches: [cicd]
+    branches: [main]
   pull_request:
-    branches: [cicd]
+    branches: [main]
 
 permissions:
   contents: write
