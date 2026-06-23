@@ -11,6 +11,7 @@ allure {
     version = '3.13.0'
     adapter {
         allureJavaVersion = '2.35.2'
+        resultsDir.set(layout.buildDirectory.dir('allure-results'))
     }
 }
 

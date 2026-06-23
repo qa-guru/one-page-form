@@ -2,6 +2,13 @@ name: UI Tests
 
 on:
   workflow_dispatch:
+    inputs:
+      ALLURE_JOB_RUN_ID:
+        description: "TestOps service parameter. Leave blank"
+        required: false
+      ALLURE_USERNAME:
+        description: "TestOps service parameter. Leave blank"
+        required: false
   push:
     branches: [cicd]
   pull_request:
@@ -10,6 +17,12 @@ on:
 jobs:
   ui-tests:
     runs-on: ubuntu-latest
+    env:
+      ALLURE_ENDPOINT: https://allure.autotests.cloud
+      ALLURE_PROJECT_ID: 5263
+      ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
+      ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
+      ALLURE_RESULTS: build/allure-results
     defaults:
       run:
         working-directory: tests-java
@@ -34,8 +47,11 @@ jobs:
         with:
           gradle-version: '8.14'
 
+      - name: Install allurectl
+        uses: allure-framework/setup-allurectl@v1
+
       - name: Run UI tests
-        run: gradle test -Denv=ci
+        run: allurectl watch -- gradle test -Denv=ci
 
       - name: Generate Allure report
         if: always()
