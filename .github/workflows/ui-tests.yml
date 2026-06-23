@@ -15,22 +15,22 @@ jobs:
         working-directory: tests-java
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 17
 
       - name: Cache Selenium browsers and drivers
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/selenium
           key: selenium-${{ runner.os }}-chrome-stable
           restore-keys: |
             selenium-${{ runner.os }}-chrome-
 
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: '8.14'
 
@@ -45,7 +45,7 @@ jobs:
 
       - name: Upload test report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: test-report
           path: tests-java/build/reports/tests/test/
