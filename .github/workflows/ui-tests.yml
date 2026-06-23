@@ -128,3 +128,21 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: pages
+
+      - name: Allure report links
+        if: always() && github.event_name != 'pull_request'
+        working-directory: .
+        run: |
+          REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/${{ github.run_number }}/index.html"
+          INDEX_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/"
+
+          echo "Allure report (this run): ${REPORT_URL}"
+          echo "Allure reports index:     ${INDEX_URL}"
+          echo "::notice title=Allure Report::${REPORT_URL}"
+
+          {
+            echo "## Allure Report"
+            echo ""
+            echo "- [Run #${{ github.run_number }}](${REPORT_URL})"
+            echo "- [All reports index](${INDEX_URL})"
+          } >> "$GITHUB_STEP_SUMMARY"
