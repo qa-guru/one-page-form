@@ -1,8 +1,2 @@
-__pycache__/*
-.vscode/launch.json
-.vscode/settings.json
-.idea/vcs.xml
-.idea/modules.xml
-.idea/misc.xml
-.idea/one-page-form.iml
-.idea/.gitignore
+.vscode/*
+.idea/*
