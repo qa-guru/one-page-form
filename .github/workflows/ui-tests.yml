@@ -37,9 +37,13 @@ jobs:
       - name: Run UI tests
         run: gradle test -Denv=ci
 
-      - name: Upload test report
-        if: failure()
+      - name: Generate Allure report
+        if: always()
+        run: gradle allureReport
+
+      - name: Upload Allure report
+        if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: test-report
-          path: tests-java/build/reports/tests/test/
+          name: allure-report
+          path: tests-java/build/reports/allure-report/
