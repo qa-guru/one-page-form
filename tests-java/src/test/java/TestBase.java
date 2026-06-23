@@ -9,7 +9,13 @@ public class TestBase {
 
     @BeforeAll
     static void setup() {
-        Configuration.baseUrl = Paths.get("../").toUri().toString();
+        String baseUrl = System.getenv("BASE_URL");
+        if (baseUrl == null || baseUrl.isBlank()) {
+            baseUrl = Paths.get("../").toUri().toString();
+        } else if (!baseUrl.endsWith("/")) {
+            baseUrl = baseUrl + "/";
+        }
+        Configuration.baseUrl = baseUrl;
         Configuration.browser = "chrome";
 //        Configuration.browserSize = "1024x768";
         Configuration.browserSize = "1920x1280";

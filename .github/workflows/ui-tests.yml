@@ -21,16 +21,26 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - uses: browser-actions/setup-chrome@v1
+      - name: Cache Selenium browsers and drivers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/selenium
+          key: selenium-${{ runner.os }}-chrome-stable
+          restore-keys: |
+            selenium-${{ runner.os }}-chrome-
 
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.14'
 
       - name: Run UI tests
-        run: gradle test
+        run: |
+          python3 -m http.server 8080 --directory .. &
+          sleep 1
+          gradle test
         env:
           CI: true
+          BASE_URL: http://127.0.0.1:8080
 
       - name: Upload test report
         if: failure()
