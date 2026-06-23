@@ -4,3 +4,4 @@
 build/*
 bin/*
 allure-results/*
+history.jsonl

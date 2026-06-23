@@ -1,0 +1,13 @@
+{
+  "name": "UI Tests",
+  "historyPath": "./history.jsonl",
+  "appendHistory": true,
+  "historyLimit": 20,
+  "plugins": {
+    "awesome": {
+      "options": {
+        "reportLanguage": "ru"
+      }
+    }
+  }
+}

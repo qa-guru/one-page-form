@@ -13,6 +13,9 @@ allure {
         allureJavaVersion = '2.35.2'
         resultsDir.set(layout.buildDirectory.dir('allure-results'))
     }
+    report {
+        configFile.set(layout.projectDirectory.file('allurerc.json'))
+    }
 }
 
 dependencies {
