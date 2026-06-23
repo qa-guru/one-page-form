@@ -13,8 +13,8 @@ public class TestBase {
         Configuration.browser = "chrome";
 //        Configuration.browserSize = "1024x768";
         Configuration.browserSize = "1920x1280";
+        Configuration.headless = "true".equalsIgnoreCase(System.getenv("CI"));
 //        Configuration.browserVersion = "148.0";
-//        Configuration.headless = true;
 //        Configuration.pageLoadStrategy = "eager";
 //        Configuration.timeout = 5000;
     }

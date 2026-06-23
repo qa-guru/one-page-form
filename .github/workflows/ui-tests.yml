@@ -1,0 +1,40 @@
+name: UI Tests
+
+on:
+  push:
+    branches: [cicd]
+  pull_request:
+    branches: [cicd]
+
+jobs:
+  ui-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tests-java
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: browser-actions/setup-chrome@v1
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14'
+
+      - name: Run UI tests
+        run: gradle test
+        env:
+          CI: true
+
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: tests-java/build/reports/tests/test/
