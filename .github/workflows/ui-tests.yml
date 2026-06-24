@@ -16,6 +16,8 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
+  checks: write
 
 jobs:
   ui-tests:
@@ -86,12 +88,26 @@ jobs:
           }
           EOF
 
+      - name: Set Allure report variables
+        if: always()
+        working-directory: tests-java
+        run: |
+          jq --arg environment "ci" \
+             --arg build "#${{ github.run_number }}" \
+             --arg branch "${{ github.head_ref || github.ref_name }}" \
+             '.variables += {
+               "Environment": $environment,
+               "Build": $build,
+               "Branch": $branch
+             }' allurerc.json > allurerc.ci.json
+          mv allurerc.ci.json allurerc.json
+
       - name: Generate Allure report
         if: always()
         run: gradle allureReport
 
       - name: Prepare GitHub Pages site
-        if: always() && github.event_name != 'pull_request'
+        if: always()
         working-directory: .
         run: |
           REPORT_ID="${{ github.run_number }}"
@@ -122,15 +138,26 @@ jobs:
           fi
 
       - name: Publish Allure report to GitHub Pages
-        if: always() && github.event_name != 'pull_request'
+        if: always()
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: pages
 
+      - name: Post Allure summary to PR
+        if: always() && github.event_name == 'pull_request'
+        uses: allure-framework/allure-action@v0.7.2
+        with:
+          report-directory: tests-java/build/reports/allure-report/allureReport
+          remote-href: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/${{ github.run_number }}/"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          sections: |
+            new
+            flaky
+
       - name: Allure report links
-        if: always() && github.event_name != 'pull_request'
+        if: always()
         working-directory: .
         run: |
           REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/${{ github.run_number }}/index.html"
