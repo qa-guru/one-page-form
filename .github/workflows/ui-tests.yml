@@ -35,6 +35,7 @@ jobs:
       ALLURE_RESULTS: build/allure-results
       BROWSER_VERSION: '148'
       REPORT_ID: ${{ github.run_id }}
+      ALLURE_RUNS_RETENTION: '10'
     defaults:
       run:
         working-directory: tests-java
@@ -174,6 +175,8 @@ jobs:
               ! -name 'latest-run-id.txt' \
               -delete
           fi
+
+          bash .github/scripts/optimize-allure-pages.sh pages/allure-reports "${{ env.ALLURE_RUNS_RETENTION }}"
 
           bash .github/scripts/generate-branch-landing.sh "${LANDING_DIR}"
 

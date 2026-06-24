@@ -3,6 +3,8 @@ set -euo pipefail
 
 PAGES_ALLURE="${1:?pages/allure-reports path required}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=allure-pages-lib.sh
+source "${SCRIPT_DIR}/allure-pages-lib.sh"
 
 GLOBAL_LANDING="${PAGES_ALLURE}"
 
@@ -45,12 +47,16 @@ for branch in "${sorted_branches[@]:-}"; do
     latest_run="$(tr -d '[:space:]' < "${GLOBAL_LANDING}/${branch}/latest-run-id.txt")"
   fi
   if [ -z "${latest_run}" ]; then
-    latest_run="$(find "${GLOBAL_LANDING}/${branch}" -mindepth 1 -maxdepth 1 -type d -regextype posix-extended -regex '.*/[0-9]+' 2>/dev/null | sort -V | tail -1 | xargs -r basename)"
+    latest_run="$(list_run_dirs "${GLOBAL_LANDING}/${branch}" | tail -1 | xargs -r basename)"
   fi
 
   report_link=""
   if [ -n "${latest_run}" ]; then
-    report_link="<a class=\"report-link\" href=\"${branch}/${latest_run}/index.html\">полный отчёт →</a>"
+    if [ -f "${GLOBAL_LANDING}/${branch}/${latest_run}/awesome/index.html" ]; then
+      report_link="<a class=\"report-link\" href=\"${branch}/${latest_run}/awesome/index.html\">полный отчёт →</a>"
+    elif [ -f "${GLOBAL_LANDING}/${branch}/${latest_run}/index.html" ]; then
+      report_link="<a class=\"report-link\" href=\"${branch}/${latest_run}/index.html\">полный отчёт →</a>"
+    fi
   fi
 
   dashboard_src="${branch}/"
@@ -70,7 +76,11 @@ for branch in "${sorted_branches[@]:-}"; do
     </section>"
   branch_links="${branch_links}<li><a href=\"${branch}/\">${branch}</a></li>"
   if [ -n "${latest_run}" ]; then
-    branch_links="${branch_links} <li><a href=\"${branch}/${latest_run}/index.html\">${branch} — последний run</a></li>"
+    if [ -f "${GLOBAL_LANDING}/${branch}/${latest_run}/awesome/index.html" ]; then
+      branch_links="${branch_links} <li><a href=\"${branch}/${latest_run}/awesome/index.html\">${branch} — последний run</a></li>"
+    elif [ -f "${GLOBAL_LANDING}/${branch}/${latest_run}/index.html" ]; then
+      branch_links="${branch_links} <li><a href=\"${branch}/${latest_run}/index.html\">${branch} — последний run</a></li>"
+    fi
   fi
 done
 

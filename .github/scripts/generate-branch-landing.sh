@@ -2,9 +2,23 @@
 set -euo pipefail
 
 BRANCH_DIR="${1:?branch directory required}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=allure-pages-lib.sh
+source "${SCRIPT_DIR}/allure-pages-lib.sh"
 
 branch_name="$(basename "${BRANCH_DIR}")"
 latest_run=""
+
+report_entry() {
+  local run_id="${1}"
+  if [ -f "${BRANCH_DIR}/${run_id}/awesome/index.html" ]; then
+    printf '%s' "${run_id}/awesome/index.html"
+  elif [ -f "${BRANCH_DIR}/${run_id}/index.html" ]; then
+    printf '%s' "${run_id}/index.html"
+  else
+    printf '%s' ""
+  fi
+}
 
 if [ -f "${BRANCH_DIR}/latest-run-id.txt" ]; then
   latest_run="$(tr -d '[:space:]' < "${BRANCH_DIR}/latest-run-id.txt")"
@@ -13,14 +27,16 @@ fi
 if [ -z "${latest_run}" ] || [ ! -d "${BRANCH_DIR}/${latest_run}" ]; then
   while IFS= read -r run_dir; do
     latest_run="$(basename "${run_dir}")"
-  done < <(find "${BRANCH_DIR}" -mindepth 1 -maxdepth 1 -type d -regextype posix-extended -regex '.*/[0-9]+' 2>/dev/null | sort -V | tail -1)
+  done < <(list_run_dirs "${BRANCH_DIR}" | tail -1)
 fi
 
 run_links=""
 while IFS= read -r run_dir; do
   run_id="$(basename "${run_dir}")"
-  run_links="<li><a href=\"${run_id}/index.html\">Run ${run_id}</a></li>${run_links}"
-done < <(find "${BRANCH_DIR}" -mindepth 1 -maxdepth 1 -type d -regextype posix-extended -regex '.*/[0-9]+' 2>/dev/null | sort -Vr)
+  entry="$(report_entry "${run_id}")"
+  [ -n "${entry}" ] || continue
+  run_links="<li><a href=\"${entry}\">Run ${run_id}</a></li>${run_links}"
+done < <(list_run_dirs "${BRANCH_DIR}" reverse)
 
 dashboard_frame=""
 if [ -f "${BRANCH_DIR}/dashboard/index.html" ]; then
@@ -30,8 +46,12 @@ elif [ -f "${BRANCH_DIR}/index.html" ] && [ ! -f "${BRANCH_DIR}/latest-run-id.tx
 fi
 
 report_cta=""
-if [ -n "${latest_run}" ] && [ -f "${BRANCH_DIR}/${latest_run}/index.html" ]; then
-  report_cta="<a class=\"btn primary\" href=\"${latest_run}/index.html\">Открыть полный отчёт (последний прогон)</a>"
+latest_entry=""
+if [ -n "${latest_run}" ]; then
+  latest_entry="$(report_entry "${latest_run}")"
+fi
+if [ -n "${latest_entry}" ]; then
+  report_cta="<a class=\"btn primary\" href=\"${latest_entry}\">Открыть полный отчёт (последний прогон)</a>"
 else
   report_cta='<p class="empty-state">Полный отчёт пока не опубликован</p>'
 fi
