@@ -21,6 +21,10 @@ public interface TestConfig extends Config {
     @DefaultValue("1920x1280")
     String browserSize();
 
+    @Key("browserVersion")
+    @DefaultValue("148")
+    String browserVersion();
+
     @Key("headless")
     @DefaultValue("false")
     boolean headless();

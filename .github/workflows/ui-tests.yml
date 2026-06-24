@@ -28,6 +28,7 @@ jobs:
       ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
       ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
       ALLURE_RESULTS: build/allure-results
+      BROWSER_VERSION: '148'
     defaults:
       run:
         working-directory: tests-java
@@ -44,7 +45,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.cache/selenium
-          key: selenium-${{ runner.os }}-chrome-stable
+          key: selenium-${{ runner.os }}-chrome-${{ env.BROWSER_VERSION }}
           restore-keys: |
             selenium-${{ runner.os }}-chrome-
 
@@ -56,7 +57,7 @@ jobs:
         uses: allure-framework/setup-allurectl@v1
 
       - name: Run UI tests
-        run: allurectl watch -- ./gradlew test -Denv=ci
+        run: allurectl watch -- ./gradlew test -Denv=ci -DbrowserVersion=${{ env.BROWSER_VERSION }}
 
       - name: Load Allure report history
         if: always()

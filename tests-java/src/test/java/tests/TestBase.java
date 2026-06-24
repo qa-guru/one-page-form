@@ -25,6 +25,7 @@ public class TestBase {
     
         Configuration.baseUrl = resolvedBaseUrl();
         Configuration.browser = config.browser();
+        Configuration.browserVersion = config.browserVersion();
         Configuration.browserSize = config.browserSize();
         Configuration.headless = config.headless();
     

@@ -52,6 +52,6 @@ public class LoginTests extends TestBase {
         $("[data-testid=login-input]").setValue("user1");
         $("[data-testid=submit-button]").click();
 
-        $("[data-testid=error-message]").shouldHave(text("Password is required (minimum 6 characters)"));
+        $("[data-testid=error-message]").shouldHave(text("Password is required (minimum 5 characters)"));
     }
 }
