@@ -16,13 +16,14 @@ Small static HTML/CSS/JavaScript demos for practicing form interactions and basi
 
 ### Allure reports (CI)
 
-Reports are grouped by branch, then by workflow run. A global dashboard aggregates trends across all branches:
+Reports are grouped by branch name in the path:
 
-- [Global dashboard (all branches)](https://qa-guru.github.io/one-page-form/allure-reports/)
+- `allure-reports/` — overview with a dashboard per branch
 - `allure-reports/{branch}/` — branch dashboard with trends
 - `allure-reports/{branch}/{run_id}/` — report for a specific run
 
 Examples:
 
+- [Overview dashboard](https://qa-guru.github.io/one-page-form/allure-reports/)
 - [main dashboard](https://qa-guru.github.io/one-page-form/allure-reports/main/)
-- [main, run example](https://qa-guru.github.io/one-page-form/allure-reports/main/12345678901/index.html)
+- [demo branch dashboard](https://qa-guru.github.io/one-page-form/allure-reports/demo-allure-data-alpha/)
