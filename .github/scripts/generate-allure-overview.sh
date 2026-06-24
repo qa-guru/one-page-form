@@ -2,6 +2,7 @@
 set -euo pipefail
 
 PAGES_ALLURE="${1:?pages/allure-reports path required}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 GLOBAL_LANDING="${PAGES_ALLURE}"
 
@@ -14,9 +15,18 @@ done < <(
   find "${GLOBAL_LANDING}" -mindepth 1 -maxdepth 1 -type d \
     ! -name '_other-branches' \
     -exec test -f '{}/history.jsonl' ';' \
-    -exec test -f '{}/index.html' ';' \
+    \( -exec test -f '{}/dashboard/index.html' ';' -o -exec test -d '{}/dashboard' ';' -o -exec test -f '{}/latest-run-id.txt' ';' \) \
     -print 2>/dev/null | sort
 )
+
+for branch_dir in "${GLOBAL_LANDING}"/*/; do
+  [ -d "${branch_dir}" ] || continue
+  slug="$(basename "${branch_dir}")"
+  case "${slug}" in _other-branches) continue ;; esac
+  if [ -f "${branch_dir}/history.jsonl" ]; then
+    bash "${SCRIPT_DIR}/generate-branch-landing.sh" "${branch_dir}"
+  fi
+done
 
 sorted_branches=()
 if printf '%s\n' "${branches[@]:-}" | grep -qx 'main'; then
@@ -30,12 +40,36 @@ done
 branch_panels=""
 branch_links=""
 for branch in "${sorted_branches[@]:-}"; do
+  latest_run=""
+  if [ -f "${GLOBAL_LANDING}/${branch}/latest-run-id.txt" ]; then
+    latest_run="$(tr -d '[:space:]' < "${GLOBAL_LANDING}/${branch}/latest-run-id.txt")"
+  fi
+  if [ -z "${latest_run}" ]; then
+    latest_run="$(find "${GLOBAL_LANDING}/${branch}" -mindepth 1 -maxdepth 1 -type d -regextype posix-extended -regex '.*/[0-9]+' 2>/dev/null | sort -V | tail -1 | xargs -r basename)"
+  fi
+
+  report_link=""
+  if [ -n "${latest_run}" ]; then
+    report_link="<a class=\"report-link\" href=\"${branch}/${latest_run}/index.html\">полный отчёт →</a>"
+  fi
+
+  dashboard_src="${branch}/"
+  if [ -f "${GLOBAL_LANDING}/${branch}/dashboard/index.html" ]; then
+    dashboard_src="${branch}/dashboard/index.html"
+  fi
+
   branch_panels="${branch_panels}
     <section class=\"panel\">
-      <h2><a href=\"${branch}/\">${branch}</a></h2>
-      <iframe class=\"dashboard-frame\" src=\"${branch}/index.html\" title=\"Dashboard: ${branch}\"></iframe>
+      <div class=\"panel-head\">
+        <h2><a href=\"${branch}/\">${branch}</a></h2>
+        ${report_link}
+      </div>
+      <iframe class=\"dashboard-frame\" src=\"${dashboard_src}\" title=\"Dashboard: ${branch}\"></iframe>
     </section>"
   branch_links="${branch_links}<li><a href=\"${branch}/\">${branch}</a></li>"
+  if [ -n "${latest_run}" ]; then
+    branch_links="${branch_links} <li><a href=\"${branch}/${latest_run}/index.html\">${branch} — последний run</a></li>"
+  fi
 done
 
 if [ -z "${branch_panels}" ]; then
@@ -60,6 +94,7 @@ cat > "${GLOBAL_LANDING}/index.html" <<EOF
       --muted: #6b6b6b;
       --primary: #20aee3;
       --border: #e3e9f5;
+      --button: #1677f2;
     }
     * { box-sizing: border-box; }
     body {
@@ -84,8 +119,16 @@ cat > "${GLOBAL_LANDING}/index.html" <<EOF
       margin-bottom: 24px;
       box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
     }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
     .panel h2 {
-      margin: 0 0 16px;
+      margin: 0;
       font-size: 1.2rem;
       border-left: 4px solid var(--primary);
       padding-left: 12px;
@@ -94,7 +137,14 @@ cat > "${GLOBAL_LANDING}/index.html" <<EOF
       color: inherit;
       text-decoration: none;
     }
-    .panel h2 a:hover { color: #1677f2; }
+    .panel h2 a:hover { color: var(--button); }
+    .report-link {
+      color: var(--button);
+      text-decoration: none;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .report-link:hover { text-decoration: underline; }
     .dashboard-frame {
       width: 100%;
       min-height: 720px;
@@ -116,8 +166,17 @@ cat > "${GLOBAL_LANDING}/index.html" <<EOF
       columns: 2;
       gap: 24px;
     }
-    .branches a { color: #1677f2; text-decoration: none; }
+    .branches a { color: var(--button); text-decoration: none; }
     .branches a:hover { text-decoration: underline; }
+    .note {
+      margin: 0 0 16px;
+      padding: 12px 14px;
+      background: #f8fbff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
     @media (max-width: 768px) {
       .branches ul { columns: 1; }
       .dashboard-frame { min-height: 560px; }
@@ -127,11 +186,12 @@ cat > "${GLOBAL_LANDING}/index.html" <<EOF
 <body>
   <header>
     <h1>UI Tests Dashboard</h1>
-    <p>Отдельный dashboard для каждой ветки</p>
+    <p>Тренды по веткам. Для дерева тестов откройте полный отчёт.</p>
   </header>
   <main>
+    <p class="note">Dashboard показывает только аналитику. Чтобы кликнуть по тестам, откройте ссылку «полный отчёт» у нужной ветки.</p>
     <section class="panel branches">
-      <h2>Ветки</h2>
+      <h2>Навигация</h2>
       <ul>
         ${branch_links}
       </ul>

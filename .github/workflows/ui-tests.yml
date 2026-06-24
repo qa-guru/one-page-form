@@ -152,10 +152,19 @@ jobs:
             cp tests-java/history.jsonl "${LANDING_DIR}/history.jsonl"
           fi
 
+          echo "${REPORT_ID}" > "${LANDING_DIR}/latest-run-id.txt"
+
           if [ -d "$DASHBOARD_SRC" ]; then
-            find "${LANDING_DIR}" -maxdepth 1 -type f ! -name 'history.jsonl' -delete
-            cp -r "${DASHBOARD_SRC}/." "${LANDING_DIR}/"
+            rm -rf "${LANDING_DIR}/dashboard"
+            mkdir -p "${LANDING_DIR}/dashboard"
+            cp -r "${DASHBOARD_SRC}/." "${LANDING_DIR}/dashboard/"
+            find "${LANDING_DIR}" -maxdepth 1 -type f \
+              ! -name 'history.jsonl' \
+              ! -name 'latest-run-id.txt' \
+              -delete
           fi
+
+          bash .github/scripts/generate-branch-landing.sh "${LANDING_DIR}"
 
       - name: Generate overview dashboard
         if: always()
