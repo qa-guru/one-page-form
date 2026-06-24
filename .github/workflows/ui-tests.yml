@@ -26,6 +26,7 @@ permissions:
 
 jobs:
   ui-tests:
+    name: UI Tests
     runs-on: ubuntu-latest
     env:
       ALLURE_ENDPOINT: https://allure.autotests.cloud
@@ -41,17 +42,18 @@ jobs:
         working-directory: tests-java
 
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout repository
+        uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
-      - name: Set branch slug
+      - name: Resolve branch slug
         run: |
           BRANCH="${{ github.head_ref || github.ref_name }}"
           BRANCH_SLUG=$(echo "$BRANCH" | sed 's/\//-/g')
           echo "BRANCH_SLUG=${BRANCH_SLUG}" >> "$GITHUB_ENV"
 
-      - name: Load Allure report history
+      - name: Load previous Allure history
         uses: actions/checkout@v6
         continue-on-error: true
         with:
@@ -60,13 +62,14 @@ jobs:
           sparse-checkout: allure-reports
           sparse-checkout-cone-mode: false
 
-      - uses: actions/setup-java@v5
+      - name: Setup Java
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
           cache: gradle
 
-      - name: Cache Selenium browsers and drivers
+      - name: Cache Selenium browsers
         uses: actions/cache@v5
         with:
           path: ~/.cache/selenium
@@ -74,7 +77,8 @@ jobs:
           restore-keys: |
             selenium-${{ runner.os }}-chrome-
 
-      - uses: gradle/actions/setup-gradle@v6
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: wrapper
 
@@ -89,20 +93,22 @@ jobs:
       - name: Install allurectl
         uses: allure-framework/setup-allurectl@v1
 
-      - name: Restore Allure history
+      - name: Restore report trend history
         run: |
           HISTORY="../gh-pages/allure-reports/${{ env.BRANCH_SLUG }}/history.jsonl"
           if [ -f "$HISTORY" ]; then
             cp "$HISTORY" history.jsonl
           fi
 
-      - name: Run UI tests and Allure report
+      - name: Run UI tests
         run: |
           set +e
           allurectl watch -- ./gradlew test -Denv=ci -DbrowserVersion=${{ env.BROWSER_VERSION }}
-          TEST_EXIT=$?
+          echo "TEST_EXIT=$?" >> "$GITHUB_ENV"
           set -e
 
+      - name: Generate Allure report
+        run: |
           mkdir -p build/allure-results
           cat > build/allure-results/executor.json <<EOF
           {
@@ -129,9 +135,7 @@ jobs:
           ./gradlew allureReport
           build/allure/allure3/node_modules/.bin/allure quality-gate build/allure-results --config allurerc.json
 
-          exit $TEST_EXIT
-
-      - name: Prepare GitHub Pages site
+      - name: Assemble Allure site
         if: always()
         working-directory: .
         run: |
@@ -183,7 +187,7 @@ jobs:
         working-directory: .
         run: bash .github/scripts/generate-allure-overview.sh pages/allure-reports
 
-      - name: Publish to GitHub Pages
+      - name: Deploy Allure Report
         if: always()
         uses: peaceiris/actions-gh-pages@v4
         with:
@@ -192,7 +196,7 @@ jobs:
           publish_dir: pages
           enable_jekyll: false
 
-      - name: Post Allure summary to PR
+      - name: Comment Allure results on PR
         if: always() && github.event_name == 'pull_request'
         uses: allure-framework/allure-action@v0.7.2
         with:
@@ -203,7 +207,7 @@ jobs:
             new
             flaky
 
-      - name: Allure report links
+      - name: Add Allure links to job summary
         if: always()
         working-directory: .
         run: |
@@ -211,9 +215,6 @@ jobs:
           BRANCH_DASHBOARD_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/${{ env.BRANCH_SLUG }}/"
           GLOBAL_DASHBOARD_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/"
 
-          echo "Allure report (this run): ${REPORT_URL}"
-          echo "Branch dashboard (${{ env.BRANCH_SLUG }}): ${BRANCH_DASHBOARD_URL}"
-          echo "Overview dashboard: ${GLOBAL_DASHBOARD_URL}"
           echo "::notice title=Allure Report::${REPORT_URL}"
 
           {
@@ -224,3 +225,7 @@ jobs:
             echo "- [Branch dashboard](${BRANCH_DASHBOARD_URL})"
             echo "- [Run #${{ github.run_number }}](${REPORT_URL})"
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail job if tests failed
+        if: always() && env.TEST_EXIT != '0'
+        run: exit "${{ env.TEST_EXIT }}"
