@@ -12,6 +12,7 @@
       --muted: #6b6b6b;
       --primary: #20aee3;
       --border: #e3e9f5;
+      --button: #1677f2;
     }
     * { box-sizing: border-box; }
     body {
@@ -36,8 +37,16 @@
       margin-bottom: 24px;
       box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
     }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
     .panel h2 {
-      margin: 0 0 16px;
+      margin: 0;
       font-size: 1.2rem;
       border-left: 4px solid var(--primary);
       padding-left: 12px;
@@ -46,7 +55,14 @@
       color: inherit;
       text-decoration: none;
     }
-    .panel h2 a:hover { color: #1677f2; }
+    .panel h2 a:hover { color: var(--button); }
+    .report-link {
+      color: var(--button);
+      text-decoration: none;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .report-link:hover { text-decoration: underline; }
     .dashboard-frame {
       width: 100%;
       min-height: 720px;
@@ -68,8 +84,17 @@
       columns: 2;
       gap: 24px;
     }
-    .branches a { color: #1677f2; text-decoration: none; }
+    .branches a { color: var(--button); text-decoration: none; }
     .branches a:hover { text-decoration: underline; }
+    .note {
+      margin: 0 0 16px;
+      padding: 12px 14px;
+      background: #f8fbff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
     @media (max-width: 768px) {
       .branches ul { columns: 1; }
       .dashboard-frame { min-height: 560px; }
@@ -79,27 +104,23 @@
 <body>
   <header>
     <h1>UI Tests Dashboard</h1>
-    <p>Отдельный dashboard для каждой ветки</p>
+    <p>Тренды по веткам. Для дерева тестов откройте полный отчёт.</p>
   </header>
   <main>
+    <p class="note">Dashboard показывает только аналитику. Чтобы кликнуть по тестам, откройте ссылку «полный отчёт» у нужной ветки.</p>
     <section class="panel branches">
-      <h2>Ветки</h2>
+      <h2>Навигация</h2>
       <ul>
-        <li><a href="main/">main</a></li><li><a href="demo-allure-data-alpha/">demo-allure-data-alpha</a></li><li><a href="demo-allure-data-beta/">demo-allure-data-beta</a></li>
+        <li><a href="main/">main</a></li> <li><a href="main/28110638927/index.html">main — последний run</a></li>
       </ul>
     </section>
     
     <section class="panel">
-      <h2><a href="main/">main</a></h2>
-      <iframe class="dashboard-frame" src="main/index.html" title="Dashboard: main"></iframe>
-    </section>
-    <section class="panel">
-      <h2><a href="demo-allure-data-alpha/">demo-allure-data-alpha</a></h2>
-      <iframe class="dashboard-frame" src="demo-allure-data-alpha/index.html" title="Dashboard: demo-allure-data-alpha"></iframe>
-    </section>
-    <section class="panel">
-      <h2><a href="demo-allure-data-beta/">demo-allure-data-beta</a></h2>
-      <iframe class="dashboard-frame" src="demo-allure-data-beta/index.html" title="Dashboard: demo-allure-data-beta"></iframe>
+      <div class="panel-head">
+        <h2><a href="main/">main</a></h2>
+        <a class="report-link" href="main/28110638927/index.html">полный отчёт →</a>
+      </div>
+      <iframe class="dashboard-frame" src="main/dashboard/index.html" title="Dashboard: main"></iframe>
     </section>
   </main>
 </body>

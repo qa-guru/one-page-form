@@ -1,51 +1,133 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html lang="ru">
 <head>
-    <meta charset="utf-8">
-    <title> UI Tests – Pull request #6 </title>
-    <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" type="text/css" href="styles-d73c10da9033a66099d2.css">
-<link rel="preload" href="pt-root-ui_vf.woff" as="font" type="font/woff" crossorigin /> 
-<link rel="preload" href="JetBrainsMono_vf.woff2" as="font" type="font/woff" crossorigin /> 
-<link rel="preload" href="pt-root-ui_vf.woff2" as="font" type="font/woff" crossorigin /> 
-<link rel="preload" href="JetBrainsMono_vf.woff" as="font" type="font/woff" crossorigin /> 
-    <script>
-      window.allureReportOptions = {"reportName":"UI Tests – Pull request #6","logo":"","theme":"light","reportLanguage":"ru","createdAt":1782314228537,"reportUuid":"ee18cde8-df6f-48fc-98a0-9f4399aebf1f","allureVersion":"3.13.0"}
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI Tests — demo-allure-data-beta</title>
+  <style>
+    :root {
+      --bg: #f5f0e8;
+      --surface: #2c2a26;
+      --text: #222;
+      --muted: #6b6b6b;
+      --primary: #20aee3;
+      --button: #1677f2;
+      --border: #e3e9f5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      background: var(--surface);
+      color: #f5f0e8;
+      padding: 20px 24px;
+    }
+    header h1 { margin: 0 0 6px; font-size: 1.5rem; }
+    header p { margin: 0; color: rgba(245, 240, 232, 0.75); }
+    main { max-width: 1400px; margin: 0 auto; padding: 24px; }
+    .panel {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+    }
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 12px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 18px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .btn.primary {
+      background: var(--button);
+      color: #fff;
+    }
+    .btn.primary:hover { background: #0e63d7; }
+    .btn.secondary {
+      background: #f8fbff;
+      color: var(--button);
+      border: 1px solid var(--border);
+    }
+    .hint {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .runs {
+      margin: 0;
+      padding-left: 20px;
+      columns: 2;
+      gap: 16px;
+    }
+    .runs a { color: var(--button); text-decoration: none; }
+    .runs a:hover { text-decoration: underline; }
+    .dashboard-frame {
+      width: 100%;
+      min-height: 720px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+    }
+    .empty-state {
+      margin: 0;
+      padding: 24px 16px;
+      text-align: center;
+      color: var(--muted);
+      background: #f8fbff;
+      border-radius: 12px;
+    }
+    .back { color: #f5f0e8; text-decoration: none; font-size: 0.9rem; }
+    .back:hover { text-decoration: underline; }
+    @media (max-width: 768px) {
+      .runs { columns: 1; }
+      .dashboard-frame { min-height: 560px; }
+    }
+  </style>
 </head>
 <body>
-    <div id="app"></div>
-    
-    <script>
-      const { origin, pathname } = window.location; 
-      const url = new URL(pathname, origin);
-      const baseEl = document.createElement("base");
-      
-      baseEl.href = url.toString();
-      
-      window.document.head.appendChild(baseEl);
-    </script>
-  
-    <script>
-      window.allure = window.allure || {};
-    </script>
-    <script   src="app-c61db9f76bfde3672624.js"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNDJ3J7WT0"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-LNDJ3J7WT0', {
-          "report": "dashboard",
-          "allureVersion": "3.13.0",
-          "reportUuid": "ee18cde8-df6f-48fc-98a0-9f4399aebf1f",
-          "single_file": ""
-        });
-    </script>
-    
-      <script async>
-        window.allureReportDataReady = true;
-      </script>
-    
+  <header>
+    <a class="back" href="../">← Все ветки</a>
+    <h1>demo-allure-data-beta</h1>
+    <p>Dashboard — только тренды. Для дерева тестов откройте полный отчёт.</p>
+  </header>
+  <main>
+    <section class="panel">
+      <h2>Полный отчёт</h2>
+      <p class="hint">Из dashboard нельзя провалиться в тесты — используйте полный Allure Report.</p>
+      <div class="actions">
+        <a class="btn primary" href="28109003789/index.html">Открыть полный отчёт (последний прогон)</a>
+        <a class="btn secondary" href="../">Overview всех веток</a>
+      </div>
+    </section>
+    <section class="panel">
+      <h2>Прогоны</h2>
+      <ul class="runs">
+        <li><a href="28107278762/index.html">Run 28107278762</a></li><li><a href="28108875180/index.html">Run 28108875180</a></li><li><a href="28109003789/index.html">Run 28109003789</a></li>
+      </ul>
+    </section>
+    <section class="panel">
+      <h2>Trends</h2>
+      <iframe class="dashboard-frame" src="index.html" title="Dashboard"></iframe>
+    </section>
+  </main>
 </body>
 </html>
