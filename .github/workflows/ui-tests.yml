@@ -15,11 +15,13 @@ on:
     branches: [main]
 
 concurrency:
-  group: gh-pages-${{ github.repository }}
-  cancel-in-progress: false
+  group: pages-${{ github.repository }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
   pull-requests: write
   checks: write
 
@@ -172,13 +174,19 @@ jobs:
         working-directory: .
         run: bash .github/scripts/generate-allure-overview.sh pages/allure-reports
 
-      - name: Publish Allure report to GitHub Pages
+      - name: Archive site on gh-pages branch
         if: always()
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: pages
+
+      - name: Upload GitHub Pages artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages
 
       - name: Post Allure summary to PR
         if: always() && github.event_name == 'pull_request'
@@ -212,3 +220,15 @@ jobs:
             echo "- [Branch dashboard](${BRANCH_DASHBOARD_URL})"
             echo "- [Run #${{ github.run_number }}](${REPORT_URL})"
           } >> "$GITHUB_STEP_SUMMARY"
+
+  deploy:
+    needs: ui-tests
+    if: always() && needs.ui-tests.result != 'cancelled'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
