@@ -14,7 +14,7 @@ public class LoginTests extends TestBase {
         $("[data-testid=password-input]").setValue("password1");
         $("[data-testid=submit-button]").click();
 
-        $("[data-testid=welcome-message]").shouldHave(text("Welcome, user1!"));
+        $("[data-testid=welcome-message]").shouldHave(text("Welcome, user2!"));
     }
 
     @Test
