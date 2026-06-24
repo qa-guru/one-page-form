@@ -31,7 +31,6 @@ public class TestBase {
         Configuration.headless = config.headless();
         if (isCi) {
             Configuration.pageLoadStrategy = "eager";
-            Configuration.timeout = 3000;
         }
     
         if (config.headless()) {
