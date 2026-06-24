@@ -157,46 +157,9 @@ jobs:
             cp -r "${DASHBOARD_SRC}/." "${LANDING_DIR}/"
           fi
 
-          GLOBAL_LANDING="pages/allure-reports"
-          GLOBAL_HISTORY_TMP=$(mktemp)
-          if find "${GLOBAL_LANDING}" -name 'history.jsonl' -print -quit | grep -q .; then
-            find "${GLOBAL_LANDING}" -name 'history.jsonl' -exec cat {} + \
-              | jq -s 'unique_by(.uuid) | sort_by(.timestamp) | .[]' -c > "${GLOBAL_HISTORY_TMP}"
-            if [ -s "${GLOBAL_HISTORY_TMP}" ]; then
-              mv "${GLOBAL_HISTORY_TMP}" "${GLOBAL_LANDING}/history.jsonl"
-            else
-              rm -f "${GLOBAL_HISTORY_TMP}"
-            fi
-          fi
-
-      - name: Generate global Allure dashboard
+      - name: Generate overview dashboard
         if: always()
-        working-directory: tests-java
-        run: |
-          GLOBAL_HISTORY="../pages/allure-reports/history.jsonl"
-          GLOBAL_DASHBOARD="../pages/allure-reports"
-          GLOBAL_REPORT="/tmp/allure-global-report"
-          ALLURE=build/allure/allure3/node_modules/.bin/allure
-
-          if [ ! -f "$GLOBAL_HISTORY" ]; then
-            echo "No global history yet, skipping global dashboard"
-            exit 0
-          fi
-
-          cp "$GLOBAL_HISTORY" history.jsonl
-          jq '.appendHistory = false
-              | .plugins.dashboard.options.reportName = "UI Tests Dashboard (all branches)"' \
-            allurerc.json > allurerc.global.json
-
-          "$ALLURE" generate build/allure-results \
-            --config allurerc.global.json \
-            --output "$GLOBAL_REPORT" \
-            --history-limit 20
-
-          if [ -d "$GLOBAL_REPORT/dashboard" ]; then
-            find "$GLOBAL_DASHBOARD" -maxdepth 1 -type f ! -name 'history.jsonl' -delete
-            cp -r "$GLOBAL_REPORT/dashboard/." "$GLOBAL_DASHBOARD/"
-          fi
+        run: bash .github/scripts/generate-allure-overview.sh pages/allure-reports
 
       - name: Publish Allure report to GitHub Pages
         if: always()
@@ -227,14 +190,14 @@ jobs:
 
           echo "Allure report (this run): ${REPORT_URL}"
           echo "Branch dashboard (${{ env.BRANCH_SLUG }}): ${BRANCH_DASHBOARD_URL}"
-          echo "Global dashboard (all branches): ${GLOBAL_DASHBOARD_URL}"
+          echo "Overview dashboard: ${GLOBAL_DASHBOARD_URL}"
           echo "::notice title=Allure Report::${REPORT_URL}"
 
           {
             echo "## Allure Report"
             echo ""
             echo "- Branch: \`${{ env.BRANCH_SLUG }}\`"
-            echo "- [Global dashboard (all branches)](${GLOBAL_DASHBOARD_URL})"
+            echo "- [Overview dashboard](${GLOBAL_DASHBOARD_URL})"
             echo "- [Branch dashboard](${BRANCH_DASHBOARD_URL})"
             echo "- [Run #${{ github.run_number }}](${REPORT_URL})"
           } >> "$GITHUB_STEP_SUMMARY"
