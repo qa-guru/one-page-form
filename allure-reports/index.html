@@ -1,51 +1,106 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html lang="ru">
 <head>
-    <meta charset="utf-8">
-    <title> UI Tests </title>
-    <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" type="text/css" href="styles-d73c10da9033a66099d2.css">
-<link rel="preload" href="pt-root-ui_vf.woff" as="font" type="font/woff" crossorigin /> 
-<link rel="preload" href="JetBrainsMono_vf.woff2" as="font" type="font/woff" crossorigin /> 
-<link rel="preload" href="pt-root-ui_vf.woff2" as="font" type="font/woff" crossorigin /> 
-<link rel="preload" href="JetBrainsMono_vf.woff" as="font" type="font/woff" crossorigin /> 
-    <script>
-      window.allureReportOptions = {"reportName":"UI Tests","logo":"","theme":"light","reportLanguage":"ru","createdAt":1782313470589,"reportUuid":"e74b6284-2a66-4472-b266-57dbfd448537","allureVersion":"3.13.0"}
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI Tests Dashboard</title>
+  <style>
+    :root {
+      --bg: #f5f0e8;
+      --surface: #2c2a26;
+      --text: #222;
+      --muted: #6b6b6b;
+      --primary: #20aee3;
+      --border: #e3e9f5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      background: var(--surface);
+      color: #f5f0e8;
+      padding: 20px 24px;
+    }
+    header h1 { margin: 0 0 6px; font-size: 1.6rem; }
+    header p { margin: 0; color: rgba(245, 240, 232, 0.75); }
+    main { max-width: 1400px; margin: 0 auto; padding: 24px; }
+    .panel {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+    }
+    .panel h2 {
+      margin: 0 0 16px;
+      font-size: 1.2rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 12px;
+    }
+    .panel h2 a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .panel h2 a:hover { color: #1677f2; }
+    .dashboard-frame {
+      width: 100%;
+      min-height: 720px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+    }
+    .empty-state {
+      margin: 0;
+      padding: 48px 16px;
+      text-align: center;
+      color: var(--muted);
+      background: #f8fbff;
+      border-radius: 12px;
+    }
+    .branches ul {
+      margin: 0;
+      padding-left: 20px;
+      columns: 2;
+      gap: 24px;
+    }
+    .branches a { color: #1677f2; text-decoration: none; }
+    .branches a:hover { text-decoration: underline; }
+    @media (max-width: 768px) {
+      .branches ul { columns: 1; }
+      .dashboard-frame { min-height: 560px; }
+    }
+  </style>
 </head>
 <body>
-    <div id="app"></div>
+  <header>
+    <h1>UI Tests Dashboard</h1>
+    <p>Отдельный dashboard для каждой ветки</p>
+  </header>
+  <main>
+    <section class="panel branches">
+      <h2>Ветки</h2>
+      <ul>
+        <li><a href="main/">main</a></li><li><a href="demo-allure-data-alpha/">demo-allure-data-alpha</a></li><li><a href="demo-allure-data-beta/">demo-allure-data-beta</a></li>
+      </ul>
+    </section>
     
-    <script>
-      const { origin, pathname } = window.location; 
-      const url = new URL(pathname, origin);
-      const baseEl = document.createElement("base");
-      
-      baseEl.href = url.toString();
-      
-      window.document.head.appendChild(baseEl);
-    </script>
-  
-    <script>
-      window.allure = window.allure || {};
-    </script>
-    <script   src="app-c61db9f76bfde3672624.js"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNDJ3J7WT0"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-LNDJ3J7WT0', {
-          "report": "dashboard",
-          "allureVersion": "3.13.0",
-          "reportUuid": "e74b6284-2a66-4472-b266-57dbfd448537",
-          "single_file": ""
-        });
-    </script>
-    
-      <script async>
-        window.allureReportDataReady = true;
-      </script>
-    
+    <section class="panel">
+      <h2><a href="main/">main</a></h2>
+      <iframe class="dashboard-frame" src="main/index.html" title="Dashboard: main"></iframe>
+    </section>
+    <section class="panel">
+      <h2><a href="demo-allure-data-alpha/">demo-allure-data-alpha</a></h2>
+      <iframe class="dashboard-frame" src="demo-allure-data-alpha/index.html" title="Dashboard: demo-allure-data-alpha"></iframe>
+    </section>
+    <section class="panel">
+      <h2><a href="demo-allure-data-beta/">demo-allure-data-beta</a></h2>
+      <iframe class="dashboard-frame" src="demo-allure-data-beta/index.html" title="Dashboard: demo-allure-data-beta"></iframe>
+    </section>
+  </main>
 </body>
 </html>
