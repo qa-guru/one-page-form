@@ -64,6 +64,7 @@ body {
   height: 56px;
   padding: 0 var(--space-4);
   border-bottom: 1px solid rgba(245, 240, 232, 0.08);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .header-content {
@@ -185,6 +186,21 @@ body {
 .nav-link:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+}
+
+.nav-link.active,
+.nav-link[aria-current="page"] {
+  background-color: rgba(245, 240, 232, 0.06);
+}
+
+.nav-link.active::after,
+.nav-link[aria-current="page"]::after {
+  transform: scaleX(0);
+}
+
+.nav-link.active:hover::after,
+.nav-link[aria-current="page"]:hover::after {
+  transform: scaleX(1);
 }
 
 .burger-menu {
@@ -1069,7 +1085,7 @@ td:first-child {
     </script>
     <script>
 function setActiveNavLink() {
-  const currentPath = window.location.pathname.split("/").pop() || "automation-practice-form.html";
+  const currentPath = window.location.pathname.split("/").pop();
   const links = document.querySelectorAll(".nav .nav-link");
   links.forEach((link) => {
     const href = link.getAttribute("href");
