@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>One Page Form Demos</title>
+    <link rel="stylesheet" href="allure-shell.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <div class="layout">
+        <header class="page-header">
+          <h1>One Page Form Demos</h1>
+          <p>Статические HTML-страницы для практики автотестов и работы с формами.</p>
+        </header>
+
+        <section class="card">
+          <div class="card-header">
+            <h2>Демо-страницы</h2>
+          </div>
+          <div class="card-body">
+            <ul class="demo-list">
+              <li class="demo-item">
+                <a href="login.html">
+                  <span class="demo-item-title">Login Form</span>
+                  <p class="demo-item-desc">Форма входа с валидацией логина и пароля.</p>
+                </a>
+              </li>
+              <li class="demo-item">
+                <a href="text-box.html">
+                  <span class="demo-item-title">Text Box Form</span>
+                  <p class="demo-item-desc">Текстовые поля, отправка и отображение результата.</p>
+                </a>
+              </li>
+              <li class="demo-item">
+                <a href="automation-practice-form.html">
+                  <span class="demo-item-title">Student Registration Form</span>
+                  <p class="demo-item-desc">Расширенная форма регистрации студента.</p>
+                </a>
+              </li>
+            </ul>
+            <div class="meta-links">
+              <a href="https://github.com/qa-guru/one-page-form" target="_blank" rel="noopener noreferrer">Репозиторий на GitHub</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <h2>UI Tests Dashboard</h2>
+            <a class="report-link" href="allure-reports/" target="_blank" rel="noopener noreferrer">полный отчёт →</a>
+          </div>
+          <div class="card-body">
+            <p class="note">
+              Тренды по веткам из Allure. Чтобы кликнуть по тестам, откройте полный отчёт у нужной ветки внутри дашборда.
+            </p>
+            <iframe
+              class="dashboard-frame"
+              src="allure-reports/"
+              title="Allure reports overview"
+              loading="lazy"
+            ></iframe>
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

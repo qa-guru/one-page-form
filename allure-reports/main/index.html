@@ -4,130 +4,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UI Tests — main</title>
-  <style>
-    :root {
-      --bg: #f5f0e8;
-      --surface: #2c2a26;
-      --text: #222;
-      --muted: #6b6b6b;
-      --primary: #20aee3;
-      --button: #1677f2;
-      --border: #e3e9f5;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-    header {
-      background: var(--surface);
-      color: #f5f0e8;
-      padding: 20px 24px;
-    }
-    header h1 { margin: 0 0 6px; font-size: 1.5rem; }
-    header p { margin: 0; color: rgba(245, 240, 232, 0.75); }
-    main { max-width: 1400px; margin: 0 auto; padding: 24px; }
-    .panel {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 24px;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
-    }
-    .panel h2 {
-      margin: 0 0 12px;
-      font-size: 1.1rem;
-      border-left: 4px solid var(--primary);
-      padding-left: 12px;
-    }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .btn {
-      display: inline-block;
-      padding: 12px 18px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .btn.primary {
-      background: var(--button);
-      color: #fff;
-    }
-    .btn.primary:hover { background: #0e63d7; }
-    .btn.secondary {
-      background: #f8fbff;
-      color: var(--button);
-      border: 1px solid var(--border);
-    }
-    .hint {
-      margin: 0 0 16px;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-    .runs {
-      margin: 0;
-      padding-left: 20px;
-      columns: 2;
-      gap: 16px;
-    }
-    .runs a { color: var(--button); text-decoration: none; }
-    .runs a:hover { text-decoration: underline; }
-    .dashboard-frame {
-      width: 100%;
-      min-height: 720px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #fff;
-    }
-    .empty-state {
-      margin: 0;
-      padding: 24px 16px;
-      text-align: center;
-      color: var(--muted);
-      background: #f8fbff;
-      border-radius: 12px;
-    }
-    .back { color: #f5f0e8; text-decoration: none; font-size: 0.9rem; }
-    .back:hover { text-decoration: underline; }
-    @media (max-width: 768px) {
-      .runs { columns: 1; }
-      .dashboard-frame { min-height: 560px; }
-    }
-  </style>
+  <link rel="stylesheet" href="../../allure-shell.css">
 </head>
 <body>
-  <header>
-    <a class="back" href="../">← Все ветки</a>
-    <h1>main</h1>
-    <p>Dashboard — только тренды. Для дерева тестов откройте полный отчёт.</p>
-  </header>
-  <main>
-    <section class="panel">
-      <h2>Полный отчёт</h2>
-      <p class="hint">Из dashboard нельзя провалиться в тесты — используйте полный Allure Report.</p>
-      <div class="actions">
-        <a class="btn primary" href="28112253646/index.html">Открыть полный отчёт (последний прогон)</a>
-        <a class="btn secondary" href="../">Overview всех веток</a>
-      </div>
-    </section>
-    <section class="panel">
-      <h2>Прогоны</h2>
-      <ul class="runs">
-        <li><a href="28107043560/index.html">Run 28107043560</a></li><li><a href="28108124005/index.html">Run 28108124005</a></li><li><a href="28108860988/index.html">Run 28108860988</a></li><li><a href="28109144217/index.html">Run 28109144217</a></li><li><a href="28110638927/index.html">Run 28110638927</a></li><li><a href="28110639519/index.html">Run 28110639519</a></li><li><a href="28112253646/index.html">Run 28112253646</a></li>
-      </ul>
-    </section>
-    <section class="panel">
-      <h2>Trends</h2>
-      <iframe class="dashboard-frame" src="dashboard/index.html" title="Dashboard"></iframe>
-    </section>
-  </main>
+  <div class="shell">
+    <div class="layout">
+      <header class="page-header">
+        <a class="back-link" href="../">← Все ветки</a>
+        <h1>main</h1>
+        <p>Dashboard — только тренды. Для дерева тестов откройте полный отчёт.</p>
+      </header>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>Полный отчёт</h2>
+        </div>
+        <div class="card-body">
+          <p class="note">Из dashboard нельзя провалиться в тесты — используйте полный Allure Report.</p>
+          <div class="actions">
+            <a class="btn primary" href="28113167713/index.html">Открыть полный отчёт (последний прогон)</a>
+            <a class="btn secondary" href="../">Overview всех веток</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>Прогоны</h2>
+        </div>
+        <div class="card-body">
+          <ul class="runs">
+            <li><a href="28107043560/index.html">Run 28107043560</a></li><li><a href="28108124005/index.html">Run 28108124005</a></li><li><a href="28108860988/index.html">Run 28108860988</a></li><li><a href="28109144217/index.html">Run 28109144217</a></li><li><a href="28110638927/index.html">Run 28110638927</a></li><li><a href="28110639519/index.html">Run 28110639519</a></li><li><a href="28112253646/index.html">Run 28112253646</a></li><li><a href="28113167713/index.html">Run 28113167713</a></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>Trends</h2>
+        </div>
+        <div class="card-body">
+          <iframe class="dashboard-frame" src="dashboard/index.html" title="Dashboard"></iframe>
+        </div>
+      </section>
+    </div>
+  </div>
 </body>
 </html>
