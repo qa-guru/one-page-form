@@ -29,9 +29,6 @@ public class TestBase {
         Configuration.browserVersion = config.browserVersion();
         Configuration.browserSize = config.browserSize();
         Configuration.headless = config.headless();
-        if (isCi) {
-            Configuration.pageLoadStrategy = "eager";
-        }
     
         if (config.headless()) {
           Configuration.browserCapabilities = new ChromeOptions()
