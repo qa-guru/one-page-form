@@ -38,7 +38,7 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
 
       - name: Cache Selenium browsers and drivers
         uses: actions/cache@v5
@@ -50,13 +50,13 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v6
         with:
-          gradle-version: '8.14'
+          gradle-version: wrapper
 
       - name: Install allurectl
         uses: allure-framework/setup-allurectl@v1
 
       - name: Run UI tests
-        run: allurectl watch -- gradle test -Denv=ci
+        run: allurectl watch -- ./gradlew test -Denv=ci
 
       - name: Load Allure report history
         if: always()
@@ -104,7 +104,7 @@ jobs:
 
       - name: Generate Allure report
         if: always()
-        run: gradle allureReport
+        run: ./gradlew allureReport
 
       - name: Prepare GitHub Pages site
         if: always()

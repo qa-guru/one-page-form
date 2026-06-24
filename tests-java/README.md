@@ -4,8 +4,7 @@ Automated browser tests for the static HTML demos in the parent repository. Test
 
 ## Prerequisites
 
-- Java 17 or newer
-- [Gradle](https://gradle.org/install/) (no wrapper is included in this folder)
+- Java 21
 - Google Chrome installed locally
 
 ## Run tests
@@ -14,15 +13,15 @@ From this directory:
 
 ```bash
 cd tests-java
-gradle test
+./gradlew test
 ```
 
 Run a single test class:
 
 ```bash
-gradle test --tests LoginTests
-gradle test --tests TextBoxTests
-gradle test --tests RegistrationTests
+./gradlew test --tests LoginTests
+./gradlew test --tests TextBoxTests
+./gradlew test --tests RegistrationTests
 ```
 
 Open the HTML report after a run:
@@ -46,6 +45,9 @@ Pages are loaded from the repository root via `Configuration.baseUrl` in `TestBa
 ```
 tests-java/
 ├── build.gradle
+├── gradlew
+├── gradlew.bat
+├── gradle/wrapper/
 └── src/test/
     ├── java/
     │   ├── TestBase.java          # Shared Selenide configuration
