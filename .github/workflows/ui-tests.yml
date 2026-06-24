@@ -14,6 +14,10 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: gh-pages-${{ github.repository }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   pull-requests: write
@@ -29,12 +33,19 @@ jobs:
       ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
       ALLURE_RESULTS: build/allure-results
       BROWSER_VERSION: '148'
+      REPORT_ID: ${{ github.run_id }}
     defaults:
       run:
         working-directory: tests-java
 
     steps:
       - uses: actions/checkout@v6
+
+      - name: Set branch slug
+        run: |
+          BRANCH="${{ github.head_ref || github.ref_name }}"
+          BRANCH_SLUG=$(echo "$BRANCH" | sed 's/\//-/g')
+          echo "BRANCH_SLUG=${BRANCH_SLUG}" >> "$GITHUB_ENV"
 
       - uses: actions/setup-java@v5
         with:
@@ -71,8 +82,9 @@ jobs:
         if: always()
         working-directory: tests-java
         run: |
-          if [ -f ../gh-pages/allure-reports/history.jsonl ]; then
-            cp ../gh-pages/allure-reports/history.jsonl history.jsonl
+          HISTORY="../gh-pages/allure-reports/${{ env.BRANCH_SLUG }}/history.jsonl"
+          if [ -f "$HISTORY" ]; then
+            cp "$HISTORY" history.jsonl
           fi
 
       - name: Add Allure executor info
@@ -84,7 +96,7 @@ jobs:
           {
             "reportName": "Run #${{ github.run_number }}",
             "buildOrder": ${{ github.run_number }},
-            "reportUrl": "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/${{ github.run_number }}/index.html",
+            "reportUrl": "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/${{ env.BRANCH_SLUG }}/${{ env.REPORT_ID }}/index.html",
             "buildUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           }
           EOF
@@ -107,15 +119,20 @@ jobs:
         if: always()
         run: ./gradlew allureReport
 
+      - name: Enforce Allure quality gate
+        if: always()
+        run: build/allure/allure3/node_modules/.bin/allure quality-gate build/allure-results --config allurerc.json
+
       - name: Prepare GitHub Pages site
         if: always()
         working-directory: .
         run: |
-          REPORT_ID="${{ github.run_number }}"
-          REPORT_DIR="pages/allure-reports/${REPORT_ID}"
+          BRANCH_SLUG="${{ env.BRANCH_SLUG }}"
+          REPORT_ID="${{ env.REPORT_ID }}"
+          REPORT_DIR="pages/allure-reports/${BRANCH_SLUG}/${REPORT_ID}"
           REPORT_SRC="tests-java/build/reports/allure-report/allureReport"
           DASHBOARD_SRC="${REPORT_SRC}/dashboard"
-          LANDING_DIR="pages/allure-reports"
+          LANDING_DIR="pages/allure-reports/${BRANCH_SLUG}"
 
           mkdir -p pages
 
@@ -129,6 +146,8 @@ jobs:
           mkdir -p "$REPORT_DIR"
           cp -r "${REPORT_SRC}/." "$REPORT_DIR/"
 
+          mkdir -p "$LANDING_DIR"
+
           if [ -f tests-java/history.jsonl ]; then
             cp tests-java/history.jsonl "${LANDING_DIR}/history.jsonl"
           fi
@@ -136,6 +155,47 @@ jobs:
           if [ -d "$DASHBOARD_SRC" ]; then
             find "${LANDING_DIR}" -maxdepth 1 -type f ! -name 'history.jsonl' -delete
             cp -r "${DASHBOARD_SRC}/." "${LANDING_DIR}/"
+          fi
+
+          GLOBAL_LANDING="pages/allure-reports"
+          GLOBAL_HISTORY_TMP=$(mktemp)
+          if find "${GLOBAL_LANDING}" -name 'history.jsonl' -print -quit | grep -q .; then
+            find "${GLOBAL_LANDING}" -name 'history.jsonl' -exec cat {} + \
+              | jq -s 'unique_by(.uuid) | sort_by(.timestamp) | .[]' -c > "${GLOBAL_HISTORY_TMP}"
+            if [ -s "${GLOBAL_HISTORY_TMP}" ]; then
+              mv "${GLOBAL_HISTORY_TMP}" "${GLOBAL_LANDING}/history.jsonl"
+            else
+              rm -f "${GLOBAL_HISTORY_TMP}"
+            fi
+          fi
+
+      - name: Generate global Allure dashboard
+        if: always()
+        working-directory: tests-java
+        run: |
+          GLOBAL_HISTORY="../pages/allure-reports/history.jsonl"
+          GLOBAL_DASHBOARD="../pages/allure-reports"
+          GLOBAL_REPORT="/tmp/allure-global-report"
+          ALLURE=build/allure/allure3/node_modules/.bin/allure
+
+          if [ ! -f "$GLOBAL_HISTORY" ]; then
+            echo "No global history yet, skipping global dashboard"
+            exit 0
+          fi
+
+          cp "$GLOBAL_HISTORY" history.jsonl
+          jq '.appendHistory = false
+              | .plugins.dashboard.options.reportName = "UI Tests Dashboard (all branches)"' \
+            allurerc.json > allurerc.global.json
+
+          "$ALLURE" generate build/allure-results \
+            --config allurerc.global.json \
+            --output "$GLOBAL_REPORT" \
+            --history-limit 20
+
+          if [ -d "$GLOBAL_REPORT/dashboard" ]; then
+            find "$GLOBAL_DASHBOARD" -maxdepth 1 -type f ! -name 'history.jsonl' -delete
+            cp -r "$GLOBAL_REPORT/dashboard/." "$GLOBAL_DASHBOARD/"
           fi
 
       - name: Publish Allure report to GitHub Pages
@@ -151,7 +211,7 @@ jobs:
         uses: allure-framework/allure-action@v0.7.2
         with:
           report-directory: tests-java/build/reports/allure-report/allureReport
-          remote-href: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/${{ github.run_number }}/"
+          remote-href: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/${{ env.BRANCH_SLUG }}/${{ env.REPORT_ID }}/"
           github-token: ${{ secrets.GITHUB_TOKEN }}
           sections: |
             new
@@ -161,16 +221,20 @@ jobs:
         if: always()
         working-directory: .
         run: |
-          REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/${{ github.run_number }}/index.html"
-          DASHBOARD_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/"
+          REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/${{ env.BRANCH_SLUG }}/${{ env.REPORT_ID }}/index.html"
+          BRANCH_DASHBOARD_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/${{ env.BRANCH_SLUG }}/"
+          GLOBAL_DASHBOARD_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure-reports/"
 
           echo "Allure report (this run): ${REPORT_URL}"
-          echo "Allure dashboard:         ${DASHBOARD_URL}"
+          echo "Branch dashboard (${{ env.BRANCH_SLUG }}): ${BRANCH_DASHBOARD_URL}"
+          echo "Global dashboard (all branches): ${GLOBAL_DASHBOARD_URL}"
           echo "::notice title=Allure Report::${REPORT_URL}"
 
           {
             echo "## Allure Report"
             echo ""
-            echo "- [Dashboard с trends](${DASHBOARD_URL})"
+            echo "- Branch: \`${{ env.BRANCH_SLUG }}\`"
+            echo "- [Global dashboard (all branches)](${GLOBAL_DASHBOARD_URL})"
+            echo "- [Branch dashboard](${BRANCH_DASHBOARD_URL})"
             echo "- [Run #${{ github.run_number }}](${REPORT_URL})"
           } >> "$GITHUB_STEP_SUMMARY"
