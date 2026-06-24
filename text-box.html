@@ -177,6 +177,21 @@
         outline-offset: 2px;
       }
 
+      .nav-link.active,
+      .nav-link[aria-current="page"] {
+        background-color: rgba(245, 240, 232, 0.06);
+      }
+
+      .nav-link.active::after,
+      .nav-link[aria-current="page"]::after {
+        transform: scaleX(0);
+      }
+
+      .nav-link.active:hover::after,
+      .nav-link[aria-current="page"]:hover::after {
+        transform: scaleX(1);
+      }
+
       .burger-menu {
         display: none;
         cursor: pointer;
@@ -593,6 +608,22 @@
         `;
         output.classList.add("has-content");
       });
+    </script>
+    <script>
+      function setActiveNavLink() {
+        const currentPath = window.location.pathname.split("/").pop();
+        document.querySelectorAll(".nav .nav-link").forEach((link) => {
+          const href = link.getAttribute("href");
+          const isActive = href === currentPath;
+          link.classList.toggle("active", isActive);
+          if (isActive) {
+            link.setAttribute("aria-current", "page");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+      }
+      document.addEventListener("DOMContentLoaded", setActiveNavLink);
     </script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
