@@ -159,6 +159,7 @@ jobs:
 
       - name: Generate overview dashboard
         if: always()
+        working-directory: .
         run: bash .github/scripts/generate-allure-overview.sh pages/allure-reports
 
       - name: Publish Allure report to GitHub Pages
