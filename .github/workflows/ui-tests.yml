@@ -95,12 +95,13 @@ jobs:
             cp "$HISTORY" history.jsonl
           fi
 
-      - name: Run UI tests
-        run: allurectl watch -- ./gradlew test -Denv=ci -DbrowserVersion=${{ env.BROWSER_VERSION }}
-
-      - name: Generate Allure report
-        if: always()
+      - name: Run UI tests and Allure report
         run: |
+          set +e
+          allurectl watch -- ./gradlew test -Denv=ci -DbrowserVersion=${{ env.BROWSER_VERSION }}
+          TEST_EXIT=$?
+          set -e
+
           mkdir -p build/allure-results
           cat > build/allure-results/executor.json <<EOF
           {
@@ -114,15 +115,20 @@ jobs:
           jq --arg environment "ci" \
              --arg build "#${{ github.run_number }}" \
              --arg branch "${{ github.head_ref || github.ref_name }}" \
-             '.variables += {
-               "Environment": $environment,
-               "Build": $build,
-               "Branch": $branch
-             }' allurerc.json > allurerc.ci.json
+             'del(.plugins.csv)
+              | .plugins.awesome.options.charts |= .[0:3]
+              | .plugins.dashboard.options.layout |= .[0:4]
+              | .variables += {
+                  "Environment": $environment,
+                  "Build": $build,
+                  "Branch": $branch
+                }' allurerc.json > allurerc.ci.json
           mv allurerc.ci.json allurerc.json
 
           ./gradlew allureReport
           build/allure/allure3/node_modules/.bin/allure quality-gate build/allure-results --config allurerc.json
+
+          exit $TEST_EXIT
 
       - name: Prepare GitHub Pages site
         if: always()

@@ -16,9 +16,10 @@ public class TestBase {
 
     @BeforeAll
     static void setup() {
+        var isCi = "ci".equals(System.getProperty("env"));
         SelenideLogger.addListener("AllureSelenide",
         new AllureSelenide()
-                .screenshots(true)
+                .screenshots(!isCi)
                 .savePageSource(false));
     
         var config = ConfigReader.config;
@@ -28,6 +29,10 @@ public class TestBase {
         Configuration.browserVersion = config.browserVersion();
         Configuration.browserSize = config.browserSize();
         Configuration.headless = config.headless();
+        if (isCi) {
+            Configuration.pageLoadStrategy = "eager";
+            Configuration.timeout = 3000;
+        }
     
         if (config.headless()) {
           Configuration.browserCapabilities = new ChromeOptions()
@@ -37,7 +42,9 @@ public class TestBase {
 
     @AfterEach
     void afterEach() {
-        Attachments.screenshotAs("Last screenshot");
+        if (!"ci".equals(System.getProperty("env"))) {
+            Attachments.screenshotAs("Last screenshot");
+        }
         closeWebDriver();
     }
 }
