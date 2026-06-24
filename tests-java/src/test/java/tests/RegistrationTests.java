@@ -1,13 +1,25 @@
 package tests;
+
+import annotations.Layer;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
+@Layer("e2e")
+@Epic("One Page Form")
+@Feature("Registration")
+@DisplayName("Registration")
 public class RegistrationTests extends TestBase {
 
     @Test
+    @Tag("positive")
+    @DisplayName("Successful registration")
     void successfulRegistrationTest() {
         open("/automation-practice-form.html");
         $(".practice-form-wrapper").shouldHave(text("Student Registration Form"));
