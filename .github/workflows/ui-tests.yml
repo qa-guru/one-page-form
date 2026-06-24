@@ -143,6 +143,7 @@ jobs:
           rm -rf pages/allure-report
 
           cp *.html pages/
+          cp allure-shell.css pages/
           mkdir -p "$REPORT_DIR"
           cp -r "${REPORT_SRC}/." "$REPORT_DIR/"
 

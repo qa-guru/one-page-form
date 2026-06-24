@@ -59,12 +59,14 @@ for branch in "${sorted_branches[@]:-}"; do
   fi
 
   branch_panels="${branch_panels}
-    <section class=\"panel\">
-      <div class=\"panel-head\">
+    <section class=\"card\">
+      <div class=\"card-header\">
         <h2><a href=\"${branch}/\">${branch}</a></h2>
         ${report_link}
       </div>
-      <iframe class=\"dashboard-frame\" src=\"${dashboard_src}\" title=\"Dashboard: ${branch}\"></iframe>
+      <div class=\"card-body\">
+        <iframe class=\"dashboard-frame\" src=\"${dashboard_src}\" title=\"Dashboard: ${branch}\"></iframe>
+      </div>
     </section>"
   branch_links="${branch_links}<li><a href=\"${branch}/\">${branch}</a></li>"
   if [ -n "${latest_run}" ]; then
@@ -73,7 +75,7 @@ for branch in "${sorted_branches[@]:-}"; do
 done
 
 if [ -z "${branch_panels}" ]; then
-  branch_panels='<section class="panel"><p class="empty-state">Пока нет опубликованных отчётов по веткам</p></section>'
+  branch_panels='<section class="card"><div class="card-body"><p class="empty-state">Пока нет опубликованных отчётов по веткам</p></div></section>'
   branch_links='<li>Нет опубликованных веток</li>'
 fi
 
@@ -86,118 +88,32 @@ cat > "${GLOBAL_LANDING}/index.html" <<EOF
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UI Tests Dashboard</title>
-  <style>
-    :root {
-      --bg: #f5f0e8;
-      --surface: #2c2a26;
-      --text: #222;
-      --muted: #6b6b6b;
-      --primary: #20aee3;
-      --border: #e3e9f5;
-      --button: #1677f2;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-    header {
-      background: var(--surface);
-      color: #f5f0e8;
-      padding: 20px 24px;
-    }
-    header h1 { margin: 0 0 6px; font-size: 1.6rem; }
-    header p { margin: 0; color: rgba(245, 240, 232, 0.75); }
-    main { max-width: 1400px; margin: 0 auto; padding: 24px; }
-    .panel {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 24px;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
-    }
-    .panel-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-    .panel h2 {
-      margin: 0;
-      font-size: 1.2rem;
-      border-left: 4px solid var(--primary);
-      padding-left: 12px;
-    }
-    .panel h2 a {
-      color: inherit;
-      text-decoration: none;
-    }
-    .panel h2 a:hover { color: var(--button); }
-    .report-link {
-      color: var(--button);
-      text-decoration: none;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    .report-link:hover { text-decoration: underline; }
-    .dashboard-frame {
-      width: 100%;
-      min-height: 720px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #fff;
-    }
-    .empty-state {
-      margin: 0;
-      padding: 48px 16px;
-      text-align: center;
-      color: var(--muted);
-      background: #f8fbff;
-      border-radius: 12px;
-    }
-    .branches ul {
-      margin: 0;
-      padding-left: 20px;
-      columns: 2;
-      gap: 24px;
-    }
-    .branches a { color: var(--button); text-decoration: none; }
-    .branches a:hover { text-decoration: underline; }
-    .note {
-      margin: 0 0 16px;
-      padding: 12px 14px;
-      background: #f8fbff;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-    @media (max-width: 768px) {
-      .branches ul { columns: 1; }
-      .dashboard-frame { min-height: 560px; }
-    }
-  </style>
+  <link rel="stylesheet" href="../allure-shell.css">
 </head>
 <body>
-  <header>
-    <h1>UI Tests Dashboard</h1>
-    <p>Тренды по веткам. Для дерева тестов откройте полный отчёт.</p>
-  </header>
-  <main>
-    <p class="note">Dashboard показывает только аналитику. Чтобы кликнуть по тестам, откройте ссылку «полный отчёт» у нужной ветки.</p>
-    <section class="panel branches">
-      <h2>Навигация</h2>
-      <ul>
-        ${branch_links}
-      </ul>
-    </section>
-    ${branch_panels}
-  </main>
+  <div class="shell">
+    <div class="layout">
+      <header class="page-header">
+        <h1>UI Tests Dashboard</h1>
+        <p>Тренды по веткам. Для дерева тестов откройте полный отчёт.</p>
+      </header>
+
+      <p class="note">Dashboard показывает только аналитику. Чтобы кликнуть по тестам, откройте ссылку «полный отчёт» у нужной ветки.</p>
+
+      <section class="card branch-nav">
+        <div class="card-header">
+          <h2>Навигация</h2>
+        </div>
+        <div class="card-body">
+          <ul>
+            ${branch_links}
+          </ul>
+        </div>
+      </section>
+
+      ${branch_panels}
+    </div>
+  </div>
 </body>
 </html>
 EOF
