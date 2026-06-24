@@ -146,6 +146,7 @@ jobs:
 
           cp *.html pages/
           cp allure-shell.css pages/
+          cp allure-shell.js pages/
           mkdir -p "$REPORT_DIR"
           cp -r "${REPORT_SRC}/." "$REPORT_DIR/"
 

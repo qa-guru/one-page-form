@@ -92,6 +92,7 @@ cat > "${BRANCH_DIR}/index.html" <<EOF
       </section>
     </div>
   </div>
+  <script src="../../allure-shell.js"></script>
 </body>
 </html>
 EOF

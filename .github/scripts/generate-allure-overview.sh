@@ -114,6 +114,7 @@ cat > "${GLOBAL_LANDING}/index.html" <<EOF
       ${branch_panels}
     </div>
   </div>
+  <script src="../allure-shell.js"></script>
 </body>
 </html>
 EOF
