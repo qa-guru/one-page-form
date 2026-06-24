@@ -178,8 +178,6 @@ jobs:
 
           bash .github/scripts/optimize-allure-pages.sh pages/allure-reports "${{ env.ALLURE_RUNS_RETENTION }}"
 
-          bash .github/scripts/generate-branch-landing.sh "${LANDING_DIR}"
-
       - name: Generate overview dashboard
         if: always()
         working-directory: .
