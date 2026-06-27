@@ -1,29 +1,7 @@
-@font-face {
-  font-family: "PTRootUIWebVF";
-  font-display: swap;
-  font-weight: 300 700;
-  src:
-    url("allure-reports/main/dashboard/pt-root-ui_vf.woff2") format("woff2 supports variations"),
-    url("allure-reports/main/dashboard/pt-root-ui_vf.woff2") format("woff2-variations"),
-    url("allure-reports/main/dashboard/pt-root-ui_vf.woff") format("woff supports variations"),
-    url("allure-reports/main/dashboard/pt-root-ui_vf.woff") format("woff-variations");
-}
-
-@font-face {
-  font-family: "JetBrainsMonoVF";
-  font-display: swap;
-  font-weight: 100 800;
-  src:
-    url("allure-reports/main/dashboard/JetBrainsMono_vf.woff2") format("woff2 supports variations"),
-    url("allure-reports/main/dashboard/JetBrainsMono_vf.woff2") format("woff2-variations"),
-    url("allure-reports/main/dashboard/JetBrainsMono_vf.woff") format("woff supports variations"),
-    url("allure-reports/main/dashboard/JetBrainsMono_vf.woff") format("woff-variations");
-}
-
 :root {
-  --font-family: "PTRootUIWebVF", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+  --font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-family-mono: "JetBrainsMonoVF", ui-monospace, monospace;
+  --font-family-mono: ui-monospace, monospace;
 
   --font-size-2xl: 24px;
   --font-size-xl: 18px;

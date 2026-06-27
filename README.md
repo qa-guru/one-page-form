@@ -2,13 +2,15 @@
 
 Small static HTML/CSS/JavaScript demos for practicing form interactions and basic UI behavior.
 
+Automated tests and Allure reports live in a separate repository: [qa-guru/one-page-form-tests-java](https://github.com/qa-guru/one-page-form-tests-java).
+
 ### Open directly in browser
 
 - `automation-practice-form.html`
 - `text-box.html`
 - `login.html`
 
-### Open in github pages
+### GitHub Pages
 
 - [https://qa-guru.github.io/one-page-form/](https://qa-guru.github.io/one-page-form/)
 - [https://qa-guru.github.io/one-page-form/automation-practice-form.html](https://qa-guru.github.io/one-page-form/automation-practice-form.html)
@@ -17,14 +19,7 @@ Small static HTML/CSS/JavaScript demos for practicing form interactions and basi
 
 ### Allure reports (CI)
 
-Reports are grouped by branch name in the path:
+Published from the tests repository:
 
-- `allure-reports/` — overview with a dashboard per branch
-- `allure-reports/{branch}/` — branch dashboard with trends
-- `allure-reports/{branch}/{run_id}/` — report for a specific run
-
-Examples:
-
-- [Overview dashboard](https://qa-guru.github.io/one-page-form/allure-reports/)
-- [main dashboard](https://qa-guru.github.io/one-page-form/allure-reports/main/)
-- [demo branch dashboard](https://qa-guru.github.io/one-page-form/allure-reports/demo-allure-data-alpha/)
+- [Overview dashboard](https://qa-guru.github.io/one-page-form-tests-java/allure-reports/)
+- [main dashboard](https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/)
