@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="allure-shell.css" />
   </head>
   <body>
-    <header class="header" data-testid="header">
+    <!-- demo-header:start -->
+<header class="header" data-testid="header">
       <div class="header-content">
         <div class="header-left">
         <div class="brand" data-testid="brand">
@@ -86,10 +87,10 @@
               </button>
               <ul class="nav-tool-menu" id="lang-menu" role="menu" aria-hidden="true">
                 <li role="none">
-                  <a href="index.html" role="menuitem" data-lang="en" data-testid="lang-en">Eng</a>
+                  <a href="#" role="menuitem" data-lang="en" data-testid="lang-en">Eng</a>
                 </li>
                 <li role="none">
-                  <a href="index.html?ru" role="menuitem" data-lang="ru" data-testid="lang-ru">Рус</a>
+                  <a href="#" role="menuitem" data-lang="ru" data-testid="lang-ru">Рус</a>
                 </li>
               </ul>
             </div>
@@ -160,6 +161,7 @@
         <div class="nav-overlay" data-testid="nav-overlay"></div>
       </div>
     </header>
+<!-- demo-header:end -->
 
     <main class="page">
       <div class="site-shell layout">
@@ -390,240 +392,45 @@
         },
       };
 
-      const LANG = new URLSearchParams(window.location.search).has("ru") ? "ru" : "en";
-      const t = I18N[LANG];
-      const langQuery = LANG === "ru" ? "?ru" : "";
       const reportBase =
         "https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/";
       const testOpsBase = "https://allure.autotests.cloud/project/5263";
-      const dashboardSegment = LANG === "ru" ? "dashboard" : "dashboard-en";
 
-      function buildLangUrl(lang) {
-        const url = new URL(window.location.href);
-        url.searchParams.delete("ru");
-        if (lang === "ru") {
-          url.searchParams.set("ru", "");
-        }
-        return `${url.pathname}${url.search}${url.hash}`;
-      }
-
-      function applyI18n() {
-        document.documentElement.lang = LANG;
-        document.title = t.pageTitle;
-
-        const burger = document.querySelector(".burger-menu");
-        if (burger) burger.setAttribute("aria-label", t.navMenu);
-
-        const nav = document.querySelector(".nav");
-        if (nav) nav.setAttribute("aria-label", t.navMain);
-
-        const navLinks = {
-          "clubs-link": { href: "text-box.html", text: t.navTextBox },
-          "create-club-link": { href: "automation-practice-form.html", text: t.navRegistration },
-          "login-link": { href: "login.html", text: t.navLogin },
-          "sandbox-link": { href: "sandbox.html", text: t.navSandbox },
-          "drawer-clubs-link": { href: "text-box.html", text: t.navTextBox },
-          "drawer-create-club-link": { href: "automation-practice-form.html", text: t.navRegistration },
-          "drawer-login-link": { href: "login.html", text: t.navLogin },
-          "drawer-sandbox-link": { href: "sandbox.html", text: t.navSandbox },
-        };
-        Object.entries(navLinks).forEach(([testId, { href, text }]) => {
-          const link = document.querySelector(`[data-testid="${testId}"]`);
-          if (link) {
-            link.href = href + langQuery;
-            link.textContent = text;
-          }
-        });
-
-        const formsLink = document.querySelector('[data-testid="forms-link"]');
-        if (formsLink) formsLink.href = "index.html" + langQuery;
-
-        const drawerFormsLink = document.querySelector('[data-testid="drawer-forms-link"]');
-        if (drawerFormsLink) drawerFormsLink.href = "index.html" + langQuery;
-
-        const githubLink = document.querySelector('[data-testid="github-link"]');
-        if (githubLink) githubLink.setAttribute("aria-label", t.navGithub);
-
-        const githubIoLink = document.querySelector('[data-testid="github-io-link"]');
-        if (githubIoLink) githubIoLink.setAttribute("aria-label", t.navGithubPages);
-
-        document.querySelectorAll("[data-i18n]").forEach((node) => {
-          const key = node.getAttribute("data-i18n");
-          if (t[key]) node.textContent = t[key];
-        });
-
-        document.querySelectorAll("[data-demo-link]").forEach((link) => {
-          link.href = link.getAttribute("data-demo-link") + langQuery;
-        });
-
-        const dashboardFrame = document.getElementById("dashboard-frame");
-        if (dashboardFrame) {
-          dashboardFrame.dataset.dashboardUrl = `${reportBase}${dashboardSegment}/index.html`;
-          dashboardFrame.title = t.dashboardFrameTitle;
-        }
-
-        const dashboardTitleLink = document.getElementById("dashboard-title-link");
-        if (dashboardTitleLink) {
-          dashboardTitleLink.href = `${reportBase}${dashboardSegment}/index.html`;
-        }
-
-        const testOpsLink = document.getElementById("testops-link");
-        if (testOpsLink) testOpsLink.href = testOpsBase;
-
-        const langLabel = document.getElementById("lang-label");
-        if (langLabel) langLabel.textContent = LANG === "ru" ? t.langRu : t.langEng;
-
-        document.querySelectorAll("#lang-menu [data-lang]").forEach((option) => {
-          const optionLang = option.getAttribute("data-lang");
-          const isActive = optionLang === LANG;
-          option.setAttribute("aria-selected", isActive ? "true" : "false");
-          option.textContent = optionLang === "ru" ? t.langRu : t.langEng;
-          option.href = buildLangUrl(optionLang);
-        });
-
-        updateThemeToggle(getSiteTheme());
-      }
-
-      function getSiteTheme() {
-        if (window.AllureShell?.getDashboardTheme) {
+      AllureShell.initDemoHeader({
+        i18n: I18N,
+        getSiteTheme() {
           const frame = document.getElementById("dashboard-frame");
-          return window.AllureShell.getDashboardTheme(frame);
-        }
-        return localStorage.getItem("site-theme") === "dark" ? "dark" : "light";
-      }
+          return AllureShell.getDashboardTheme(frame);
+        },
+        applyPage(t, lang, langQuery) {
+          const dashboardSegment = lang === "ru" ? "dashboard" : "dashboard-en";
 
-      function updateThemeToggle(theme) {
-        const toggle = document.getElementById("theme-toggle");
-        const icon = toggle?.querySelector(".theme-icon");
-        if (!toggle || !icon) return;
-
-        const isDark = theme === "dark";
-        icon.innerHTML = isDark
-          ? '<circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>'
-          : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>';
-        toggle.setAttribute("aria-label", isDark ? t.themeLight : t.themeDark);
-      }
-
-      function closeLangMenu() {
-        const toggle = document.getElementById("lang-toggle");
-        const menu = document.getElementById("lang-menu");
-        if (!toggle || !menu) return;
-        menu.classList.remove("is-open");
-        menu.setAttribute("aria-hidden", "true");
-        toggle.setAttribute("aria-expanded", "false");
-      }
-
-      function initHeaderTools() {
-        const langToggle = document.getElementById("lang-toggle");
-        const langMenu = document.getElementById("lang-menu");
-        const themeToggle = document.getElementById("theme-toggle");
-        const dashboardFrame = document.getElementById("dashboard-frame");
-
-        if (langToggle && langMenu) {
-          langToggle.addEventListener("click", (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            const isOpen = !langMenu.classList.contains("is-open");
-            langMenu.classList.toggle("is-open", isOpen);
-            langMenu.setAttribute("aria-hidden", isOpen ? "false" : "true");
-            langToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+          document.querySelectorAll("[data-i18n]").forEach((node) => {
+            const key = node.getAttribute("data-i18n");
+            if (t[key]) node.textContent = t[key];
           });
 
-          document.addEventListener("click", (event) => {
-            if (!langToggle.contains(event.target) && !langMenu.contains(event.target)) {
-              closeLangMenu();
-            }
+          document.querySelectorAll("[data-demo-link]").forEach((link) => {
+            link.href = link.getAttribute("data-demo-link") + langQuery;
           });
 
-          document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") closeLangMenu();
-          });
-        }
-
-        if (themeToggle) {
-          themeToggle.addEventListener("click", () => {
-            const nextTheme = window.AllureShell?.toggleDashboardTheme
-              ? window.AllureShell.toggleDashboardTheme(dashboardFrame)
-              : (() => {
-                  const theme =
-                    localStorage.getItem("site-theme") === "dark" ? "light" : "dark";
-                  localStorage.setItem("site-theme", theme);
-                  if (window.AllureShell?.applySiteTheme) {
-                    window.AllureShell.applySiteTheme(theme);
-                  } else {
-                    document.documentElement.setAttribute("data-theme", theme);
-                  }
-                  window.dispatchEvent(
-                    new CustomEvent("dashboard-theme-change", { detail: { theme } })
-                  );
-                  return theme;
-                })();
-            updateThemeToggle(nextTheme);
-          });
-        }
-
-        window.addEventListener("dashboard-theme-change", (event) => {
-          updateThemeToggle(event.detail?.theme || getSiteTheme());
-        });
-      }
-
-      function setActiveNavLink() {
-        const currentPath = window.location.pathname.split("/").pop() || "index.html";
-        document.querySelectorAll(
-          ".header-left .form-nav-home, .header-left .form-nav .nav-link, .nav-drawer-links .nav-link"
-        ).forEach((link) => {
-          const href = link.getAttribute("href").split("?")[0];
-          const isActive = href === currentPath;
-          link.classList.toggle("active", isActive);
-          if (isActive) {
-            link.setAttribute("aria-current", "page");
-          } else {
-            link.removeAttribute("aria-current");
+          const dashboardFrame = document.getElementById("dashboard-frame");
+          if (dashboardFrame) {
+            dashboardFrame.dataset.dashboardUrl = `${reportBase}${dashboardSegment}/index.html`;
+            dashboardFrame.title = t.dashboardFrameTitle;
           }
-        });
-      }
 
-      applyI18n();
-      initHeaderTools();
-      setActiveNavLink();
+          const dashboardTitleLink = document.getElementById("dashboard-title-link");
+          if (dashboardTitleLink) {
+            dashboardTitleLink.href = `${reportBase}${dashboardSegment}/index.html`;
+          }
+
+          const testOpsLink = document.getElementById("testops-link");
+          if (testOpsLink) testOpsLink.href = testOpsBase;
+        },
+      });
 
       document.addEventListener("DOMContentLoaded", () => {
-        const burger = document.querySelector(".burger-menu");
-        const nav = document.querySelector(".nav");
-        const overlay = document.querySelector(".nav-overlay");
-        const links = document.querySelectorAll(".nav-link");
-
-        function closeMenu() {
-          if (!burger || !nav || !overlay) return;
-          burger.classList.remove("active");
-          nav.classList.remove("active");
-          overlay.classList.remove("active");
-          burger.setAttribute("aria-expanded", "false");
-          closeLangMenu();
-        }
-
-        if (burger && nav && overlay) {
-          burger.addEventListener("click", () => {
-            const isOpen = !burger.classList.contains("active");
-            burger.classList.toggle("active", isOpen);
-            nav.classList.toggle("active", isOpen);
-            overlay.classList.toggle("active", isOpen);
-            burger.setAttribute("aria-expanded", isOpen ? "true" : "false");
-          });
-
-          overlay.addEventListener("click", closeMenu);
-
-          window.matchMedia("(max-width: 768px)").addEventListener("change", closeMenu);
-        }
-
-        links.forEach((link) => {
-          link.addEventListener("click", closeMenu);
-        });
-
-        document.addEventListener("keydown", (event) => {
-          if (event.key === "Escape") closeMenu();
-        });
-
         const reportLink = document.getElementById("full-report-link");
 
         fetch(`${reportBase}latest-run-id.txt`)
