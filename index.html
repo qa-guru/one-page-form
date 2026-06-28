@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -42,6 +42,11 @@
           <a href="text-box.html" class="nav-link" data-testid="clubs-link">Text Box Form</a>
           <a href="automation-practice-form.html" class="nav-link" data-testid="create-club-link">Student Registration Form</a>
           <a href="login.html" class="nav-link" data-testid="login-link">Login Form</a>
+          <div class="lang-switch" data-testid="lang-switch">
+            <a href="index.html" data-testid="lang-en">EN</a>
+            <span class="lang-switch-separator" aria-hidden="true">/</span>
+            <a href="index.html?ru" data-testid="lang-ru">RU</a>
+          </div>
           <div class="nav-external">
             <a
               href="https://github.com/qa-guru/one-page-form"
@@ -97,10 +102,10 @@
       <div class="site-shell layout">
         <section class="panel-card panel-card-dashboard">
           <div class="card-body card-body-demo">
-            <h3 class="demo-section-title">Демо-страницы</h3>
+            <h3 class="demo-section-title" data-i18n="demoSectionTitle">Demo pages</h3>
             <ul class="demo-list">
               <li class="demo-item">
-                <a href="login.html">
+                <a href="login.html" data-demo-link="login.html">
                   <span class="demo-item-preview" aria-hidden="true">
                     <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" fill="none">
                       <rect x="8" y="8" width="104" height="56" rx="6" fill="#fff" stroke="#d9e2f3" stroke-width="1.5"/>
@@ -116,12 +121,12 @@
                       <rect x="40" y="58" width="40" height="5" rx="2.5" fill="#20aee3"/>
                     </svg>
                   </span>
-                  <span class="demo-item-title">Login Form</span>
-                  <p class="demo-item-desc">Форма входа с валидацией логина и пароля.</p>
+                  <span class="demo-item-title" data-i18n="loginTitle">Login Form</span>
+                  <p class="demo-item-desc" data-i18n="loginDesc">Login form with username and password validation.</p>
                 </a>
               </li>
               <li class="demo-item">
-                <a href="text-box.html">
+                <a href="text-box.html" data-demo-link="text-box.html">
                   <span class="demo-item-preview" aria-hidden="true">
                     <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" fill="none">
                       <rect x="8" y="4" width="104" height="64" rx="6" fill="#fff" stroke="#d9e2f3" stroke-width="1.5"/>
@@ -135,12 +140,12 @@
                       <rect x="14" y="68" width="92" height="1" rx="0.5" fill="#e3e9f5"/>
                     </svg>
                   </span>
-                  <span class="demo-item-title">Text Box Form</span>
-                  <p class="demo-item-desc">Текстовые поля, отправка и отображение результата.</p>
+                  <span class="demo-item-title" data-i18n="textBoxTitle">Text Box Form</span>
+                  <p class="demo-item-desc" data-i18n="textBoxDesc">Text fields, submission, and result display.</p>
                 </a>
               </li>
               <li class="demo-item">
-                <a href="automation-practice-form.html">
+                <a href="automation-practice-form.html" data-demo-link="automation-practice-form.html">
                   <span class="demo-item-preview" aria-hidden="true">
                     <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" fill="none">
                       <rect x="8" y="4" width="104" height="64" rx="6" fill="#fff" stroke="#d9e2f3" stroke-width="1.5"/>
@@ -162,34 +167,31 @@
                       <rect x="62" y="58" width="38" height="8" rx="3" fill="#2d5a4a"/>
                     </svg>
                   </span>
-                  <span class="demo-item-title">Student Registration Form</span>
-                  <p class="demo-item-desc">Расширенная форма регистрации студента.</p>
+                  <span class="demo-item-title" data-i18n="registrationTitle">Student Registration Form</span>
+                  <p class="demo-item-desc" data-i18n="registrationDesc">Advanced student registration form.</p>
                 </a>
               </li>
             </ul>
           </div>
           <div class="card-header card-header-dashboard">
-            <h2>UI Tests Dashboard</h2>
+            <h2>
+              <a
+                id="dashboard-title-link"
+                href="https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-i18n="dashboardTitle"
+              >Automated Tests Dashboard</a>
+            </h2>
             <div class="card-header-actions">
               <a
                 class="report-link"
                 href="https://qa-guru.github.io/one-page-form-tests-java/"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-i18n="testsProjectLink"
               >
-                <svg
-                  class="report-link-icon"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
-                  ></path>
-                </svg>
-                Проект с автотестами на формы
+                Forms automated tests project
               </a>
               <a
                 class="report-link"
@@ -206,14 +208,15 @@
                   alt=""
                   aria-hidden="true"
                 />
-                Allure Report 3
+                <span data-i18n="allureReportLink">Allure Report 3</span>
               </a>
             </div>
           </div>
           <div class="card-body card-body-dashboard">
             <iframe
               class="dashboard-frame"
-              src="https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/dashboard/index.html"
+              id="dashboard-frame"
+              src="https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/dashboard-en/index.html"
               title="Allure dashboard: main"
               loading="lazy"
             ></iframe>
@@ -229,6 +232,113 @@
     </footer>
 
     <script>
+      const I18N = {
+        en: {
+          pageTitle: "One Page Form Demos",
+          navMenu: "Menu",
+          navMain: "Navigation",
+          navTextBox: "Text Box Form",
+          navRegistration: "Student Registration Form",
+          navLogin: "Login Form",
+          navGithub: "Project on GitHub",
+          navGithubPages: "GitHub Pages",
+          demoSectionTitle: "Demo pages",
+          loginTitle: "Login Form",
+          loginDesc: "Login form with username and password validation.",
+          textBoxTitle: "Text Box Form",
+          textBoxDesc: "Text fields, submission, and result display.",
+          registrationTitle: "Student Registration Form",
+          registrationDesc: "Advanced student registration form.",
+          dashboardTitle: "Automated Tests Dashboard",
+          testsProjectLink: "Forms automated tests project",
+          allureReportLink: "Allure Report 3",
+          dashboardFrameTitle: "Allure dashboard: main",
+        },
+        ru: {
+          pageTitle: "Демо-формы One Page Form",
+          navMenu: "Меню",
+          navMain: "Навигация",
+          navTextBox: "Форма Text Box",
+          navRegistration: "Форма регистрации студента",
+          navLogin: "Форма входа",
+          navGithub: "Репозиторий на GitHub",
+          navGithubPages: "GitHub Pages",
+          demoSectionTitle: "Демо-страницы",
+          loginTitle: "Форма входа",
+          loginDesc: "Форма входа с валидацией логина и пароля.",
+          textBoxTitle: "Форма Text Box",
+          textBoxDesc: "Текстовые поля, отправка и отображение результата.",
+          registrationTitle: "Форма регистрации студента",
+          registrationDesc: "Расширенная форма регистрации студента.",
+          dashboardTitle: "Дашборд автотестов",
+          testsProjectLink: "Проект с автотестами на формы",
+          allureReportLink: "Allure Report 3",
+          dashboardFrameTitle: "Дашборд Allure: main",
+        },
+      };
+
+      const LANG = new URLSearchParams(window.location.search).has("ru") ? "ru" : "en";
+      const t = I18N[LANG];
+      const langQuery = LANG === "ru" ? "?ru" : "";
+      const reportBase =
+        "https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/";
+      const dashboardSegment = LANG === "ru" ? "dashboard" : "dashboard-en";
+
+      function applyI18n() {
+        document.documentElement.lang = LANG;
+        document.title = t.pageTitle;
+
+        const burger = document.querySelector(".burger-menu");
+        if (burger) burger.setAttribute("aria-label", t.navMenu);
+
+        const nav = document.querySelector(".nav");
+        if (nav) nav.setAttribute("aria-label", t.navMain);
+
+        const navLinks = {
+          "clubs-link": { href: "text-box.html", text: t.navTextBox },
+          "create-club-link": { href: "automation-practice-form.html", text: t.navRegistration },
+          "login-link": { href: "login.html", text: t.navLogin },
+        };
+        Object.entries(navLinks).forEach(([testId, { href, text }]) => {
+          const link = document.querySelector(`[data-testid="${testId}"]`);
+          if (link) {
+            link.href = href + langQuery;
+            link.textContent = text;
+          }
+        });
+
+        const formsLink = document.querySelector('[data-testid="forms-link"]');
+        if (formsLink) formsLink.href = "index.html" + langQuery;
+
+        const githubLink = document.querySelector('[data-testid="github-link"]');
+        if (githubLink) githubLink.setAttribute("aria-label", t.navGithub);
+
+        const githubIoLink = document.querySelector('[data-testid="github-io-link"]');
+        if (githubIoLink) githubIoLink.setAttribute("aria-label", t.navGithubPages);
+
+        document.querySelectorAll("[data-i18n]").forEach((node) => {
+          const key = node.getAttribute("data-i18n");
+          if (t[key]) node.textContent = t[key];
+        });
+
+        document.querySelectorAll("[data-demo-link]").forEach((link) => {
+          link.href = link.getAttribute("data-demo-link") + langQuery;
+        });
+
+        const langEn = document.querySelector('[data-testid="lang-en"]');
+        const langRu = document.querySelector('[data-testid="lang-ru"]');
+        if (langEn) langEn.classList.toggle("active", LANG === "en");
+        if (langRu) langRu.classList.toggle("active", LANG === "ru");
+
+        const dashboardFrame = document.getElementById("dashboard-frame");
+        if (dashboardFrame) {
+          dashboardFrame.src = `${reportBase}${dashboardSegment}/index.html`;
+          dashboardFrame.title = t.dashboardFrameTitle;
+        }
+      }
+
+      applyI18n();
+
       document.addEventListener("DOMContentLoaded", () => {
         const burger = document.querySelector(".burger-menu");
         const nav = document.querySelector(".nav");
@@ -259,8 +369,6 @@
           link.addEventListener("click", closeMenu);
         });
 
-        const reportBase =
-          "https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/";
         const reportLink = document.getElementById("full-report-link");
 
         fetch(`${reportBase}latest-run-id.txt`)

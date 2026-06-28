@@ -354,6 +354,15 @@ body {
   color: #1e293b;
 }
 
+.card-header h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card-header h2 a:hover {
+  color: var(--link-hover);
+}
+
 .card-body {
   padding: 20px 24px 24px;
 }
