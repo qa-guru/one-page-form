@@ -35,9 +35,11 @@ Allure 3 reports are published from the tests repository after each CI run on `m
 
 ### Open directly in browser
 
-- `automation-practice-form.html`
-- `text-box.html`
-- `login.html`
+No web server required — open any `.html` file locally in any browser (double-click or drag into a tab).
+
+- [automation-practice-form.html](automation-practice-form.html)
+- [text-box.html](text-box.html)
+- [login.html](login.html)
 
 ### GitHub Pages
 
