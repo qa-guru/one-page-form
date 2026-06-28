@@ -6,7 +6,7 @@ Automated tests and Allure reports live in a separate repository: [qa-guru/one-p
 
 [![UI Tests](https://qa-guru.github.io/one-page-form-tests-java/readme/badge.svg)](https://qa-guru.github.io/one-page-form-tests-java/allure-reports/)
 
-## UI Tests Dashboard
+## Automated Tests Dashboard
 
 Allure 3 reports are published from the tests repository after each CI run on `main`.
 
