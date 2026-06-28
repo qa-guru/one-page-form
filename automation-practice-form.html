@@ -69,13 +69,53 @@ body {
 
 .header-content {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   max-width: 1300px;
   margin: 0 auto;
   width: 100%;
   position: relative;
   height: 100%;
+}
+
+.header-left {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  z-index: 102;
+}
+
+.brand-separator {
+  color: rgba(245, 240, 232, 0.35);
+  font-weight: 300;
+  font-size: 1.1rem;
+  line-height: 1;
+  user-select: none;
+  flex-shrink: 0;
+  padding-inline: var(--space-2);
+}
+
+.brand-section {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-text-inverse);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: var(--space-2) var(--space-2) var(--space-2) 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out);
+  flex-shrink: 0;
+}
+
+.header-right {
+  margin-left: auto;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  z-index: 102;
 }
 
 .logo {
@@ -107,6 +147,23 @@ body {
   border-radius: var(--radius-sm);
 }
 
+.brand {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  z-index: 102;
+}
+
+.brand-section:hover {
+  background-color: rgba(245, 240, 232, 0.1);
+}
+
+.brand-section:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
 .nav {
   display: flex;
   align-items: center;
@@ -117,7 +174,6 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  margin-left: var(--space-6);
   padding-left: var(--space-4);
   border-left: 1px solid rgba(245, 240, 232, 0.2);
 }
@@ -157,7 +213,7 @@ body {
   white-space: nowrap;
   transition: color var(--duration-normal) var(--ease-out),
     background-color var(--duration-fast) var(--ease-out);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-2) var(--space-2);
   border-radius: var(--radius-sm);
 }
 
@@ -190,17 +246,17 @@ body {
 
 .nav-link.active,
 .nav-link[aria-current="page"] {
-  background-color: rgba(245, 240, 232, 0.06);
+  color: var(--color-text-inverse);
 }
 
 .nav-link.active::after,
 .nav-link[aria-current="page"]::after {
-  transform: scaleX(0);
+  transform: scaleX(1);
 }
 
-.nav-link.active:hover::after,
-.nav-link[aria-current="page"]:hover::after {
-  transform: scaleX(1);
+.nav-link.active:hover,
+.nav-link[aria-current="page"]:hover {
+  background-color: rgba(245, 240, 232, 0.06);
 }
 
 .burger-menu {
@@ -271,6 +327,10 @@ body {
 }
 
 @media (max-width: 768px) {
+  .header-right {
+    padding-right: 48px;
+  }
+
   .nav {
     position: fixed;
     top: 56px;
@@ -350,7 +410,7 @@ body {
   inset: 0 0 auto 0;
   height: 5px;
   border-radius: 16px 16px 0 0;
-  background: linear-gradient(90deg, #20AEE3, #2d5a4a);
+  background: linear-gradient(90deg, #b0bcc9, #8f9db0);
 }
 
 h1 {
@@ -814,6 +874,8 @@ td:first-child {
   <body>
     <header class="header" data-testid="header">
       <div class="header-content">
+        <div class="header-left">
+        <div class="brand" data-testid="brand">
         <a href="https://qa.guru" class="logo" data-testid="logo-link" aria-label="QA.GURU">
           <svg
             class="default-logo"
@@ -835,15 +897,12 @@ td:first-child {
             <path d="M15.4209 8.37699V13.7592L0 19.3531V14.2128L9.16186 11.0681L0 7.92343V2.78313L15.4209 8.37699Z" fill="#20AEE3"></path>
           </svg>
         </a>
+        </div>
+        <span class="brand-separator" aria-hidden="true">|</span>
+        <a href="index.html" class="brand-section" data-testid="forms-link">Forms</a>
+        </div>
 
-        <button class="burger-menu" type="button" aria-label="Меню" aria-expanded="false" data-testid="burger-menu">
-          <div class="burger-line burger-line-1" data-testid="burger-line-1"></div>
-          <div class="burger-line burger-line-2" data-testid="burger-line-2"></div>
-          <div class="burger-line burger-line-3" data-testid="burger-line-3"></div>
-        </button>
-
-        <div class="nav-overlay" data-testid="nav-overlay"></div>
-
+        <div class="header-right">
         <nav class="nav" data-testid="main-nav" aria-label="Навигация">
           <a href="text-box.html" class="nav-link" data-testid="clubs-link">Text Box Form</a>
           <a href="automation-practice-form.html" class="nav-link" data-testid="create-club-link">Student Registration Form</a>
@@ -887,6 +946,15 @@ td:first-child {
             </a>
           </div>
         </nav>
+        </div>
+
+        <button class="burger-menu" type="button" aria-label="Меню" aria-expanded="false" data-testid="burger-menu">
+          <div class="burger-line burger-line-1" data-testid="burger-line-1"></div>
+          <div class="burger-line burger-line-2" data-testid="burger-line-2"></div>
+          <div class="burger-line burger-line-3" data-testid="burger-line-3"></div>
+        </button>
+
+        <div class="nav-overlay" data-testid="nav-overlay"></div>
       </div>
     </header>
 
