@@ -13,20 +13,3 @@
 [data-testid="base-layout"] > div > div {
   padding: 12px !important;
 }
-
-@media (max-width: 768px) {
-  html {
-    font-size: 87.5%;
-  }
-
-  :root {
-    --font-size-3xl: 31px;
-    --font-size-2xl: 21px;
-    --font-size-xl: 16px;
-    --font-size-l: 14px;
-    --font-size-m: 12px;
-    --font-size-m-code: 11px;
-    --font-size-s: 10px;
-    --font-size-xs: 10px;
-  }
-}

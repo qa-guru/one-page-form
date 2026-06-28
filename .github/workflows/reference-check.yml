@@ -1,0 +1,29 @@
+name: Landing reference check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'allure-shell.css'
+      - 'allure-shell.js'
+      - 'dashboard-overrides.css'
+      - 'reference/**'
+      - 'scripts/check_landing_reference.py'
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'allure-shell.css'
+      - 'allure-shell.js'
+      - 'dashboard-overrides.css'
+      - 'reference/**'
+      - 'scripts/check_landing_reference.py'
+
+jobs:
+  reference:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Verify landing page matches reference
+        run: python scripts/check_landing_reference.py

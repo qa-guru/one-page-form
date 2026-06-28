@@ -1,25 +1,8 @@
 (function () {
   const RESIZE_MESSAGE = "allure-shell:resize";
   const RESPONSIVE_BREAKPOINT_PX = 768;
-  const SHELL_ROOT_FONT_SIZE_NARROW = "87.5%";
   const LAYOUT_SYNC_STYLE_ID = "shell-layout-sync";
-  const NARROW_DASHBOARD_FONT_VARS = `
-  --font-size-3xl: 31px;
-  --font-size-2xl: 21px;
-  --font-size-xl: 16px;
-  --font-size-l: 14px;
-  --font-size-m: 12px;
-  --font-size-m-code: 11px;
-  --font-size-s: 10px;
-  --font-size-xs: 10px;
-`;
   const NARROW_DASHBOARD_LAYOUT_CSS = `
-html {
-  font-size: ${SHELL_ROOT_FONT_SIZE_NARROW} !important;
-}
-:root {
-${NARROW_DASHBOARD_FONT_VARS}
-}
 [class*="styles_grid__"] {
   grid-template-columns: 1fr !important;
   width: 100% !important;
@@ -294,6 +277,246 @@ ${NARROW_DASHBOARD_FONT_VARS}
     notifyParentResize();
   });
 
+  function getPageLang() {
+    return new URLSearchParams(window.location.search).has("ru") ? "ru" : "en";
+  }
+
+  function buildLangUrl(lang) {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("ru");
+    if (lang === "ru") {
+      url.searchParams.set("ru", "");
+    }
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+
+  function resolveSiteTheme(getSiteTheme) {
+    if (typeof getSiteTheme === "function") {
+      return getSiteTheme();
+    }
+    const dashboardFrame = document.getElementById("dashboard-frame");
+    if (dashboardFrame) {
+      return getDashboardTheme(dashboardFrame);
+    }
+    return localStorage.getItem("site-theme") === "dark" ? "dark" : "light";
+  }
+
+  function updateThemeToggle(t, theme) {
+    const toggle = document.getElementById("theme-toggle");
+    const icon = toggle?.querySelector(".theme-icon");
+    if (!toggle || !icon) return;
+
+    const isDark = theme === "dark";
+    icon.innerHTML = isDark
+      ? '<circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>'
+      : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>';
+    toggle.setAttribute("aria-label", isDark ? t.themeLight : t.themeDark);
+  }
+
+  function closeLangMenu() {
+    const toggle = document.getElementById("lang-toggle");
+    const menu = document.getElementById("lang-menu");
+    if (!toggle || !menu) return;
+    menu.classList.remove("is-open");
+    menu.setAttribute("aria-hidden", "true");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+
+  function applyHeaderI18n(t, langQuery) {
+    const burger = document.querySelector(".burger-menu");
+    if (burger && t.navMenu) burger.setAttribute("aria-label", t.navMenu);
+
+    const nav = document.querySelector(".nav");
+    if (nav && t.navMain) nav.setAttribute("aria-label", t.navMain);
+
+    const navLinks = {
+      "clubs-link": { href: "text-box.html", text: t.navTextBox },
+      "create-club-link": { href: "automation-practice-form.html", text: t.navRegistration },
+      "login-link": { href: "login.html", text: t.navLogin },
+      "sandbox-link": { href: "sandbox.html", text: t.navSandbox },
+      "drawer-clubs-link": { href: "text-box.html", text: t.navTextBox },
+      "drawer-create-club-link": { href: "automation-practice-form.html", text: t.navRegistration },
+      "drawer-login-link": { href: "login.html", text: t.navLogin },
+      "drawer-sandbox-link": { href: "sandbox.html", text: t.navSandbox },
+    };
+
+    Object.entries(navLinks).forEach(([testId, { href, text }]) => {
+      if (!text) return;
+      const link = document.querySelector(`[data-testid="${testId}"]`);
+      if (!link) return;
+      link.href = href + langQuery;
+      link.textContent = text;
+    });
+
+    const formsText = t.navForms || "Forms";
+    const formsLink = document.querySelector('[data-testid="forms-link"]');
+    if (formsLink) {
+      formsLink.href = "index.html" + langQuery;
+      formsLink.textContent = formsText;
+    }
+
+    const drawerFormsLink = document.querySelector('[data-testid="drawer-forms-link"]');
+    if (drawerFormsLink) {
+      drawerFormsLink.href = "index.html" + langQuery;
+      drawerFormsLink.textContent = formsText;
+    }
+
+    const githubLink = document.querySelector('[data-testid="github-link"]');
+    if (githubLink && t.navGithub) githubLink.setAttribute("aria-label", t.navGithub);
+
+    const githubIoLink = document.querySelector('[data-testid="github-io-link"]');
+    if (githubIoLink && t.navGithubPages) githubIoLink.setAttribute("aria-label", t.navGithubPages);
+
+    const langLabel = document.getElementById("lang-label");
+    if (langLabel) {
+      langLabel.textContent = getPageLang() === "ru" ? t.langRu : t.langEng;
+    }
+
+    document.querySelectorAll("#lang-menu [data-lang]").forEach((option) => {
+      const optionLang = option.getAttribute("data-lang");
+      const isActive = optionLang === getPageLang();
+      option.setAttribute("aria-selected", isActive ? "true" : "false");
+      option.textContent = optionLang === "ru" ? t.langRu : t.langEng;
+      option.href = buildLangUrl(optionLang);
+    });
+  }
+
+  function setActiveNavLink() {
+    const currentPath = window.location.pathname.split("/").pop() || "index.html";
+    document
+      .querySelectorAll(
+        ".header-left .form-nav-home, .header-left .form-nav .nav-link, .nav-drawer-links .nav-link"
+      )
+      .forEach((link) => {
+        const href = link.getAttribute("href").split("?")[0];
+        const isActive = href === currentPath;
+        link.classList.toggle("active", isActive);
+        if (isActive) {
+          link.setAttribute("aria-current", "page");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+  }
+
+  function initHeaderTools(getSiteTheme) {
+    const langToggle = document.getElementById("lang-toggle");
+    const langMenu = document.getElementById("lang-menu");
+    const themeToggle = document.getElementById("theme-toggle");
+    const dashboardFrame = document.getElementById("dashboard-frame");
+
+    if (langToggle && langMenu) {
+      langToggle.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const isOpen = !langMenu.classList.contains("is-open");
+        langMenu.classList.toggle("is-open", isOpen);
+        langMenu.setAttribute("aria-hidden", isOpen ? "false" : "true");
+        langToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!langToggle.contains(event.target) && !langMenu.contains(event.target)) {
+          closeLangMenu();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeLangMenu();
+      });
+    }
+
+    if (themeToggle) {
+      themeToggle.addEventListener("click", () => {
+        const nextTheme = dashboardFrame
+          ? toggleDashboardTheme(dashboardFrame)
+          : (() => {
+              const theme = localStorage.getItem("site-theme") === "dark" ? "light" : "dark";
+              applySiteTheme(theme);
+              window.dispatchEvent(
+                new CustomEvent("dashboard-theme-change", { detail: { theme } })
+              );
+              return theme;
+            })();
+        const lang = getPageLang();
+        const translations = window.__demoHeaderI18n?.[lang];
+        if (translations) updateThemeToggle(translations, nextTheme);
+      });
+    }
+
+    window.addEventListener("dashboard-theme-change", (event) => {
+      const lang = getPageLang();
+      const translations = window.__demoHeaderI18n?.[lang];
+      if (translations) {
+        updateThemeToggle(translations, event.detail?.theme || resolveSiteTheme(getSiteTheme));
+      }
+    });
+  }
+
+  function initBurgerMenu() {
+    const burger = document.querySelector(".burger-menu");
+    const nav = document.querySelector(".nav");
+    const overlay = document.querySelector(".nav-overlay");
+    const links = document.querySelectorAll(".nav-link");
+
+    function closeMenu() {
+      if (!burger || !nav || !overlay) return;
+      burger.classList.remove("active");
+      nav.classList.remove("active");
+      overlay.classList.remove("active");
+      burger.setAttribute("aria-expanded", "false");
+      closeLangMenu();
+    }
+
+    if (burger && nav && overlay) {
+      burger.addEventListener("click", () => {
+        const isOpen = !burger.classList.contains("active");
+        burger.classList.toggle("active", isOpen);
+        nav.classList.toggle("active", isOpen);
+        overlay.classList.toggle("active", isOpen);
+        burger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      overlay.addEventListener("click", closeMenu);
+      window.matchMedia(`(max-width: ${RESPONSIVE_BREAKPOINT_PX}px)`).addEventListener("change", closeMenu);
+    }
+
+    links.forEach((link) => {
+      link.addEventListener("click", closeMenu);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeMenu();
+    });
+  }
+
+  function initDemoHeader({ i18n, applyPage, getSiteTheme } = {}) {
+    if (!i18n) return;
+
+    window.__demoHeaderI18n = i18n;
+    const lang = getPageLang();
+    const langQuery = lang === "ru" ? "?ru" : "";
+    const t = i18n[lang] || i18n.en;
+
+    function applyAll() {
+      document.documentElement.lang = lang;
+      if (t.pageTitle) document.title = t.pageTitle;
+      applyHeaderI18n(t, langQuery);
+      applyPage?.(t, lang, langQuery);
+      updateThemeToggle(t, resolveSiteTheme(getSiteTheme));
+    }
+
+    applyAll();
+    initHeaderTools(getSiteTheme);
+    setActiveNavLink();
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initBurgerMenu);
+    } else {
+      initBurgerMenu();
+    }
+  }
+
   initSiteTheme();
   syncShellLayoutAttribute();
 
@@ -308,6 +531,9 @@ ${NARROW_DASHBOARD_FONT_VARS}
     isNarrowShellLayout,
     syncShellLayoutAttribute,
     syncDashboardLayouts,
+    initDemoHeader,
+    buildLangUrl,
+    getPageLang,
   };
 
   if (document.readyState === "loading") {

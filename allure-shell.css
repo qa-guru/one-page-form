@@ -5,9 +5,9 @@
   --link-hover: #2d5a4a;
   --focus: rgba(32, 174, 227, 0.25);
   --color-bg: #f5f0e8;
-  --color-surface: #1e293b;
-  --color-surface-soft: #334155;
-  --color-text-inverse: #f1f5f9;
+  --color-surface: #2c2a26;
+  --color-surface-soft: #383530;
+  --color-text-inverse: #f5f0e8;
   --header-border: rgba(255, 255, 255, 0.1);
   --header-muted: rgba(255, 255, 255, 0.45);
   --header-hover-bg: rgba(255, 255, 255, 0.06);
@@ -222,6 +222,7 @@ body {
   align-items: center;
   justify-content: center;
   align-self: stretch;
+  flex-shrink: 0;
   text-decoration: none;
   transition: opacity var(--duration-normal) var(--ease-out);
   z-index: 102;
@@ -233,9 +234,9 @@ body {
 
 .default-logo {
   display: block;
+  width: 118px;
   height: 22px;
-  width: auto;
-  max-width: 130px;
+  flex-shrink: 0;
   object-fit: contain;
   transform: translateY(3px);
 }

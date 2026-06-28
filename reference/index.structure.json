@@ -1,0 +1,72 @@
+{
+  "page": "index.html",
+  "description": "Reference contract for the One Page Form landing page (index.html).",
+  "requiredTestIds": [
+    "brand",
+    "burger-line-1",
+    "burger-line-2",
+    "burger-line-3",
+    "burger-menu",
+    "clubs-link",
+    "create-club-link",
+    "drawer-clubs-link",
+    "drawer-create-club-link",
+    "drawer-forms-link",
+    "drawer-login-link",
+    "drawer-sandbox-link",
+    "forms-link",
+    "github-io-link",
+    "github-link",
+    "header",
+    "lang-en",
+    "lang-ru",
+    "lang-toggle",
+    "login-link",
+    "logo-link",
+    "main-nav",
+    "metrics-panel",
+    "nav-drawer-links",
+    "nav-overlay",
+    "nav-tools",
+    "sandbox-link",
+    "theme-toggle"
+  ],
+  "requiredSelectors": [
+    ".demo-list",
+    ".demo-item",
+    ".panel-card-dashboard",
+    ".card-header-dashboard",
+    ".card-body-dashboard",
+    "#dashboard-frame",
+    ".metrics-panel",
+    ".site-footer"
+  ],
+  "layout": {
+    "headerHeightPx": 56,
+    "headerNavGapPx": 12,
+    "responsiveBreakpointPx": 768,
+    "viewports": {
+      "1280": {
+        "demoColumns": 3,
+        "dashboardColumns": 2
+      },
+      "769": {
+        "demoColumns": 3,
+        "dashboardColumns": 2
+      },
+      "768": {
+        "demoColumns": 1,
+        "dashboardColumns": 1
+      },
+      "390": {
+        "demoColumns": 1,
+        "dashboardColumns": 1
+      }
+    }
+  },
+  "computedStyles": {
+    ".header": {
+      "backgroundColor": "rgb(44, 42, 38)"
+    }
+  }
+}
