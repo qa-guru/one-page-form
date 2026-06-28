@@ -1,8 +1,25 @@
 (function () {
   const RESIZE_MESSAGE = "allure-shell:resize";
   const RESPONSIVE_BREAKPOINT_PX = 768;
+  const SHELL_ROOT_FONT_SIZE_NARROW = "87.5%";
   const LAYOUT_SYNC_STYLE_ID = "shell-layout-sync";
+  const NARROW_DASHBOARD_FONT_VARS = `
+  --font-size-3xl: 31px;
+  --font-size-2xl: 21px;
+  --font-size-xl: 16px;
+  --font-size-l: 14px;
+  --font-size-m: 12px;
+  --font-size-m-code: 11px;
+  --font-size-s: 10px;
+  --font-size-xs: 10px;
+`;
   const NARROW_DASHBOARD_LAYOUT_CSS = `
+html {
+  font-size: ${SHELL_ROOT_FONT_SIZE_NARROW} !important;
+}
+:root {
+${NARROW_DASHBOARD_FONT_VARS}
+}
 [class*="styles_grid__"] {
   grid-template-columns: 1fr !important;
   width: 100% !important;
@@ -72,9 +89,29 @@
     }
   }
 
+  function updateMetricsPanel(theme) {
+    const img = document.getElementById("metrics-panel-img");
+    if (!img) return;
+
+    const normalized = theme === "dark" ? "dark" : "light";
+    const nextSrc =
+      img.dataset[normalized === "dark" ? "srcDark" : "srcLight"] ||
+      img.getAttribute("src")?.replace(/-dark(?=\.svg$)/, "") ||
+      "";
+    const resolvedSrc =
+      normalized === "dark" && nextSrc.endsWith(".svg") && !nextSrc.endsWith("-dark.svg")
+        ? nextSrc.replace(/\.svg$/, "-dark.svg")
+        : nextSrc;
+
+    if (resolvedSrc && img.getAttribute("src") !== resolvedSrc) {
+      img.setAttribute("src", resolvedSrc);
+    }
+  }
+
   function applySiteTheme(theme) {
     const normalized = theme === "dark" ? "dark" : "light";
     document.documentElement.setAttribute("data-theme", normalized);
+    updateMetricsPanel(normalized);
     return normalized;
   }
 
@@ -125,9 +162,16 @@
     return window.matchMedia(`(max-width: ${RESPONSIVE_BREAKPOINT_PX}px)`).matches;
   }
 
+  function syncShellLayoutAttribute() {
+    document.documentElement.dataset.shellLayout = isNarrowShellLayout() ? "narrow" : "wide";
+  }
+
   function applyDashboardLayout(frame) {
     const doc = getDashboardDocument(frame);
     if (!doc) return;
+
+    const narrow = isNarrowShellLayout();
+    doc.documentElement.dataset.shellLayout = narrow ? "narrow" : "wide";
 
     let style = doc.getElementById(LAYOUT_SYNC_STYLE_ID);
     if (!style) {
@@ -135,7 +179,7 @@
       style.id = LAYOUT_SYNC_STYLE_ID;
       doc.head.appendChild(style);
     }
-    style.textContent = isNarrowShellLayout() ? NARROW_DASHBOARD_LAYOUT_CSS : "";
+    style.textContent = narrow ? NARROW_DASHBOARD_LAYOUT_CSS : "";
     resizeFrame(frame);
   }
 
@@ -251,6 +295,7 @@
   });
 
   initSiteTheme();
+  syncShellLayoutAttribute();
 
   window.AllureShell = {
     loadDashboardFrame,
@@ -261,6 +306,7 @@
     toggleDashboardTheme,
     responsiveBreakpointPx: RESPONSIVE_BREAKPOINT_PX,
     isNarrowShellLayout,
+    syncShellLayoutAttribute,
     syncDashboardLayouts,
   };
 
@@ -271,6 +317,7 @@
   }
 
   window.addEventListener("resize", () => {
+    syncShellLayoutAttribute();
     syncDashboardLayouts();
     document.querySelectorAll("iframe.dashboard-frame").forEach(resizeFrame);
     notifyParentResize();

@@ -60,6 +60,14 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: 100%;
+}
+
+html[data-shell-layout="narrow"] {
+  font-size: 87.5%;
+}
+
 body {
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -877,13 +885,6 @@ body {
   background: var(--panel-bg);
 }
 
-.metrics-panel-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3);
-}
-
 .metrics-panel a {
   display: inline-flex;
   line-height: 0;
@@ -1103,6 +1104,10 @@ body {
 }
 
 @media (max-width: 768px) {
+  html {
+    font-size: 87.5%;
+  }
+
   .site-shell {
     width: 100%;
     padding-inline: 12px;

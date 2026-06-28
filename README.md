@@ -31,9 +31,9 @@ Live SVG metrics (compact → detailed → full panel), updated after each CI ru
 |------|-------------|
 | [Overview dashboard](https://qa-guru.github.io/one-page-form-tests-java/allure-reports/) | Trends across all branches |
 | [main dashboard](https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/) | Latest `main` branch analytics |
-| [Demo landing](https://qa-guru.github.io/one-page-form/) | Demo pages + embedded dashboard |
+| [Demo landing](https://qa-guru.github.io/one-page-form/) | One Page Form Demos + embedded dashboard |
 
-## Demo pages
+## One Page Form Demos
 
 ### Open directly in browser
 

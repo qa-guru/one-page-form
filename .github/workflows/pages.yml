@@ -1,4 +1,4 @@
-name: Deploy Demo Pages
+name: Deploy One Page Form Demos
 
 on:
   push:
