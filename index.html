@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>One Page Form Demos</title>
+    <script>
+      if (localStorage.getItem("site-theme") === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    </script>
     <link rel="stylesheet" href="allure-shell.css" />
   </head>
   <body>
@@ -33,21 +38,70 @@
           </svg>
         </a>
         </div>
-        <span class="brand-separator" aria-hidden="true">|</span>
-        <a href="index.html" class="brand-section" data-testid="forms-link">Forms</a>
+        <nav class="form-nav" aria-label="Forms navigation">
+          <span class="brand-separator" aria-hidden="true">|</span>
+          <a href="index.html" class="nav-link form-nav-home" data-testid="forms-link">Forms</a>
+          <span class="form-nav-sep" aria-hidden="true">|</span>
+          <a href="text-box.html" class="nav-link" data-testid="clubs-link">Text Box Form</a>
+          <span class="form-nav-sep" aria-hidden="true">|</span>
+          <a href="automation-practice-form.html" class="nav-link" data-testid="create-club-link">Student Registration Form</a>
+          <span class="form-nav-sep" aria-hidden="true">|</span>
+          <a href="login.html" class="nav-link" data-testid="login-link">Login Form</a>
+        </nav>
         </div>
 
         <div class="header-right">
         <nav class="nav" data-testid="main-nav" aria-label="Навигация">
-          <a href="text-box.html" class="nav-link" data-testid="clubs-link">Text Box Form</a>
-          <a href="automation-practice-form.html" class="nav-link" data-testid="create-club-link">Student Registration Form</a>
-          <a href="login.html" class="nav-link" data-testid="login-link">Login Form</a>
-          <div class="lang-switch" data-testid="lang-switch">
-            <a href="index.html" data-testid="lang-en">EN</a>
-            <span class="lang-switch-separator" aria-hidden="true">/</span>
-            <a href="index.html?ru" data-testid="lang-ru">RU</a>
-          </div>
-          <div class="nav-external">
+          <div class="nav-actions" data-testid="nav-tools">
+            <div class="nav-tool-dropdown">
+              <button
+                type="button"
+                class="nav-tool-btn nav-tool-btn--lang"
+                id="lang-toggle"
+                data-testid="lang-toggle"
+                aria-haspopup="menu"
+                aria-expanded="false"
+                aria-controls="lang-menu"
+              >
+                <span class="nav-tool-label" id="lang-label">Eng</span>
+                <svg class="nav-tool-chevron" viewBox="0 0 16 16" aria-hidden="true">
+                  <path
+                    d="M4 6l4 4 4-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></path>
+                </svg>
+              </button>
+              <ul class="nav-tool-menu" id="lang-menu" role="menu" aria-hidden="true">
+                <li role="none">
+                  <a href="index.html" role="menuitem" data-lang="en" data-testid="lang-en">Eng</a>
+                </li>
+                <li role="none">
+                  <a href="index.html?ru" role="menuitem" data-lang="ru" data-testid="lang-ru">Рус</a>
+                </li>
+              </ul>
+            </div>
+            <button
+              type="button"
+              class="nav-tool-btn nav-tool-icon"
+              id="theme-toggle"
+              data-testid="theme-toggle"
+              aria-label="Toggle theme"
+            >
+              <svg class="theme-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  id="theme-icon-path"
+                  d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </svg>
+            </button>
             <a
               href="https://github.com/qa-guru/one-page-form"
               target="_blank"
@@ -108,17 +162,17 @@
                 <a href="login.html" data-demo-link="login.html">
                   <span class="demo-item-preview" aria-hidden="true">
                     <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" fill="none">
-                      <rect x="8" y="8" width="104" height="56" rx="6" fill="#fff" stroke="#d9e2f3" stroke-width="1.5"/>
-                      <circle cx="60" cy="24" r="7" fill="#e8f4fc" stroke="#20aee3" stroke-width="1.5"/>
-                      <path d="M53 35c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="#20aee3" stroke-width="1.5" stroke-linecap="round"/>
-                      <rect x="28" y="38" width="64" height="7" rx="2" fill="#f8fafc" stroke="#c4cfdf" stroke-width="1"/>
-                      <circle cx="33" cy="41.5" r="2" fill="#20aee3" opacity="0.6"/>
-                      <rect x="38" y="40" width="24" height="3" rx="1.5" fill="#d9e2f3"/>
-                      <rect x="28" y="48" width="64" height="7" rx="2" fill="#f8fafc" stroke="#c4cfdf" stroke-width="1"/>
-                      <circle cx="33" cy="51.5" r="1.5" fill="#94a3b8"/>
-                      <circle cx="37" cy="51.5" r="1.5" fill="#94a3b8"/>
-                      <circle cx="41" cy="51.5" r="1.5" fill="#94a3b8"/>
-                      <rect x="40" y="58" width="40" height="5" rx="2.5" fill="#20aee3"/>
+                      <rect x="8" y="8" width="104" height="56" rx="6" fill="var(--demo-svg-surface)" stroke="var(--demo-svg-surface-border)" stroke-width="1.5"/>
+                      <circle cx="60" cy="24" r="7" fill="var(--demo-svg-icon-bg)" stroke="var(--demo-svg-accent)" stroke-width="1.5"/>
+                      <path d="M53 35c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="var(--demo-svg-accent)" stroke-width="1.5" stroke-linecap="round"/>
+                      <rect x="28" y="38" width="64" height="7" rx="2" fill="var(--demo-svg-input-bg)" stroke="var(--demo-svg-input-border)" stroke-width="1"/>
+                      <circle cx="33" cy="41.5" r="2" fill="var(--demo-svg-accent)" opacity="0.6"/>
+                      <rect x="38" y="40" width="24" height="3" rx="1.5" fill="var(--demo-svg-surface-border)"/>
+                      <rect x="28" y="48" width="64" height="7" rx="2" fill="var(--demo-svg-input-bg)" stroke="var(--demo-svg-input-border)" stroke-width="1"/>
+                      <circle cx="33" cy="51.5" r="1.5" fill="var(--demo-svg-muted)"/>
+                      <circle cx="37" cy="51.5" r="1.5" fill="var(--demo-svg-muted)"/>
+                      <circle cx="41" cy="51.5" r="1.5" fill="var(--demo-svg-muted)"/>
+                      <rect x="40" y="58" width="40" height="5" rx="2.5" fill="var(--demo-svg-accent)"/>
                     </svg>
                   </span>
                   <span class="demo-item-title" data-i18n="loginTitle">Login Form</span>
@@ -129,15 +183,15 @@
                 <a href="text-box.html" data-demo-link="text-box.html">
                   <span class="demo-item-preview" aria-hidden="true">
                     <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" fill="none">
-                      <rect x="8" y="4" width="104" height="64" rx="6" fill="#fff" stroke="#d9e2f3" stroke-width="1.5"/>
-                      <rect x="18" y="12" width="20" height="3" rx="1.5" fill="#94a3b8" opacity="0.5"/>
-                      <rect x="18" y="18" width="84" height="8" rx="2" fill="#f8fafc" stroke="#c4cfdf" stroke-width="1"/>
-                      <rect x="18" y="30" width="16" height="3" rx="1.5" fill="#94a3b8" opacity="0.5"/>
-                      <rect x="18" y="36" width="84" height="8" rx="2" fill="#f8fafc" stroke="#c4cfdf" stroke-width="1"/>
-                      <rect x="18" y="48" width="84" height="8" rx="2" fill="#f8fafc" stroke="#c4cfdf" stroke-width="1"/>
-                      <rect x="22" y="51" width="40" height="2" rx="1" fill="#20aee3" opacity="0.4"/>
-                      <rect x="40" y="60" width="40" height="6" rx="3" fill="#1677f2"/>
-                      <rect x="14" y="68" width="92" height="1" rx="0.5" fill="#e3e9f5"/>
+                      <rect x="8" y="4" width="104" height="64" rx="6" fill="var(--demo-svg-surface)" stroke="var(--demo-svg-surface-border)" stroke-width="1.5"/>
+                      <rect x="18" y="12" width="20" height="3" rx="1.5" fill="var(--demo-svg-muted)" opacity="0.5"/>
+                      <rect x="18" y="18" width="84" height="8" rx="2" fill="var(--demo-svg-input-bg)" stroke="var(--demo-svg-input-border)" stroke-width="1"/>
+                      <rect x="18" y="30" width="16" height="3" rx="1.5" fill="var(--demo-svg-muted)" opacity="0.5"/>
+                      <rect x="18" y="36" width="84" height="8" rx="2" fill="var(--demo-svg-input-bg)" stroke="var(--demo-svg-input-border)" stroke-width="1"/>
+                      <rect x="18" y="48" width="84" height="8" rx="2" fill="var(--demo-svg-input-bg)" stroke="var(--demo-svg-input-border)" stroke-width="1"/>
+                      <rect x="22" y="51" width="40" height="2" rx="1" fill="var(--demo-svg-accent)" opacity="0.4"/>
+                      <rect x="40" y="60" width="40" height="6" rx="3" fill="var(--demo-svg-button-primary)"/>
+                      <rect x="14" y="68" width="92" height="1" rx="0.5" fill="var(--demo-svg-divider)"/>
                     </svg>
                   </span>
                   <span class="demo-item-title" data-i18n="textBoxTitle">Text Box Form</span>
@@ -148,23 +202,23 @@
                 <a href="automation-practice-form.html" data-demo-link="automation-practice-form.html">
                   <span class="demo-item-preview" aria-hidden="true">
                     <svg viewBox="0 0 120 72" xmlns="http://www.w3.org/2000/svg" fill="none">
-                      <rect x="8" y="4" width="104" height="64" rx="6" fill="#fff" stroke="#d9e2f3" stroke-width="1.5"/>
-                      <rect x="18" y="10" width="36" height="4" rx="2" fill="#20aee3" opacity="0.25"/>
-                      <rect x="18" y="10" width="18" height="4" rx="2" fill="#20aee3"/>
-                      <rect x="18" y="18" width="38" height="7" rx="2" fill="#f8fafc" stroke="#c4cfdf" stroke-width="1"/>
-                      <rect x="62" y="18" width="38" height="7" rx="2" fill="#f8fafc" stroke="#c4cfdf" stroke-width="1"/>
-                      <rect x="18" y="29" width="38" height="7" rx="2" fill="#f8fafc" stroke="#c4cfdf" stroke-width="1"/>
-                      <rect x="62" y="29" width="38" height="7" rx="2" fill="#f8fafc" stroke="#c4cfdf" stroke-width="1"/>
-                      <rect x="18" y="40" width="82" height="1" rx="0.5" fill="#e3e9f5"/>
-                      <circle cx="22" cy="48" r="3" stroke="#20aee3" stroke-width="1.2"/>
-                      <circle cx="22" cy="48" r="1.5" fill="#20aee3"/>
-                      <rect x="30" y="46.5" width="14" height="3" rx="1.5" fill="#94a3b8" opacity="0.5"/>
-                      <circle cx="56" cy="48" r="3" stroke="#c4cfdf" stroke-width="1.2"/>
-                      <rect x="64" y="46.5" width="14" height="3" rx="1.5" fill="#94a3b8" opacity="0.5"/>
-                      <rect x="18" y="56" width="12" height="12" rx="2" fill="#f8fafc" stroke="#c4cfdf" stroke-width="1"/>
-                      <path d="M21 62l3 3 6-6" stroke="#2d5a4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      <rect x="34" y="59" width="20" height="3" rx="1.5" fill="#94a3b8" opacity="0.5"/>
-                      <rect x="62" y="58" width="38" height="8" rx="3" fill="#2d5a4a"/>
+                      <rect x="8" y="4" width="104" height="64" rx="6" fill="var(--demo-svg-surface)" stroke="var(--demo-svg-surface-border)" stroke-width="1.5"/>
+                      <rect x="18" y="10" width="36" height="4" rx="2" fill="var(--demo-svg-accent)" opacity="0.25"/>
+                      <rect x="18" y="10" width="18" height="4" rx="2" fill="var(--demo-svg-accent)"/>
+                      <rect x="18" y="18" width="38" height="7" rx="2" fill="var(--demo-svg-input-bg)" stroke="var(--demo-svg-input-border)" stroke-width="1"/>
+                      <rect x="62" y="18" width="38" height="7" rx="2" fill="var(--demo-svg-input-bg)" stroke="var(--demo-svg-input-border)" stroke-width="1"/>
+                      <rect x="18" y="29" width="38" height="7" rx="2" fill="var(--demo-svg-input-bg)" stroke="var(--demo-svg-input-border)" stroke-width="1"/>
+                      <rect x="62" y="29" width="38" height="7" rx="2" fill="var(--demo-svg-input-bg)" stroke="var(--demo-svg-input-border)" stroke-width="1"/>
+                      <rect x="18" y="40" width="82" height="1" rx="0.5" fill="var(--demo-svg-divider)"/>
+                      <circle cx="22" cy="48" r="3" stroke="var(--demo-svg-accent)" stroke-width="1.2"/>
+                      <circle cx="22" cy="48" r="1.5" fill="var(--demo-svg-accent)"/>
+                      <rect x="30" y="46.5" width="14" height="3" rx="1.5" fill="var(--demo-svg-muted)" opacity="0.5"/>
+                      <circle cx="56" cy="48" r="3" stroke="var(--demo-svg-input-border)" stroke-width="1.2"/>
+                      <rect x="64" y="46.5" width="14" height="3" rx="1.5" fill="var(--demo-svg-muted)" opacity="0.5"/>
+                      <rect x="18" y="56" width="12" height="12" rx="2" fill="var(--demo-svg-input-bg)" stroke="var(--demo-svg-input-border)" stroke-width="1"/>
+                      <path d="M21 62l3 3 6-6" stroke="var(--demo-svg-button-success)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <rect x="34" y="59" width="20" height="3" rx="1.5" fill="var(--demo-svg-muted)" opacity="0.5"/>
+                      <rect x="62" y="58" width="38" height="8" rx="3" fill="var(--demo-svg-button-success)"/>
                     </svg>
                   </span>
                   <span class="demo-item-title" data-i18n="registrationTitle">Student Registration Form</span>
@@ -174,49 +228,58 @@
             </ul>
           </div>
           <div class="card-header card-header-dashboard">
-            <h2>
+            <nav class="dashboard-nav form-nav" aria-label="Dashboard navigation">
               <a
                 id="dashboard-title-link"
+                class="nav-link dashboard-nav-home"
                 href="https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/"
                 target="_blank"
                 rel="noopener noreferrer"
-                data-i18n="dashboardTitle"
-              >Automated Tests Dashboard</a>
-            </h2>
-            <div class="card-header-actions">
+                aria-current="page"
+              ><span class="dashboard-nav-label" data-i18n="dashboardTitle">Automated Tests Dashboard</span></a>
+              <span class="form-nav-sep" aria-hidden="true">|</span>
               <a
-                class="report-link"
-                href="https://qa-guru.github.io/one-page-form-tests-java/"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-i18n="testsProjectLink"
-              >
-                Forms automated tests project
-              </a>
-              <a
-                class="report-link"
+                class="nav-link"
                 id="full-report-link"
                 href="https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <img
-                  class="report-link-icon"
+                  class="dashboard-nav-icon"
                   src="allure-report-logo.svg"
                   width="18"
                   height="18"
                   alt=""
                   aria-hidden="true"
                 />
-                <span data-i18n="allureReportLink">Allure Report 3</span>
+                <span class="dashboard-nav-label" data-i18n="allureReportLink">Allure Report 3</span>
               </a>
-            </div>
+              <span class="form-nav-sep" aria-hidden="true">|</span>
+              <a
+                class="nav-link"
+                id="testops-link"
+                href="https://allure.autotests.cloud/project/5263"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  class="dashboard-nav-icon"
+                  src="allure-testops-logo.svg"
+                  width="18"
+                  height="18"
+                  alt=""
+                  aria-hidden="true"
+                />
+                <span class="dashboard-nav-label" data-i18n="allureTestOpsLink">Allure TestOps</span>
+              </a>
+            </nav>
           </div>
           <div class="card-body card-body-dashboard">
             <iframe
               class="dashboard-frame"
               id="dashboard-frame"
-              src="https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/dashboard-en/index.html"
+              data-dashboard-url="https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/dashboard-en/index.html"
               title="Allure dashboard: main"
               loading="lazy"
             ></iframe>
@@ -231,6 +294,7 @@
       </div>
     </footer>
 
+    <script src="allure-shell.js"></script>
     <script>
       const I18N = {
         en: {
@@ -250,9 +314,14 @@
           registrationTitle: "Student Registration Form",
           registrationDesc: "Advanced student registration form.",
           dashboardTitle: "Automated Tests Dashboard",
-          testsProjectLink: "Forms automated tests project",
           allureReportLink: "Allure Report 3",
+          allureTestOpsLink: "Allure TestOps",
           dashboardFrameTitle: "Allure dashboard: main",
+          langEng: "Eng",
+          langRu: "Рус",
+          themeToggle: "Toggle theme",
+          themeLight: "Switch to light theme",
+          themeDark: "Switch to dark theme",
         },
         ru: {
           pageTitle: "Демо-формы One Page Form",
@@ -271,9 +340,14 @@
           registrationTitle: "Форма регистрации студента",
           registrationDesc: "Расширенная форма регистрации студента.",
           dashboardTitle: "Дашборд автотестов",
-          testsProjectLink: "Проект с автотестами на формы",
           allureReportLink: "Allure Report 3",
+          allureTestOpsLink: "Allure TestOps",
           dashboardFrameTitle: "Дашборд Allure: main",
+          langEng: "Eng",
+          langRu: "Рус",
+          themeToggle: "Переключить тему",
+          themeLight: "Светлая тема",
+          themeDark: "Тёмная тема",
         },
       };
 
@@ -282,7 +356,17 @@
       const langQuery = LANG === "ru" ? "?ru" : "";
       const reportBase =
         "https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/";
+      const testOpsBase = "https://allure.autotests.cloud/project/5263";
       const dashboardSegment = LANG === "ru" ? "dashboard" : "dashboard-en";
+
+      function buildLangUrl(lang) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("ru");
+        if (lang === "ru") {
+          url.searchParams.set("ru", "");
+        }
+        return `${url.pathname}${url.search}${url.hash}`;
+      }
 
       function applyI18n() {
         document.documentElement.lang = LANG;
@@ -325,19 +409,134 @@
           link.href = link.getAttribute("data-demo-link") + langQuery;
         });
 
-        const langEn = document.querySelector('[data-testid="lang-en"]');
-        const langRu = document.querySelector('[data-testid="lang-ru"]');
-        if (langEn) langEn.classList.toggle("active", LANG === "en");
-        if (langRu) langRu.classList.toggle("active", LANG === "ru");
-
         const dashboardFrame = document.getElementById("dashboard-frame");
         if (dashboardFrame) {
-          dashboardFrame.src = `${reportBase}${dashboardSegment}/index.html`;
+          dashboardFrame.dataset.dashboardUrl = `${reportBase}${dashboardSegment}/index.html`;
           dashboardFrame.title = t.dashboardFrameTitle;
         }
+
+        const dashboardTitleLink = document.getElementById("dashboard-title-link");
+        if (dashboardTitleLink) {
+          dashboardTitleLink.href = `${reportBase}${dashboardSegment}/index.html`;
+        }
+
+        const testOpsLink = document.getElementById("testops-link");
+        if (testOpsLink) testOpsLink.href = testOpsBase;
+
+        const langLabel = document.getElementById("lang-label");
+        if (langLabel) langLabel.textContent = LANG === "ru" ? t.langRu : t.langEng;
+
+        document.querySelectorAll("#lang-menu [data-lang]").forEach((option) => {
+          const optionLang = option.getAttribute("data-lang");
+          const isActive = optionLang === LANG;
+          option.setAttribute("aria-selected", isActive ? "true" : "false");
+          option.textContent = optionLang === "ru" ? t.langRu : t.langEng;
+          option.href = buildLangUrl(optionLang);
+        });
+
+        updateThemeToggle(getSiteTheme());
+      }
+
+      function getSiteTheme() {
+        if (window.AllureShell?.getDashboardTheme) {
+          const frame = document.getElementById("dashboard-frame");
+          return window.AllureShell.getDashboardTheme(frame);
+        }
+        return localStorage.getItem("site-theme") === "dark" ? "dark" : "light";
+      }
+
+      function updateThemeToggle(theme) {
+        const toggle = document.getElementById("theme-toggle");
+        const icon = toggle?.querySelector(".theme-icon");
+        if (!toggle || !icon) return;
+
+        const isDark = theme === "dark";
+        icon.innerHTML = isDark
+          ? '<circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>'
+          : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>';
+        toggle.setAttribute("aria-label", isDark ? t.themeLight : t.themeDark);
+      }
+
+      function closeLangMenu() {
+        const toggle = document.getElementById("lang-toggle");
+        const menu = document.getElementById("lang-menu");
+        if (!toggle || !menu) return;
+        menu.classList.remove("is-open");
+        menu.setAttribute("aria-hidden", "true");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+
+      function initHeaderTools() {
+        const langToggle = document.getElementById("lang-toggle");
+        const langMenu = document.getElementById("lang-menu");
+        const themeToggle = document.getElementById("theme-toggle");
+        const dashboardFrame = document.getElementById("dashboard-frame");
+
+        if (langToggle && langMenu) {
+          langToggle.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            const isOpen = !langMenu.classList.contains("is-open");
+            langMenu.classList.toggle("is-open", isOpen);
+            langMenu.setAttribute("aria-hidden", isOpen ? "false" : "true");
+            langToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+          });
+
+          document.addEventListener("click", (event) => {
+            if (!langToggle.contains(event.target) && !langMenu.contains(event.target)) {
+              closeLangMenu();
+            }
+          });
+
+          document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") closeLangMenu();
+          });
+        }
+
+        if (themeToggle) {
+          themeToggle.addEventListener("click", () => {
+            const nextTheme = window.AllureShell?.toggleDashboardTheme
+              ? window.AllureShell.toggleDashboardTheme(dashboardFrame)
+              : (() => {
+                  const theme =
+                    localStorage.getItem("site-theme") === "dark" ? "light" : "dark";
+                  localStorage.setItem("site-theme", theme);
+                  if (window.AllureShell?.applySiteTheme) {
+                    window.AllureShell.applySiteTheme(theme);
+                  } else {
+                    document.documentElement.setAttribute("data-theme", theme);
+                  }
+                  window.dispatchEvent(
+                    new CustomEvent("dashboard-theme-change", { detail: { theme } })
+                  );
+                  return theme;
+                })();
+            updateThemeToggle(nextTheme);
+          });
+        }
+
+        window.addEventListener("dashboard-theme-change", (event) => {
+          updateThemeToggle(event.detail?.theme || getSiteTheme());
+        });
+      }
+
+      function setActiveNavLink() {
+        const currentPath = window.location.pathname.split("/").pop() || "index.html";
+        document.querySelectorAll(".header-left .form-nav-home, .header-left .form-nav .nav-link").forEach((link) => {
+          const href = link.getAttribute("href").split("?")[0];
+          const isActive = href === currentPath;
+          link.classList.toggle("active", isActive);
+          if (isActive) {
+            link.setAttribute("aria-current", "page");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
       }
 
       applyI18n();
+      initHeaderTools();
+      setActiveNavLink();
 
       document.addEventListener("DOMContentLoaded", () => {
         const burger = document.querySelector(".burger-menu");
@@ -381,6 +580,5 @@
           .catch(() => {});
       });
     </script>
-    <script src="allure-shell.js"></script>
   </body>
 </html>
