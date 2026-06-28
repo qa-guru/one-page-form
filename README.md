@@ -14,9 +14,9 @@ Allure 3 reports are published from the tests repository after each CI run on `m
 
 <a href="https://qa-guru.github.io/one-page-form-tests-java/allure-reports/">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://qa-guru.github.io/one-page-form-tests-java/readme/dashboard-preview-dark.png">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/qa-guru/one-page-form-tests-java/main/readme/dashboard-preview-dark.png">
     <img
-      src="https://qa-guru.github.io/one-page-form-tests-java/readme/dashboard-preview.png"
+      src="https://raw.githubusercontent.com/qa-guru/one-page-form-tests-java/main/readme/dashboard-preview.png"
       alt="Allure 3 dashboard preview with branch trends"
       width="800"
     />
