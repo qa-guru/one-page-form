@@ -82,6 +82,7 @@ body {
 
 .header {
   background-color: var(--color-surface);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   position: fixed;
   top: 0;
   left: 0;
@@ -92,6 +93,10 @@ body {
   padding: 0 var(--space-4);
   border-bottom: 1px solid var(--header-border);
   overflow: visible;
+}
+
+.header button {
+  margin: 0;
 }
 
 .header-content {
@@ -260,11 +265,11 @@ body {
 .nav-actions {
   --nav-action-size: 32px;
   --nav-action-gap: 2px;
-  display: grid;
-  grid-template-columns: auto repeat(3, var(--nav-action-size));
-  column-gap: var(--nav-action-gap);
+  display: flex;
   align-items: center;
-  justify-items: center;
+  justify-content: flex-end;
+  gap: var(--nav-action-gap);
+  margin-left: auto;
   flex-shrink: 0;
 }
 
@@ -1108,10 +1113,22 @@ body {
     padding-inline: 12px;
   }
 
+  .header-content .nav-actions {
+    position: absolute;
+    top: 0;
+    right: 44px;
+    height: 56px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    width: auto;
+    z-index: 103;
+  }
+
   .header-right {
     position: static;
-    width: 0;
-    height: 0;
+    width: auto;
+    height: auto;
     margin: 0;
     padding: 0;
     overflow: visible;
@@ -1190,17 +1207,6 @@ body {
   .nav .nav-link {
     width: 100%;
     font-size: 1rem;
-  }
-
-  .nav-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: var(--nav-action-gap);
-    width: 100%;
-    padding-top: 12px;
-    margin-top: 12px;
-    border-top: 1px solid var(--header-border);
   }
 
   .nav-tool-dropdown {
