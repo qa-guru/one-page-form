@@ -20,7 +20,7 @@ jobs:
       - name: Prepare site
         run: |
           mkdir pages
-          cp *.html allure-shell.css allure-shell.js pages/
+          cp *.html allure-shell.css allure-shell.js dashboard-overrides.css allure-report-logo.svg pages/
           touch pages/.nojekyll
 
       - uses: peaceiris/actions-gh-pages@v4

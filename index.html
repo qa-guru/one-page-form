@@ -47,11 +47,20 @@
           <a href="automation-practice-form.html" class="nav-link" data-testid="create-club-link">Student Registration Form</a>
           <span class="form-nav-sep" aria-hidden="true">|</span>
           <a href="login.html" class="nav-link" data-testid="login-link">Login Form</a>
+          <span class="form-nav-sep" aria-hidden="true">|</span>
+          <a href="sandbox.html" class="nav-link" data-testid="sandbox-link">Sandbox</a>
         </nav>
         </div>
 
         <div class="header-right">
         <nav class="nav" data-testid="main-nav" aria-label="Навигация">
+          <div class="nav-drawer-links" data-testid="nav-drawer-links">
+            <a href="index.html" class="nav-link form-nav-home" data-testid="drawer-forms-link">Forms</a>
+            <a href="text-box.html" class="nav-link" data-testid="drawer-clubs-link">Text Box Form</a>
+            <a href="automation-practice-form.html" class="nav-link" data-testid="drawer-create-club-link">Student Registration Form</a>
+            <a href="login.html" class="nav-link" data-testid="drawer-login-link">Login Form</a>
+            <a href="sandbox.html" class="nav-link" data-testid="drawer-sandbox-link">Sandbox</a>
+          </div>
           <div class="nav-actions" data-testid="nav-tools">
             <div class="nav-tool-dropdown">
               <button
@@ -275,6 +284,62 @@
               </a>
             </nav>
           </div>
+          <div class="metrics-panel" data-testid="metrics-panel">
+            <div class="metrics-panel-row">
+              <a
+                id="metrics-badge-link"
+                href="https://qa-guru.github.io/one-page-form-tests-java/allure-reports/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  id="metrics-badge"
+                  src="https://qa-guru.github.io/one-page-form-tests-java/readme/badge.svg"
+                  width="220"
+                  height="20"
+                  alt="UI Tests status"
+                />
+              </a>
+              <a
+                id="metrics-stats-link"
+                href="https://qa-guru.github.io/one-page-form-tests-java/allure-reports/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  id="metrics-stats"
+                  src="https://qa-guru.github.io/one-page-form-tests-java/readme/stats.svg"
+                  width="360"
+                  height="92"
+                  alt="UI Tests stats"
+                />
+              </a>
+            </div>
+            <a
+              id="metrics-panel-link"
+              href="https://qa-guru.github.io/one-page-form-tests-java/allure-reports/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                class="metrics-panel-full"
+                id="metrics-panel-img"
+                src="https://qa-guru.github.io/one-page-form-tests-java/readme/metrics-panel.svg"
+                width="800"
+                height="168"
+                alt="UI Tests metrics"
+              />
+            </a>
+            <ul class="metrics-stack" aria-label="Test stack">
+              <li>Java 21</li>
+              <li>Selenide</li>
+              <li>JUnit 5</li>
+              <li>Allure 3</li>
+            </ul>
+            <p class="metrics-panel-note" data-i18n="metricsNote">
+              Badges and metrics update automatically after each CI run on main.
+            </p>
+          </div>
           <div class="card-body card-body-dashboard">
             <iframe
               class="dashboard-frame"
@@ -304,6 +369,7 @@
           navTextBox: "Text Box Form",
           navRegistration: "Student Registration Form",
           navLogin: "Login Form",
+          navSandbox: "Sandbox",
           navGithub: "Project on GitHub",
           navGithubPages: "GitHub Pages",
           demoSectionTitle: "Demo pages",
@@ -317,6 +383,7 @@
           allureReportLink: "Allure Report 3",
           allureTestOpsLink: "Allure TestOps",
           dashboardFrameTitle: "Allure dashboard: main",
+          metricsNote: "Badges and metrics update automatically after each CI run on main.",
           langEng: "Eng",
           langRu: "Рус",
           themeToggle: "Toggle theme",
@@ -330,6 +397,7 @@
           navTextBox: "Форма Text Box",
           navRegistration: "Форма регистрации студента",
           navLogin: "Форма входа",
+          navSandbox: "Песочница",
           navGithub: "Репозиторий на GitHub",
           navGithubPages: "GitHub Pages",
           demoSectionTitle: "Демо-страницы",
@@ -343,6 +411,7 @@
           allureReportLink: "Allure Report 3",
           allureTestOpsLink: "Allure TestOps",
           dashboardFrameTitle: "Дашборд Allure: main",
+          metricsNote: "Бейджи и метрики обновляются автоматически после каждого CI-прогона на main.",
           langEng: "Eng",
           langRu: "Рус",
           themeToggle: "Переключить тему",
@@ -382,6 +451,11 @@
           "clubs-link": { href: "text-box.html", text: t.navTextBox },
           "create-club-link": { href: "automation-practice-form.html", text: t.navRegistration },
           "login-link": { href: "login.html", text: t.navLogin },
+          "sandbox-link": { href: "sandbox.html", text: t.navSandbox },
+          "drawer-clubs-link": { href: "text-box.html", text: t.navTextBox },
+          "drawer-create-club-link": { href: "automation-practice-form.html", text: t.navRegistration },
+          "drawer-login-link": { href: "login.html", text: t.navLogin },
+          "drawer-sandbox-link": { href: "sandbox.html", text: t.navSandbox },
         };
         Object.entries(navLinks).forEach(([testId, { href, text }]) => {
           const link = document.querySelector(`[data-testid="${testId}"]`);
@@ -393,6 +467,9 @@
 
         const formsLink = document.querySelector('[data-testid="forms-link"]');
         if (formsLink) formsLink.href = "index.html" + langQuery;
+
+        const drawerFormsLink = document.querySelector('[data-testid="drawer-forms-link"]');
+        if (drawerFormsLink) drawerFormsLink.href = "index.html" + langQuery;
 
         const githubLink = document.querySelector('[data-testid="github-link"]');
         if (githubLink) githubLink.setAttribute("aria-label", t.navGithub);
@@ -522,7 +599,9 @@
 
       function setActiveNavLink() {
         const currentPath = window.location.pathname.split("/").pop() || "index.html";
-        document.querySelectorAll(".header-left .form-nav-home, .header-left .form-nav .nav-link").forEach((link) => {
+        document.querySelectorAll(
+          ".header-left .form-nav-home, .header-left .form-nav .nav-link, .nav-drawer-links .nav-link"
+        ).forEach((link) => {
           const href = link.getAttribute("href").split("?")[0];
           const isActive = href === currentPath;
           link.classList.toggle("active", isActive);
@@ -550,6 +629,7 @@
           nav.classList.remove("active");
           overlay.classList.remove("active");
           burger.setAttribute("aria-expanded", "false");
+          closeLangMenu();
         }
 
         if (burger && nav && overlay) {
@@ -562,10 +642,16 @@
           });
 
           overlay.addEventListener("click", closeMenu);
+
+          window.matchMedia("(max-width: 768px)").addEventListener("change", closeMenu);
         }
 
         links.forEach((link) => {
           link.addEventListener("click", closeMenu);
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") closeMenu();
         });
 
         const reportLink = document.getElementById("full-report-link");

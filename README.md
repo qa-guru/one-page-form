@@ -8,9 +8,11 @@ Automated tests and Allure reports live in a separate repository: [qa-guru/one-p
 
 ## Automated Tests Dashboard
 
-Allure 3 reports are published from the tests repository after each CI run on `main`.
+Live SVG metrics (compact → detailed → full panel), updated after each CI run on `main`:
 
 [![UI Tests stats](https://qa-guru.github.io/one-page-form-tests-java/readme/stats.svg)](https://qa-guru.github.io/one-page-form-tests-java/allure-reports/)
+
+[![UI Tests metrics](https://qa-guru.github.io/one-page-form-tests-java/readme/metrics-panel.svg)](https://qa-guru.github.io/one-page-form-tests-java/allure-reports/)
 
 <a href="https://qa-guru.github.io/one-page-form-tests-java/allure-reports/">
   <picture>
@@ -23,7 +25,7 @@ Allure 3 reports are published from the tests repository after each CI run on `m
   </picture>
 </a>
 
-> **Live dashboard:** open the [interactive landing page](https://qa-guru.github.io/one-page-form/) — it embeds the same Allure overview with auto-resizing iframes.
+> **Live dashboard:** open the [interactive landing page](https://qa-guru.github.io/one-page-form/) — it embeds the same Allure overview with auto-resizing iframes and live metrics badges.
 
 | Link | Description |
 |------|-------------|
