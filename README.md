@@ -5,11 +5,12 @@ Small static HTML/CSS/JavaScript demos for practicing form interactions and basi
 Automated tests and Allure reports live in a separate repository: [qa-guru/one-page-form-tests-java](https://github.com/qa-guru/one-page-form-tests-java).
 
 [![UI Tests](https://qa-guru.github.io/one-page-form-tests-java/readme/badge.svg)](https://qa-guru.github.io/one-page-form-tests-java/allure-reports/)
-[![UI Tests stats](https://qa-guru.github.io/one-page-form-tests-java/readme/stats.svg)](https://qa-guru.github.io/one-page-form-tests-java/allure-reports/)
 
 ## UI Tests Dashboard
 
 Allure 3 reports are published from the tests repository after each CI run on `main`.
+
+[![UI Tests stats](https://qa-guru.github.io/one-page-form-tests-java/readme/stats.svg)](https://qa-guru.github.io/one-page-form-tests-java/allure-reports/)
 
 <a href="https://qa-guru.github.io/one-page-form-tests-java/allure-reports/">
   <picture>
