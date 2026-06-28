@@ -354,7 +354,7 @@ body {
 }
 
 h1 {
-  margin: 0;
+  margin: 0 0 18px;
   text-align: center;
   font-size: clamp(1.4rem, 2.7vw, 2rem);
   letter-spacing: 0.2px;
@@ -1088,7 +1088,7 @@ function setActiveNavLink() {
   const currentPath = window.location.pathname.split("/").pop();
   const links = document.querySelectorAll(".nav .nav-link");
   links.forEach((link) => {
-    const href = link.getAttribute("href");
+    const href = link.getAttribute("href").split("?")[0];
     const isActive = href === currentPath;
     link.classList.toggle("active", isActive);
     if (isActive) {
@@ -1101,16 +1101,228 @@ function setActiveNavLink() {
 document.addEventListener("DOMContentLoaded", setActiveNavLink);
     </script>
     <script>
-const cityMap = {
-  NCR: ["Delhi", "Gurgaon", "Noida"],
-  "Uttar Pradesh": ["Agra", "Lucknow", "Merrut"],
-  Haryana: ["Karnal", "Panipat"],
-  Rajasthan: ["Jaipur", "Jaiselmer"]
+const I18N = {
+  en: {
+    pageTitle: "Practice Form",
+    navMenu: "Menu",
+    navMain: "Navigation",
+    navTextBox: "Text Box Form",
+    navRegistration: "Student Registration Form",
+    navLogin: "Login Form",
+    navGithub: "Project on GitHub",
+    heading: "Practice Form",
+    subtitle: "Student Registration Form",
+    labelName: "Name *",
+    placeholderFirstName: "First Name",
+    placeholderLastName: "Last Name",
+    labelEmail: "Email",
+    placeholderEmail: "name@example.com",
+    labelGender: "Gender *",
+    genderMale: "Male",
+    genderFemale: "Female",
+    genderOther: "Other",
+    labelMobile: "Mobile (10 Digits) *",
+    labelDateOfBirth: "Date of Birth",
+    placeholderDate: "DD MMM YYYY",
+    labelSubjects: "Subjects",
+    subjectsPlaceholder: "e.g. Maths, Physics",
+    subjectsOptions: ["Maths", "Physics", "Chemistry", "Biology", "English", "Computer Science", "Economics", "Arts", "History", "Civics", "Hindi"],
+    labelHobbies: "Hobbies",
+    hobbySports: "Sports",
+    hobbyReading: "Reading",
+    hobbyMusic: "Music",
+    labelPicture: "Picture",
+    labelCurrentAddress: "Current Address",
+    labelStateCity: "State and City",
+    selectState: "Select State",
+    selectCity: "Select City",
+    stateOptions: ["NCR", "Uttar Pradesh", "Haryana", "Rajasthan"],
+    cityMap: {
+      NCR: ["Delhi", "Gurgaon", "Noida"],
+      "Uttar Pradesh": ["Agra", "Lucknow", "Merrut"],
+      Haryana: ["Karnal", "Panipat"],
+      Rajasthan: ["Jaipur", "Jaiselmer"]
+    },
+    submitButton: "Submit",
+    formError: "Please fill required fields and enter a valid 10-digit mobile number.",
+    modalTitle: "Thanks for submitting the form",
+    closeButton: "Close",
+    removeChip: "Remove",
+    promoTag: "QA.GURU",
+    promoHeading: "Level up your automation",
+    promoText: "Java, Python, JavaScript, Kotlin, Swift. Real projects, portfolio, mentorship. 3,000+ grads. Start with a free intensive.",
+    promoCta: "View courses",
+    promoClose: "Close",
+    resultStudentName: "Student Name",
+    resultStudentEmail: "Student Email",
+    resultGender: "Gender",
+    resultMobile: "Mobile",
+    resultDateOfBirth: "Date of Birth",
+    resultSubjects: "Subjects",
+    resultHobbies: "Hobbies",
+    resultPicture: "Picture",
+    resultAddress: "Address",
+    resultStateCity: "State and City",
+    months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  },
+  ru: {
+    pageTitle: "Тренировочная форма",
+    navMenu: "Меню",
+    navMain: "Навигация",
+    navTextBox: "Форма Text Box",
+    navRegistration: "Форма регистрации студента",
+    navLogin: "Форма входа",
+    navGithub: "Репозиторий на GitHub",
+    heading: "Тренировочная форма",
+    subtitle: "Форма регистрации студента",
+    labelName: "Имя *",
+    placeholderFirstName: "Имя",
+    placeholderLastName: "Фамилия",
+    labelEmail: "Электронная почта",
+    placeholderEmail: "name@example.com",
+    labelGender: "Пол *",
+    genderMale: "Мужской",
+    genderFemale: "Женский",
+    genderOther: "Другой",
+    labelMobile: "Мобильный телефон (10 цифр) *",
+    labelDateOfBirth: "Дата рождения",
+    placeholderDate: "ДД МММ ГГГГ",
+    labelSubjects: "Предметы",
+    subjectsPlaceholder: "например, Математика, Физика",
+    subjectsOptions: ["Математика", "Физика", "Химия", "Биология", "Английский", "Информатика", "Экономика", "Искусство", "История", "Обществознание", "Хинди"],
+    labelHobbies: "Увлечения",
+    hobbySports: "Спорт",
+    hobbyReading: "Чтение",
+    hobbyMusic: "Музыка",
+    labelPicture: "Фотография",
+    labelCurrentAddress: "Текущий адрес",
+    labelStateCity: "Регион и город",
+    selectState: "Выберите регион",
+    selectCity: "Выберите город",
+    stateOptions: ["NCR", "Уттар-Прадеш", "Харьяна", "Раджастан"],
+    cityMap: {
+      NCR: ["Дели", "Гургаон", "Ноида"],
+      "Уттар-Прадеш": ["Агра", "Лакхнау", "Мерут"],
+      "Харьяна": ["Карнал", "Панипат"],
+      "Раджастан": ["Джайпур", "Джайсалмер"]
+    },
+    submitButton: "Отправить",
+    formError: "Заполните обязательные поля и укажите корректный 10-значный номер телефона.",
+    modalTitle: "Спасибо за отправку формы",
+    closeButton: "Закрыть",
+    removeChip: "Удалить",
+    promoTag: "QA.GURU",
+    promoHeading: "Поднимите автоматизацию на новый уровень",
+    promoText: "Java, Python, JavaScript, Kotlin, Swift — освоите стек, который откроет новые возможности. Реальные проекты, портфолио и наставничество от практиков. Уже более 3 000 выпускников. Первый шаг — бесплатный интенсив.",
+    promoCta: "Начать обучение",
+    promoClose: "Закрыть",
+    resultStudentName: "Имя студента",
+    resultStudentEmail: "Электронная почта",
+    resultGender: "Пол",
+    resultMobile: "Телефон",
+    resultDateOfBirth: "Дата рождения",
+    resultSubjects: "Предметы",
+    resultHobbies: "Увлечения",
+    resultPicture: "Фотография",
+    resultAddress: "Адрес",
+    resultStateCity: "Регион и город",
+    months: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+    monthsShort: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+  },
 };
 
-const STATE_OPTIONS = ["NCR", "Uttar Pradesh", "Haryana", "Rajasthan"];
-const SUBJECTS_OPTIONS = ["Maths", "Physics", "Chemistry", "Biology", "English", "Computer Science", "Economics", "Arts", "History", "Civics", "Hindi"];
-const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const LANG = new URLSearchParams(window.location.search).has("ru") ? "ru" : "en";
+const t = I18N[LANG];
+const langQuery = LANG === "ru" ? "?ru" : "";
+
+function setRadioLabel(forId, text) {
+  const label = document.querySelector(`label[for="${forId}"]`);
+  if (!label) return;
+  const input = label.querySelector("input");
+  label.textContent = "";
+  label.appendChild(input);
+  label.append(" " + text);
+}
+
+function applyI18n() {
+  document.documentElement.lang = LANG;
+  document.title = t.pageTitle;
+
+  const burger = document.querySelector(".burger-menu");
+  if (burger) burger.setAttribute("aria-label", t.navMenu);
+
+  const nav = document.querySelector(".nav");
+  if (nav) nav.setAttribute("aria-label", t.navMain);
+
+  const navLinks = {
+    "clubs-link": { href: "text-box.html", text: t.navTextBox },
+    "create-club-link": { href: "automation-practice-form.html", text: t.navRegistration },
+    "login-link": { href: "login.html", text: t.navLogin },
+  };
+  Object.entries(navLinks).forEach(([testId, { href, text }]) => {
+    const link = document.querySelector(`[data-testid="${testId}"]`);
+    if (link) {
+      link.href = href + langQuery;
+      link.textContent = text;
+    }
+  });
+
+  const githubLink = document.querySelector('[data-testid="github-link"]');
+  if (githubLink) githubLink.setAttribute("aria-label", t.navGithub);
+
+  document.querySelector("h1").textContent = t.heading;
+  document.querySelector(".subtitle").textContent = t.subtitle;
+  document.querySelector('label[for="firstName"]').textContent = t.labelName;
+  document.getElementById("firstName").placeholder = t.placeholderFirstName;
+  document.getElementById("lastName").placeholder = t.placeholderLastName;
+  document.querySelector('label[for="userEmail"]').textContent = t.labelEmail;
+  document.getElementById("userEmail").placeholder = t.placeholderEmail;
+  document.getElementById("genterWrapper").previousElementSibling.textContent = t.labelGender;
+  setRadioLabel("gender-radio-1", t.genderMale);
+  setRadioLabel("gender-radio-2", t.genderFemale);
+  setRadioLabel("gender-radio-3", t.genderOther);
+  document.querySelector('label[for="userNumber"]').textContent = t.labelMobile;
+  document.querySelector('label[for="dateOfBirthInput"]').textContent = t.labelDateOfBirth;
+  document.getElementById("dateOfBirthInput").placeholder = t.placeholderDate;
+  document.querySelector('label[for="subjectsInput"]').textContent = t.labelSubjects;
+  document.getElementById("subjectsInput").placeholder = t.subjectsPlaceholder;
+  document.getElementById("hobbiesWrapper").previousElementSibling.textContent = t.labelHobbies;
+  setRadioLabel("hobbies-checkbox-1", t.hobbySports);
+  setRadioLabel("hobbies-checkbox-2", t.hobbyReading);
+  setRadioLabel("hobbies-checkbox-3", t.hobbyMusic);
+  document.querySelector('label[for="uploadPicture"]').textContent = t.labelPicture;
+  document.querySelector('label[for="currentAddress"]').textContent = t.labelCurrentAddress;
+  document.querySelector(".state-city-row").previousElementSibling.textContent = t.labelStateCity;
+  document.getElementById("state").textContent = t.selectState;
+  document.getElementById("city").textContent = t.selectCity;
+  document.getElementById("submit").textContent = t.submitButton;
+  document.getElementById("example-modal-sizes-title-lg").textContent = t.modalTitle;
+  document.getElementById("closeModal").textContent = t.closeButton;
+
+  const promo = document.getElementById("fixedban");
+  if (promo) {
+    const promoTag = promo.querySelector("p");
+    if (promoTag) promoTag.textContent = t.promoTag;
+    const promoHeading = promo.querySelector("h3");
+    if (promoHeading) promoHeading.textContent = t.promoHeading;
+    const promoText = promo.querySelector("h3 + p");
+    if (promoText) promoText.textContent = t.promoText;
+    const promoCta = document.getElementById("promoCta");
+    if (promoCta) promoCta.textContent = t.promoCta;
+    const promoClose = promo.querySelector('button[aria-label="Close"]');
+    if (promoClose) promoClose.setAttribute("aria-label", t.promoClose);
+  }
+}
+
+applyI18n();
+
+const cityMap = t.cityMap;
+
+const STATE_OPTIONS = t.stateOptions;
+const SUBJECTS_OPTIONS = t.subjectsOptions;
+const MONTHS = t.months;
+const MONTHS_SHORT = t.monthsShort;
 
 const form = document.getElementById("userForm");
 const stateTrigger = document.getElementById("state");
@@ -1142,7 +1354,7 @@ function showStateOptions() {
       stateCityWrapper.style.display = "none";
       const cities = cityMap[name] || [];
       cityValue.value = "";
-      cityTrigger.textContent = "Select City";
+      cityTrigger.textContent = t.selectCity;
       cityTrigger.classList.remove("disabled");
     });
     stateCityWrapper.appendChild(opt);
@@ -1222,7 +1434,7 @@ function validateForm() {
   const gender = getSelectedGender();
 
   if (!firstName || !lastName || !gender || !/^\d{10}$/.test(phone)) {
-    formError.textContent = "Please fill required fields and enter a valid 10-digit mobile number.";
+    formError.textContent = t.formError;
     return false;
   }
 
@@ -1329,7 +1541,7 @@ function buildDatepicker() {
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, "0");
     const dd = String(date.getDate()).padStart(2, "0");
-    dateOfBirthInput.value = dd + " " + MONTHS[month].slice(0, 3) + " " + y;
+    dateOfBirthInput.value = dd + " " + MONTHS_SHORT[month] + " " + y;
     dateOfBirthInput.setAttribute("data-iso", y + "-" + m + "-" + dd);
     hideDatepicker();
   });
@@ -1364,7 +1576,7 @@ buildDatepicker();
     hiddenInput.value = selectedSubjects.join(", ");
   }
 
-  const PLACEHOLDER_TEXT = "e.g. Maths, Physics";
+  const PLACEHOLDER_TEXT = t.subjectsPlaceholder;
 
   function updatePlaceholder() {
     input.placeholder = selectedSubjects.length > 0 ? "" : PLACEHOLDER_TEXT;
@@ -1380,7 +1592,7 @@ buildDatepicker();
       label.textContent = subject;
       const removeBtn = document.createElement("span");
       removeBtn.className = "subjects-chip__remove";
-      removeBtn.setAttribute("aria-label", "Remove");
+      removeBtn.setAttribute("aria-label", t.removeChip);
       removeBtn.textContent = "×";
       removeBtn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -1471,16 +1683,16 @@ form.addEventListener("submit", (event) => {
 
   resultBody.innerHTML = "";
   resultBody.append(
-    createResultRow("Student Name", `${firstName} ${lastName}`.trim()),
-    createResultRow("Student Email", email),
-    createResultRow("Gender", gender),
-    createResultRow("Mobile", mobile),
-    createResultRow("Date of Birth", dob),
-    createResultRow("Subjects", subjects),
-    createResultRow("Hobbies", hobbies),
-    createResultRow("Picture", picture),
-    createResultRow("Address", address),
-    createResultRow("State and City", [state, city].filter(Boolean).join(" "))
+    createResultRow(t.resultStudentName, `${firstName} ${lastName}`.trim()),
+    createResultRow(t.resultStudentEmail, email),
+    createResultRow(t.resultGender, gender),
+    createResultRow(t.resultMobile, mobile),
+    createResultRow(t.resultDateOfBirth, dob),
+    createResultRow(t.resultSubjects, subjects),
+    createResultRow(t.resultHobbies, hobbies),
+    createResultRow(t.resultPicture, picture),
+    createResultRow(t.resultAddress, address),
+    createResultRow(t.resultStateCity, [state, city].filter(Boolean).join(" "))
   );
 
   if (typeof modal.showModal === "function") {

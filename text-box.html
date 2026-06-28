@@ -286,7 +286,7 @@
       }
 
       h1 {
-        margin: 0;
+        margin: 0 0 18px;
         text-align: center;
         font-size: clamp(1.4rem, 2.7vw, 2rem);
         letter-spacing: 0.2px;
@@ -589,6 +589,96 @@
     </footer>
 
     <script>
+      const I18N = {
+        en: {
+          pageTitle: "Text Box",
+          navMenu: "Menu",
+          navMain: "Navigation",
+          navTextBox: "Text Box Form",
+          navRegistration: "Student Registration Form",
+          navLogin: "Login Form",
+          navGithub: "Project on GitHub",
+          heading: "Text Box",
+          labelFullName: "Full Name",
+          placeholderFullName: "Full Name",
+          labelEmail: "Email",
+          placeholderEmail: "name@example.com",
+          labelCurrentAddress: "Current Address",
+          placeholderCurrentAddress: "Current Address",
+          labelPermanentAddress: "Permanent Address",
+          submitButton: "Submit",
+          outputName: "Name:",
+          outputEmail: "Email:",
+          outputCurrentAddress: "Current Address :",
+          outputPermanentAddress: "Permananet Address :",
+        },
+        ru: {
+          pageTitle: "Text Box",
+          navMenu: "Меню",
+          navMain: "Навигация",
+          navTextBox: "Форма Text Box",
+          navRegistration: "Форма регистрации студента",
+          navLogin: "Форма входа",
+          navGithub: "Репозиторий на GitHub",
+          heading: "Text Box",
+          labelFullName: "Полное имя",
+          placeholderFullName: "Полное имя",
+          labelEmail: "Электронная почта",
+          placeholderEmail: "name@example.com",
+          labelCurrentAddress: "Текущий адрес",
+          placeholderCurrentAddress: "Текущий адрес",
+          labelPermanentAddress: "Постоянный адрес",
+          submitButton: "Отправить",
+          outputName: "Имя:",
+          outputEmail: "Электронная почта:",
+          outputCurrentAddress: "Текущий адрес:",
+          outputPermanentAddress: "Постоянный адрес:",
+        },
+      };
+
+      const LANG = new URLSearchParams(window.location.search).has("ru") ? "ru" : "en";
+      const t = I18N[LANG];
+      const langQuery = LANG === "ru" ? "?ru" : "";
+
+      function applyI18n() {
+        document.documentElement.lang = LANG;
+        document.title = t.pageTitle;
+
+        const burger = document.querySelector(".burger-menu");
+        if (burger) burger.setAttribute("aria-label", t.navMenu);
+
+        const nav = document.querySelector(".nav");
+        if (nav) nav.setAttribute("aria-label", t.navMain);
+
+        const navLinks = {
+          "clubs-link": { href: "text-box.html", text: t.navTextBox },
+          "create-club-link": { href: "automation-practice-form.html", text: t.navRegistration },
+          "login-link": { href: "login.html", text: t.navLogin },
+        };
+        Object.entries(navLinks).forEach(([testId, { href, text }]) => {
+          const link = document.querySelector(`[data-testid="${testId}"]`);
+          if (link) {
+            link.href = href + langQuery;
+            link.textContent = text;
+          }
+        });
+
+        const githubLink = document.querySelector('[data-testid="github-link"]');
+        if (githubLink) githubLink.setAttribute("aria-label", t.navGithub);
+
+        document.querySelector("h1").textContent = t.heading;
+        document.querySelector('label[for="userName"]').textContent = t.labelFullName;
+        document.getElementById("userName").placeholder = t.placeholderFullName;
+        document.querySelector('label[for="userEmail"]').textContent = t.labelEmail;
+        document.getElementById("userEmail").placeholder = t.placeholderEmail;
+        document.querySelector('label[for="currentAddress"]').textContent = t.labelCurrentAddress;
+        document.getElementById("currentAddress").placeholder = t.placeholderCurrentAddress;
+        document.querySelector('label[for="permanentAddress"]').textContent = t.labelPermanentAddress;
+        document.getElementById("submit").textContent = t.submitButton;
+      }
+
+      applyI18n();
+
       const form = document.getElementById("userForm");
 
       form.addEventListener("submit", (event) => {
@@ -601,10 +691,10 @@
 
         const output = document.getElementById("output");
         output.innerHTML = `
-          <p id="name">Name:${userNameValue}</p>
-          <p id="email">Email:${userEmailValue}</p>
-          <p id="currentAddress">Current Address :${currentAddressValue}</p>
-          <p id="permanentAddress">Permananet Address :${permanentAddressValue}</p>
+          <p id="name">${t.outputName}${userNameValue}</p>
+          <p id="email">${t.outputEmail}${userEmailValue}</p>
+          <p id="currentAddress">${t.outputCurrentAddress}${currentAddressValue}</p>
+          <p id="permanentAddress">${t.outputPermanentAddress}${permanentAddressValue}</p>
         `;
         output.classList.add("has-content");
       });
@@ -613,7 +703,7 @@
       function setActiveNavLink() {
         const currentPath = window.location.pathname.split("/").pop();
         document.querySelectorAll(".nav .nav-link").forEach((link) => {
-          const href = link.getAttribute("href");
+          const href = link.getAttribute("href").split("?")[0];
           const isActive = href === currentPath;
           link.classList.toggle("active", isActive);
           if (isActive) {

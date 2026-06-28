@@ -285,7 +285,7 @@
       }
 
       h1 {
-        margin: 0 0 24px;
+        margin: 0 0 18px;
         text-align: center;
         font-size: clamp(1.4rem, 2.7vw, 2rem);
         letter-spacing: 0.2px;
@@ -604,6 +604,97 @@
     </footer>
 
     <script>
+      const I18N = {
+        en: {
+          pageTitle: "Login",
+          navMenu: "Menu",
+          navMain: "Navigation",
+          navTextBox: "Text Box Form",
+          navRegistration: "Student Registration Form",
+          navLogin: "Login Form",
+          navGithub: "Project on GitHub",
+          heading: "Login Form",
+          labelLogin: "Login",
+          labelPassword: "Password",
+          submitButton: "Login",
+          welcomeDefault: "Welcome!",
+          welcomeUser: "Welcome, {login}!",
+          logoutButton: "Logout",
+          errorBothRequired: "Login and password are required (minimum {minLogin} and {minPassword} characters)",
+          errorLoginRequired: "Login is required (minimum {minLogin} characters)",
+          errorLoginMinLength: "Login must be at least {minLogin} characters",
+          errorPasswordRequired: "Password is required (minimum {minPassword} characters)",
+          errorPasswordMinLength: "Password must be at least {minPassword} characters",
+          errorWrongCredentials: "Wrong login or password",
+        },
+        ru: {
+          pageTitle: "Вход",
+          navMenu: "Меню",
+          navMain: "Навигация",
+          navTextBox: "Форма Text Box",
+          navRegistration: "Форма регистрации студента",
+          navLogin: "Форма входа",
+          navGithub: "Репозиторий на GitHub",
+          heading: "Форма входа",
+          labelLogin: "Логин",
+          labelPassword: "Пароль",
+          submitButton: "Войти",
+          welcomeDefault: "Добро пожаловать!",
+          welcomeUser: "Добро пожаловать, {login}!",
+          logoutButton: "Выйти",
+          errorBothRequired: "Укажите логин и пароль (не менее {minLogin} и {minPassword} символов соответственно)",
+          errorLoginRequired: "Укажите логин (не менее {minLogin} символов)",
+          errorLoginMinLength: "Логин должен содержать не менее {minLogin} символов",
+          errorPasswordRequired: "Укажите пароль (не менее {minPassword} символов)",
+          errorPasswordMinLength: "Пароль должен содержать не менее {minPassword} символов",
+          errorWrongCredentials: "Неверный логин или пароль",
+        },
+      };
+
+      const LANG = new URLSearchParams(window.location.search).has("ru") ? "ru" : "en";
+      const t = I18N[LANG];
+      const langQuery = LANG === "ru" ? "?ru" : "";
+
+      function formatMessage(template, values) {
+        return template.replace(/\{(\w+)\}/g, (_, key) => values[key] ?? "");
+      }
+
+      function applyI18n() {
+        document.documentElement.lang = LANG;
+        document.title = t.pageTitle;
+
+        const burger = document.querySelector(".burger-menu");
+        if (burger) burger.setAttribute("aria-label", t.navMenu);
+
+        const nav = document.querySelector(".nav");
+        if (nav) nav.setAttribute("aria-label", t.navMain);
+
+        const navLinks = {
+          "clubs-link": { href: "text-box.html", text: t.navTextBox },
+          "create-club-link": { href: "automation-practice-form.html", text: t.navRegistration },
+          "login-link": { href: "login.html", text: t.navLogin },
+        };
+        Object.entries(navLinks).forEach(([testId, { href, text }]) => {
+          const link = document.querySelector(`[data-testid="${testId}"]`);
+          if (link) {
+            link.href = href + langQuery;
+            link.textContent = text;
+          }
+        });
+
+        const githubLink = document.querySelector('[data-testid="github-link"]');
+        if (githubLink) githubLink.setAttribute("aria-label", t.navGithub);
+
+        document.querySelector("h1").textContent = t.heading;
+        document.querySelector('label[for="login-input"]').textContent = t.labelLogin;
+        document.querySelector('label[for="password-input"]').textContent = t.labelPassword;
+        document.getElementById("submit-button").textContent = t.submitButton;
+        document.getElementById("welcome-message").textContent = t.welcomeDefault;
+        document.getElementById("logout-button").textContent = t.logoutButton;
+      }
+
+      applyI18n();
+
       const USERBASE_KEY = "userbase";
       const AUTH_KEY = "authUser";
       const DEFAULT_USERBASE = "user1:password1";
@@ -657,30 +748,27 @@
         const minPasswordLength = 6;
 
         if (!login && !password) {
-          return (
-            "Login and password are required (minimum " +
-            minLoginLength +
-            " and " +
-            minPasswordLength +
-            " characters)"
-          );
+          return formatMessage(t.errorBothRequired, {
+            minLogin: minLoginLength,
+            minPassword: minPasswordLength,
+          });
         }
         if (!login) {
-          return "Login is required (minimum " + minLoginLength + " characters)";
+          return formatMessage(t.errorLoginRequired, { minLogin: minLoginLength });
         }
         if (login.length < minLoginLength) {
-          return "Login must be at least " + minLoginLength + " characters";
+          return formatMessage(t.errorLoginMinLength, { minLogin: minLoginLength });
         }
         if (!password) {
-          return "Password is required (minimum " + minPasswordLength + " characters)";
+          return formatMessage(t.errorPasswordRequired, { minPassword: minPasswordLength });
         }
         if (password.length < minPasswordLength) {
-          return "Password must be at least " + minPasswordLength + " characters";
+          return formatMessage(t.errorPasswordMinLength, { minPassword: minPasswordLength });
         }
 
         const stored = parseUserbase(readLocalStorage(USERBASE_KEY));
         if (login !== stored.login || password !== stored.password) {
-          return "Wrong login or password";
+          return t.errorWrongCredentials;
         }
 
         return null;
@@ -689,7 +777,7 @@
       function showLoggedIn(login) {
         loginForm.classList.add("is-hidden");
         loginSuccess.classList.add("is-visible");
-        welcomeMessage.textContent = "Welcome, " + login + "!";
+        welcomeMessage.textContent = formatMessage(t.welcomeUser, { login });
         loginError.textContent = "";
       }
 
@@ -733,7 +821,7 @@
       function setActiveNavLink() {
         const currentPath = window.location.pathname.split("/").pop();
         document.querySelectorAll(".nav .nav-link").forEach((link) => {
-          const href = link.getAttribute("href");
+          const href = link.getAttribute("href").split("?")[0];
           const isActive = href === currentPath;
           link.classList.toggle("active", isActive);
           if (isActive) {
