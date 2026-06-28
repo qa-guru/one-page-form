@@ -184,8 +184,7 @@ body {
 .header-left .form-nav-home[aria-current="page"],
 .header-left .form-nav .nav-link.active,
 .header-left .form-nav .nav-link[aria-current="page"] {
-  font-weight: 700;
-  text-decoration: none;
+  text-decoration-color: transparent;
 }
 
 .form-nav-home:focus-visible,
@@ -843,11 +842,6 @@ body {
   text-decoration-color: currentColor;
 }
 
-.card-header-dashboard .dashboard-nav .nav-link.active,
-.card-header-dashboard .dashboard-nav .nav-link[aria-current="page"] {
-  font-weight: 700;
-}
-
 .card-header-dashboard .dashboard-nav .nav-link:hover {
   color: var(--heading-color);
   background-color: transparent;
@@ -1191,10 +1185,6 @@ body {
 
   .nav-drawer-links .nav-link::after {
     display: none;
-  }
-
-  .nav-drawer-links .form-nav-home {
-    font-weight: 600;
   }
 
   .nav .nav-link {
