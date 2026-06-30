@@ -156,8 +156,17 @@
         justify-content: center;
       }
 
-      .login-form.is-hidden {
+      .login-form.is-hidden,
+      .login-form-title.is-hidden {
         display: none;
+      }
+
+      .logged-in-title {
+        display: none;
+      }
+
+      .logged-in-title.is-visible {
+        display: block;
       }
 
       .site-footer {
@@ -369,7 +378,8 @@
 
     <main class="page">
       <section class="card">
-        <h1>Login Form</h1>
+        <h1 class="login-form-title" data-testid="login-form-title">Login Form</h1>
+        <h1 class="logged-in-title" data-testid="logged-in-title">Logged In Form</h1>
 
         <form id="login-form" class="login-form" data-testid="login-form">
           <div class="form-row">
@@ -434,6 +444,7 @@
           themeLight: "Switch to light theme",
           themeDark: "Switch to dark theme",
           heading: "Login Form",
+          loggedInHeading: "Logged In Form",
           labelLogin: "Login",
           labelPassword: "Password",
           submitButton: "Login",
@@ -463,6 +474,7 @@
           themeDark: "Тёмная тема",
 
           heading: "Форма входа",
+          loggedInHeading: "Форма после входа",
           labelLogin: "Логин",
           labelPassword: "Пароль",
           submitButton: "Войти",
@@ -485,7 +497,8 @@
       AllureShell.initDemoHeader({
         i18n: I18N,
         applyPage(t) {
-          document.querySelector("h1").textContent = t.heading;
+          document.querySelector('[data-testid="login-form-title"]').textContent = t.heading;
+          document.querySelector('[data-testid="logged-in-title"]').textContent = t.loggedInHeading;
           document.querySelector('label[for="login-input"]').textContent = t.labelLogin;
           document.querySelector('label[for="password-input"]').textContent = t.labelPassword;
           document.getElementById("submit-button").textContent = t.submitButton;
@@ -499,6 +512,8 @@
       const USERBASE_KEY = "userbase";
       const DEFAULT_USERBASE = "user1:password1";
 
+      const loginFormTitle = document.querySelector('[data-testid="login-form-title"]');
+      const loggedInTitle = document.querySelector('[data-testid="logged-in-title"]');
       const loginForm = document.getElementById("login-form");
       const loginLogin = document.getElementById("login-input");
       const loginPassword = document.getElementById("password-input");
@@ -577,6 +592,8 @@
       function showLoggedIn(login) {
         loginForm.classList.add("is-hidden");
         loginSuccess.classList.add("is-visible");
+        loginFormTitle.classList.add("is-hidden");
+        loggedInTitle.classList.add("is-visible");
         welcomeMessage.textContent = formatMessage(t.welcomeUser, { login });
         loginError.textContent = "";
       }
@@ -584,6 +601,8 @@
       function showLoginForm() {
         loginForm.classList.remove("is-hidden");
         loginSuccess.classList.remove("is-visible");
+        loginFormTitle.classList.remove("is-hidden");
+        loggedInTitle.classList.remove("is-visible");
         loginLogin.value = "";
         loginPassword.value = "";
         loginError.textContent = "";
