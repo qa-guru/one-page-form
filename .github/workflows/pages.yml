@@ -3,6 +3,7 @@ name: Deploy One Page Form Demos
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -29,3 +30,14 @@ jobs:
           publish_branch: gh-pages
           publish_dir: pages
           enable_jekyll: false
+
+      - name: Mirror to demo.qa.guru
+        env:
+          SSH_KEY: ${{ secrets.DEMO_QA_GURU_SSH_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' '212.92.101.15 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPLxPBgt4sucr/l9arC06dTjBT3VEN16P5GZ6BDe3l9I' >> ~/.ssh/known_hosts
+          rsync -avz --delete -e 'ssh -o BatchMode=yes -i '"$HOME"'/.ssh/id_ed25519' \
+            pages/ qaguru@212.92.101.15:/var/www/demo.qa.guru/

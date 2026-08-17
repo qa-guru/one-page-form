@@ -25,13 +25,14 @@ Live SVG metrics (compact → detailed → full panel), updated after each CI ru
   </picture>
 </a>
 
-> **Live dashboard:** open the [interactive landing page](https://qa-guru.github.io/one-page-form/) — it embeds the same Allure overview with auto-resizing iframes and live metrics badges.
+> **Live dashboard:** from RU use [demo.qa.guru](https://demo.qa.guru/) (GitHub Pages is often blocked). Non-RU: [GitHub Pages](https://qa-guru.github.io/one-page-form/).
 
 | Link | Description |
 |------|-------------|
 | [Overview dashboard](https://qa-guru.github.io/one-page-form-tests-java/allure-reports/) | Trends across all branches |
 | [main dashboard](https://qa-guru.github.io/one-page-form-tests-java/allure-reports/main/) | Latest `main` branch analytics |
-| [Demo landing](https://qa-guru.github.io/one-page-form/) | One Page Form Demos + embedded dashboard |
+| [Demo landing (RF)](https://demo.qa.guru/) | Box3 mirror — same pages at site root |
+| [Demo landing (Pages)](https://qa-guru.github.io/one-page-form/) | GitHub Pages — often blocked from RU |
 
 ## One Page Form Demos
 
@@ -43,7 +44,19 @@ No web server required — open any `.html` file locally in any browser (double-
 - [text-box.html](text-box.html)
 - [login.html](login.html)
 
-### GitHub Pages
+### Live URLs (RF: `demo.qa.guru`)
+
+GitHub Pages (`qa-guru.github.io`) is often unreachable from Russia. Use the Box3 alias — same files, site root:
+
+- [https://demo.qa.guru/](https://demo.qa.guru/)
+- [https://demo.qa.guru/automation-practice-form.html](https://demo.qa.guru/automation-practice-form.html)
+- [https://demo.qa.guru/text-box.html](https://demo.qa.guru/text-box.html)
+- [https://demo.qa.guru/login.html](https://demo.qa.guru/login.html)
+- [https://demo.qa.guru/sandbox.html](https://demo.qa.guru/sandbox.html)
+
+`https://demo.qa.guru/one-page-form/…` rewrites to the same paths.
+
+### GitHub Pages (non-RU)
 
 - [https://qa-guru.github.io/one-page-form/](https://qa-guru.github.io/one-page-form/)
 - [https://qa-guru.github.io/one-page-form/automation-practice-form.html](https://qa-guru.github.io/one-page-form/automation-practice-form.html)
