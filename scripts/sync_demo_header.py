@@ -13,9 +13,6 @@ MARKER_START = "<!-- demo-header:start -->"
 MARKER_END = "<!-- demo-header:end -->"
 TARGET_PAGES = [
     "index.html",
-    "text-box.html",
-    "login.html",
-    "automation-practice-form.html",
     "sandbox.html",
 ]
 HEADER_RE = re.compile(r"<header class=\"header\"[\s\S]*?</header>", re.MULTILINE)
